@@ -1,3 +1,13 @@
+How To Run
+1. Pull repository
+2. jalankan composer intall
+3. jalankan php artisan migrate
+4. jalankan php artisan db:seed --class=SuperAdminSeeder
+5. jalankan php artisan serve
+6. buka http://localhost:8000
+
+
+
 <p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400"></a></p>
 
 <p align="center">
