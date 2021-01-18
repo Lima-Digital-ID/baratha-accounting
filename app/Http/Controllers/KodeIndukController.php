@@ -3,65 +3,60 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use \App\Models\User;
+use \App\Models\KodeInduk;
 
-class UserController extends Controller
+class KodeIndukController extends Controller
 {
     private $param;
     public function __construct()
     {
-        $this->param['icon'] = 'fa-user';
+        $this->param['icon'] = 'fa-cogs';
     }
 
     public function index(Request $request)
     {
-        $this->param['pageInfo'] = 'Manage User / List User';
+        $this->param['pageInfo'] = 'Manage Kode Induk / List Kode Induk';
         $this->param['btnRight']['text'] = 'Tambah Data';
-        $this->param['btnRight']['link'] = route('user.create');
+        $this->param['btnRight']['link'] = route('kode-induk.create');
 
         try {
             $keyword = $request->get('keyword');
             if ($keyword) {
-                $user = User::where('name', 'LIKE', "%$keyword%")->orWhere('email', 'LIKE', "%$keyword%")->paginate(10);
+                $kodeInduk = KodeInduk::where('name', 'LIKE', "%$keyword%")->orWhere('email', 'LIKE', "%$keyword%")->paginate(10);
             }
             else{
-                $user = User::paginate(10);
+                $kodeInduk = KodeInduk::paginate(10);
             }
         } catch (\Illuminate\Database\QueryException $e) {
             return redirect()->back()->withStatus('Terjadi Kesalahan');
         }
                 
-        return \view('user.list-user', ['user' => $user], $this->param);
+        return \view('kode-induk.list-kode-induk', ['kodeInduk' => $kodeInduk], $this->param);
     }
 
     public function create()
     {
-        $this->param['pageInfo'] = 'Manage User / Tambah Data';
+        $this->param['pageInfo'] = 'Manage Kode Induk / Tambah Data';
         $this->param['btnRight']['text'] = 'Lihat Data';
-        $this->param['btnRight']['link'] = route('user.index');
+        $this->param['btnRight']['link'] = route('kode-induk.index');
 
-        return \view('user.tambah-user', $this->param);
+        return \view('kode-induk.tambah-kode-induk', $this->param);
     }
 
     public function store(Request $request)
     {
         $validatedData = $request->validate([
-            'name' => 'required',
-            'email' => 'required|email|unique:users',
-            'akses' => 'required',
-            'password' => 'required',
-            'konfirmasi_password' => 'required|same:password',
+            'kode_induk' => 'required|unique:kode_induk',
+            'nama' => 'required|unique:kode_induk',
         ]);
         try{
     
-            $newUser = new User;
+            $newKodeInduk = new KodeInduk;
     
-            $newUser->name = $request->get('name');
-            $newUser->email = $request->get('email');
-            $newUser->password = \Hash::make($request->get('password'));
-            $newUser->akses = $request->get('akses');
+            $newKodeInduk->kode_induk = $request->get('kode_induk');
+            $newKodeInduk->nama = $request->get('nama');
     
-            $newUser->save();
+            $newKodeInduk->save();
     
             return redirect()->back()->withStatus('Data berhasil ditambahkan.');
         }
@@ -76,12 +71,12 @@ class UserController extends Controller
     public function edit($id)
     {
         try{
-            $this->param['pageInfo'] = 'Manage User / Edit Data';
+            $this->param['pageInfo'] = 'Manage Kode Induk / Edit Data';
             $this->param['btnRight']['text'] = 'Lihat Data';
-            $this->param['btnRight']['link'] = route('user.index');
-            $this->param['user'] = User::find($id);
+            $this->param['btnRight']['link'] = route('kode-induk.index');
+            $this->param['kodeInduk'] = KodeInduk::find($id);
 
-            return \view('user.edit-user', $this->param);
+            return \view('kode-induk.edit-kode-induk', $this->param);
         }
         catch(\Exception $e){
             return redirect()->back()->withError('Terjadi kesalahan : '. $e->getMessage());
@@ -93,20 +88,21 @@ class UserController extends Controller
 
     public function update(Request $request, $id)
     {
-        $user = User::find($id);
+        $kodeInduk = KodeInduk::find($id);
 
-        $isUnique = $user->email == $request->email ? '' : '|unique:users';
+        $isUnique = $kodeInduk->kode_induk == $request->kode_induk ? '' : '|unique:kode_induk';
+        $isUniqueNama = $kodeInduk->nama == $request->nama ? '' : '|unique:kode_induk';
 
         $validatedData = $request->validate([
-            'name' => 'required',
-            'email' => 'required|email'.$isUnique,
+            'kode_induk' => 'required'.$isUnique,
+            'nama' => 'required'.$isUniqueNama,
         ]);
         try{
 
-            $user->name = $request->get('name');
-            $user->email = $request->get('email');
-            $user->akses = $request->get('akses');
-            $user->save();
+            // $kodeInduk->kode_induk = $request->get('kode_induk');
+            $kodeInduk->nama = $request->get('nama');
+            
+            $kodeInduk->save();
 
             return redirect()->back()->withStatus('Data berhasil diperbarui.');
         }
@@ -121,17 +117,17 @@ class UserController extends Controller
     public function destroy($id)
     {
         try{
-            $member = User::findOrFail($id);
+            $member = KodeInduk::findOrFail($id);
 
             $member->delete();
 
-            return redirect()->route('user.index')->withStatus('Data berhasil dihapus.');
+            return redirect()->route('kode-induk.index')->withStatus('Data berhasil dihapus.');
         }
         catch(\Exception $e){
-            return redirect()->route('user.index')->withError('Terjadi kesalahan : '. $e->getMessage());
+            return redirect()->route('kode-induk.index')->withError('Terjadi kesalahan : '. $e->getMessage());
         }
         catch(\Illuminate\Database\QueryException $e){
-            return redirect()->route('user.index')->withError('Terjadi kesalahan pada database : '. $e->getMessage());
+            return redirect()->route('kode-induk.index')->withError('Terjadi kesalahan pada database : '. $e->getMessage());
         }
         
     }

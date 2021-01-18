@@ -63,7 +63,7 @@
 
           <!-- Heading -->
           <div class="sidebar-heading">
-          MENU
+          Data Master
           </div>
 
           <!-- Nav Item - Pages Collapse Menu -->
@@ -71,6 +71,12 @@
             <a class="nav-link" href="{{url('user')}}">
               <i class="fas fa-fw fa-user-alt"></i>
               <span>Manage User</span></a>
+          </li>
+          
+          <li class="nav-item {{Request::segment(1) == 'kode-induk' ? 'active' : ''}}">
+            <a class="nav-link" href="{{url('kode-induk')}}">
+              <i class="fas fa-fw fa-cogs"></i>
+              <span>Manage Kode Induk</span></a>
           </li>
           
           
