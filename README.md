@@ -3,8 +3,9 @@ How To Run
 2. jalankan composer intall
 3. jalankan php artisan migrate
 4. jalankan php artisan db:seed --class=SuperAdminSeeder
-5. jalankan php artisan serve
-6. buka http://localhost:8000
+5. php artisan db:seed --class=PerusahaanSeeder
+6. jalankan php artisan serve
+7. buka http://localhost:8000
 
 
 
