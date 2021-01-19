@@ -19,11 +19,7 @@
     <link href="{{ asset('img/logobaratha.png') }}" rel="icon">
     <link href="{{ asset('img/logobaratha.png') }}" rel="apple-touch-icon">
     <!-- Custom fonts for this template-->
-    <link
-      href="{{ asset('vendor/fontawesome-free/css/all.min.css') }}"
-      rel="stylesheet"
-      type="text/css"
-    />
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.1/css/all.css" integrity="sha384-vp86vTRFVJgpjF9jiIGPEEqYqlDwgyBgEF109VFjmqGmIY/Y4HV4d3Gp2irVfcrp" crossorigin="anonymous">
     <!-- Custom styles for this template-->
     <link href="{{ asset('css/sb-admin-2.min.css') }}" rel="stylesheet" />
     <link href="{{ asset('vendor/datatables/dataTables.bootstrap4.min.css') }}" rel="stylesheet" />
@@ -67,18 +63,94 @@
           </div>
 
           <!-- Nav Item - Pages Collapse Menu -->
-          <li class="nav-item {{Request::segment(1) == 'user' ? 'active' : ''}}">
-            <a class="nav-link" href="{{url('user')}}">
-              <i class="fas fa-fw fa-user-alt"></i>
-              <span>Manage User</span></a>
+
+          <!-- Nav Item - Pages Collapse Menu -->
+          <li class="nav-item {{Request::segment(1) == 'data-master' ? 'active' : ''}}">
+            <a
+              class="nav-link collapsed"
+              href="#"
+              data-toggle="collapse"
+              data-target="#data-master"
+              aria-expanded="true"
+              aria-controls="data-master"
+            >
+            <i class="fas fa-fw fa-cog"></i>
+              <span>Data Master</span>
+            </a>
+            <div
+              id="data-master"
+              class="collapse"
+              aria-labelledby="headingTwo"
+              data-parent="#accordionSidebar"
+            >
+              <div class="py-2 collapse-inner rounded">
+                <a class="nav-link" href="{{url('data-master/user')}}">
+                  <span>Manage User</span>
+                </a>
+                <a class="nav-link" href="{{url('data-master/perusahaan')}}">
+                  <span>Setup Perusahaan</span>
+                </a>
+              </div>
+            </div>
+          </li>
+
+          <li class="nav-item {{Request::segment(1) == 'master-akuntansi' ? 'active' : ''}}">
+            <a
+              class="nav-link collapsed"
+              href="#"
+              data-toggle="collapse"
+              data-target="#master-akuntansi"
+              aria-expanded="true"
+              aria-controls="master-akuntansi"
+            >
+            <i class="fas fa-fw fa-money-bill-wave "></i>
+              <span>Master Akuntansi</span>
+            </a>
+            <div
+              id="master-akuntansi"
+              class="collapse"
+              aria-labelledby="headingTwo"
+              data-parent="#accordionSidebar"
+            >
+              <div class="py-2 collapse-inner rounded">
+                <a class="nav-link" href="{{url('master-akuntansi/kode-induk')}}">
+                  <span>Kode Induk</span>
+                </a>
+                <a class="nav-link" href="{{url('master-akuntansi/kode-rekening')}}">
+                  <span>Kode Rekening</span>
+                </a>
+              </div>
+            </div>
           </li>
           
-          <li class="nav-item {{Request::segment(1) == 'kode-induk' ? 'active' : ''}}">
-            <a class="nav-link" href="{{url('kode-induk')}}">
-              <i class="fas fa-fw fa-cogs"></i>
-              <span>Manage Kode Induk</span></a>
+          <li class="nav-item {{Request::segment(1) == 'persediaan' ? 'active' : ''}}">
+            <a
+              class="nav-link collapsed"
+              href="#"
+              data-toggle="collapse"
+              data-target="#persediaan"
+              aria-expanded="true"
+              aria-controls="persediaan"
+            >
+            <i class="fas fa-fw fa-boxes"></i>
+              <span>Persediaan</span>
+            </a>
+            <div
+              id="persediaan"
+              class="collapse"
+              aria-labelledby="headingTwo"
+              data-parent="#accordionSidebar"
+            >
+              <div class="py-2 collapse-inner rounded">
+                <a class="nav-link" href="{{url('persediaan/kategori-barang')}}">
+                  <span>Kategori Barang</span>
+                </a>
+                <a class="nav-link" href="{{url('persediaan/barang')}}">
+                  <span>Barang</span>
+                </a>
+              </div>
+            </div>
           </li>
-          
           
           <!-- Sidebar Toggler (Sidebar) -->
           <div class="text-center d-none d-md-inline">

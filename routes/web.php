@@ -22,6 +22,18 @@ Route::middleware(['auth:sanctum', 'verified'])->get('/dashboard', function () {
 })->name('dashboard');
 
 Route::group(['middleware' => ['auth:sanctum', 'verified']], function () {
-    Route::resource('user', 'UserController');
-    Route::resource('kode-induk', 'KodeIndukController');
+    Route::group(['prefix' => 'data-master'], function () {
+        Route::resource('user', 'UserController');
+        Route::resource('perusahaan', 'PerusahaanController');
+    });
+
+    Route::group(['prefix' => 'master-akuntansi'], function () {
+        Route::resource('kode-induk', 'KodeIndukController');
+        Route::resource('kode-rekening', 'KodeRekeningController');
+    });
+    
+    Route::group(['prefix' => 'persediaan'], function () {
+        Route::resource('kategori-barang', 'KategoriBarangController');
+        Route::resource('barang', 'BarangController');
+    });
 });
