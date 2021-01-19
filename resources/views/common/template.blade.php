@@ -78,6 +78,12 @@
               <i class="fas fa-fw fa-cogs"></i>
               <span>Manage Kode Induk</span></a>
           </li>
+
+          <li class="nav-item {{Request::segment(1) == 'supplier' ? 'active' : ''}}">
+            <a class="nav-link" href="{{url('supplier')}}">
+              <i class="fas fa-fw fa-cogs"></i>
+              <span>Manage Supplier</span></a>
+          </li>
           
           
           <!-- Sidebar Toggler (Sidebar) -->
