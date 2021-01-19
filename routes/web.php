@@ -30,6 +30,7 @@ Route::group(['middleware' => ['auth:sanctum', 'verified']], function () {
     Route::group(['prefix' => 'master-akuntansi'], function () {
         Route::resource('kode-induk', 'KodeIndukController');
         Route::resource('kode-rekening', 'KodeRekeningController');
+        Route::resource('kode-biaya', 'KodeBiayaController');
     });
     
     Route::group(['prefix' => 'persediaan'], function () {

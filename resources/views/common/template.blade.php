@@ -119,6 +119,9 @@
                 <a class="nav-link" href="{{url('master-akuntansi/kode-rekening')}}">
                   <span>Kode Rekening</span>
                 </a>
+                <a class="nav-link" href="{{url('master-akuntansi/kode-biaya')}}">
+                  <span>Kode Biaya</span>
+                </a>
               </div>
             </div>
           </li>

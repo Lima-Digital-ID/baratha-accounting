@@ -17,4 +17,9 @@ class KodeRekening extends Model
     {
         return $this->belongsTo('App\Models\KodeInduk', 'kode_induk');
     }
+
+    public function kodeBiaya()
+    {
+        return $this->hasMany('App\Models\KodeBiaya');
+    }
 }
