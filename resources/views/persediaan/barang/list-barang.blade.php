@@ -61,9 +61,9 @@
                             <td>{{$value->nama}}</td>
                             <td>{{$value->satuan}}</td>
                             <td>{{number_format($value->stock_awal, 2, ',', '.')}}</td>
-                            <td>{{number_format($value->saldo_awal, 2, ',', '.')}}</td>
+                            <td>Rp {{number_format($value->saldo_awal, 2, ',', '.')}}</td>
                             <td>{{number_format($value->stock, 2, ',', '.')}}</td>
-                            <td>{{number_format($value->saldo, 2, ',', '.')}}</td>
+                            <td>Rp {{number_format($value->saldo, 2, ',', '.')}}</td>
                             <td>{{$value->kategoriBarang->nama}}</td>
                             <td class="text-center">
                                 <div class="dropdown dropdown-link">
@@ -72,7 +72,7 @@
                                     </button>
                                     <div class="dropdown-menu">
                                         <a href="{{ route('barang.edit', $value) }}" class="dropdown-item">{{ __('Edit') }}</a>
-                                        {{-- <form action="{{ route(barang-rekening.destroy', $value) }}" method="post">
+                                        {{-- <form action="{{ route('barang.destroy', $value) }}" method="post">
                                             @csrf
                                             @method('delete')
                                             <button type="button" class="mr-1 dropdown-item" onclick="confirm('{{ __("Apakah anda yakin ingin menghapus?") }}') ? this.parentElement.submit() : ''">

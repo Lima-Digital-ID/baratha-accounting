@@ -124,10 +124,13 @@ class BarangController extends Controller
         try{
                 
             $barang = Barang::find($id);
+            
             // mengembalikan stock dan saldo terlebih dahulu
-            $barang->stock -= $request->get('stock_awal');
-            $barang->saldo -= $request->get('saldo_awal');
-            $barang->save();
+            if ($barang->stock > 0.00) {
+                $barang->stock -= $barang->stock_awal;
+                $barang->saldo -= $barang->saldo_awal;
+                $barang->save();
+            }
 
             // $barang->kode_barang = $request->get('kode_barang');
             $barang->nama = $request->get('nama');
