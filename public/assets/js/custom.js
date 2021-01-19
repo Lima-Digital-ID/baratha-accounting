@@ -6,17 +6,9 @@ $(document).ready(function() {
     });
     CKEDITOR.replace( 'editor');
 
-    $('#has_submenu').change(function () { 
-        if ($(this).val() == '0') {
-            $('#halaman').removeAttr('disabled');
-            $('#section_id').removeAttr('disabled');
-        }
-        else{
-            $('#halaman').val('');
-            $('#no_page').attr('selected', true);
-            $('#halaman').attr('disabled', true);
-            $('#section_id').attr('disabled', true);
-        }
+    // get kode induk di tambah kode rekening
+    $('#kode_induk').change(function (e) {
+        $('#kode_rekening').val(`${$(this).val()}.`);
     });
 
 });

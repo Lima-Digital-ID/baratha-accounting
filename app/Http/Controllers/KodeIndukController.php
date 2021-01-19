@@ -10,7 +10,7 @@ class KodeIndukController extends Controller
     private $param;
     public function __construct()
     {
-        $this->param['icon'] = 'fa-cogs';
+        $this->param['icon'] = 'fa-money-bill-wave';
     }
 
     public function index(Request $request)
@@ -22,7 +22,7 @@ class KodeIndukController extends Controller
         try {
             $keyword = $request->get('keyword');
             if ($keyword) {
-                $kodeInduk = KodeInduk::where('name', 'LIKE', "%$keyword%")->orWhere('email', 'LIKE', "%$keyword%")->paginate(10);
+                $kodeInduk = KodeInduk::where('nama', 'LIKE', "%$keyword%")->orWhere('kode_induk', 'LIKE', "%$keyword%")->paginate(10);
             }
             else{
                 $kodeInduk = KodeInduk::paginate(10);
@@ -31,7 +31,7 @@ class KodeIndukController extends Controller
             return redirect()->back()->withStatus('Terjadi Kesalahan');
         }
                 
-        return \view('kode-induk.list-kode-induk', ['kodeInduk' => $kodeInduk], $this->param);
+        return \view('master-akuntansi.kode-induk.list-kode-induk', ['kodeInduk' => $kodeInduk], $this->param);
     }
 
     public function create()
@@ -40,7 +40,7 @@ class KodeIndukController extends Controller
         $this->param['btnRight']['text'] = 'Lihat Data';
         $this->param['btnRight']['link'] = route('kode-induk.index');
 
-        return \view('kode-induk.tambah-kode-induk', $this->param);
+        return \view('master-akuntansi.kode-induk.tambah-kode-induk', $this->param);
     }
 
     public function store(Request $request)
@@ -76,7 +76,7 @@ class KodeIndukController extends Controller
             $this->param['btnRight']['link'] = route('kode-induk.index');
             $this->param['kodeInduk'] = KodeInduk::find($id);
 
-            return \view('kode-induk.edit-kode-induk', $this->param);
+            return \view('master-akuntansi.kode-induk.edit-kode-induk', $this->param);
         }
         catch(\Exception $e){
             return redirect()->back()->withError('Terjadi kesalahan : '. $e->getMessage());

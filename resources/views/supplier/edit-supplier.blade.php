@@ -21,37 +21,56 @@
     @endif
     <a href="{{$btnRight['link']}}" class="btn btn-primary mb-3"> <span class="fa fa-arrow-alt-circle-left"></span> {{$btnRight['text']}}</a>
     <hr>
-    <form action="{{ route('user.update', $user->id) }}" method="POST">
+    <form action="{{ route('supplier.update', $supplier->kode_supplier) }}" method="POST">
       @csrf
       @method('put')
+      <label>Kode Supplier</label>
+      <input type="text" class="form-control {{ $errors->has('kode_supplier') ? ' is-invalid' : '' }}" value="{{ old('kode_supplier', $supplier->kode_supplier) }}" autofocus name="kode_supplier" placeholder="ex : Supplier 1">
+      @if ($errors->has('kode_supplier'))
+          <span class="invalid-feedback" role="alert">
+              <strong>{{ $errors->first('kode_supplier') }}</strong>
+          </span>
+      @endif
+
+      <br>
+
       <label>Nama</label>
-      <input type="text" class="form-control {{ $errors->has('name') ? ' is-invalid' : '' }}" value="{{ old('name', $user->name) }}" autofocus name="name" placeholder="ex : Anthony Davis">
-      @if ($errors->has('name'))
+      <input type="text" class="form-control {{ $errors->has('nama') ? ' is-invalid' : '' }}" value="{{ old('nama', $supplier->nama) }}" autofocus name="nama" placeholder="ex : Anthony Davis">
+      @if ($errors->has('nama'))
           <span class="invalid-feedback" role="alert">
-              <strong>{{ $errors->first('name') }}</strong>
+              <strong>{{ $errors->first('nama') }}</strong>
           </span>
       @endif
 
       <br>
 
-      <label>Email</label>
-      <input type="email" class="form-control {{ $errors->has('email') ? ' is-invalid' : '' }}" value="{{ old('email', $user->email) }}" name="email" placeholder="ex : anthonydavis@mail.test">
-      @if ($errors->has('email'))
+      <label>Alamat</label>
+      <textarea class="form-control" name="alamat" id="alamat" cols="30" rows="5">{{old('alamat', $supplier->alamat)}}</textarea>
+      @if ($errors->has('alamat'))
           <span class="invalid-feedback" role="alert">
-              <strong>{{ $errors->first('email') }}</strong>
+              <strong>{{ $errors->first('alamat') }}</strong>
           </span>
       @endif
 
       <br>
 
-      <label for="">Akses</label>
-      <select name="akses" id="akses" class="form-control select2 {{ $errors->has('akses') ? ' is-invalid' : '' }}">
-        <option value="">--Pilih Akses--</option>
-        <option value="Akuntan" {{old('akses', $user->akses) == 'Akuntan' ? 'selected' : ''}} >Akuntan</option>
-        <option value="Persediaan" {{old('akses', $user->akses) == 'Persediaan' ? 'selected' : ''}} >Persediaan</option>
-        <option value="Pembelian" {{old('akses', $user->akses) == 'Pembelian' ? 'selected' : ''}} >Pembelian</option>
-        <option value="Super Admin" {{old('akses', $user->akses) == 'Super Admin' ? 'selected' : ''}} >Super Admin</option>
-      </select>
+      <label>No Hp</label>
+      <input type="text" class="form-control {{ $errors->has('no_hp') ? ' is-invalid' : '' }}" value="{{ old('no_hp', $supplier->no_hp) }}" autofocus name="no_hp" placeholder="ex : 085331xxxxxx">
+      @if ($errors->has('no_hp'))
+          <span class="invalid-feedback" role="alert">
+              <strong>{{ $errors->first('no_hp') }}</strong>
+          </span>
+      @endif
+
+      <br>
+
+      <label>Hutang</label>
+      <input type="text" class="form-control {{ $errors->has('hutang') ? ' is-invalid' : '' }}" value="{{ old('hutang', $supplier->hutang) }}" autofocus name="hutang" placeholder="ex : 1.000.000,00">
+      @if ($errors->has('hutang'))
+          <span class="invalid-feedback" role="alert">
+              <strong>{{ $errors->first('hutang') }}</strong>
+          </span>
+      @endif
 
       <br>
 

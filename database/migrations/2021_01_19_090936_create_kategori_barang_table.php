@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateSupplierTable extends Migration
+class CreateKategoriBarangTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,12 +13,9 @@ class CreateSupplierTable extends Migration
      */
     public function up()
     {
-        Schema::create('supplier', function (Blueprint $table) {
-            $table->string('kode_supplier', 15)->primary();
-            $table->string('nama', 40);
-            $table->text('alamat');
-            $table->string('no_hp', 15);
-            $table->decimal('hutang', 13,2)->default(0);
+        Schema::create('kategori_barang', function (Blueprint $table) {
+            $table->tinyIncrements('id');
+            $table->string('nama');
             $table->timestamps();
         });
     }
@@ -30,6 +27,6 @@ class CreateSupplierTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('supplier');
+        Schema::dropIfExists('kategori_barang');
     }
 }

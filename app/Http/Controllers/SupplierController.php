@@ -40,39 +40,29 @@ class SupplierController extends Controller
         $this->param['btnRight']['text'] = 'Lihat Data';
         $this->param['btnRight']['link'] = route('supplier.index');
 
-        $data = Supplier::all();
-        $kode_supplier = null;
-        if($data->count() > 0){
-            $lastnoSupplier = Supplier::orderBy('kode_supplier', 'desc')->first()->kode_supplier;
-            $lastIncreament = substr($lastnoSupplier, 1);
-            $kode_supplier = str_pad($lastIncreament + 1, 3, 0, STR_PAD_LEFT);
-            $kode_supplier = 'S-'.$kode_supplier;
-        }
-        else{
-            $kode_supplier = 'S-001';
-        }
-        $this->param['kode_supplier'] = $kode_supplier;
-
         return \view('supplier.tambah-supplier', $this->param);
     }
 
     public function store(Request $request)
     {
         $validatedData = $request->validate([
-            'kode_supplier' => 'required|unique:kode_supplier',
+            'kode_supplier' => 'required|unique:supplier',
             'nama' => 'required',
             'alamat' => 'required',
-            'no_hp' => 'required',
+            'no_hp' => 'required|unique:supplier',
             'hutang' => 'required'
         ]);
+        
         try{
+            $newSupplier = new Supplier;
     
-            $newKodeInduk = new Supplier;
+            $newSupplier->kode_supplier = $request->get('kode_supplier');
+            $newSupplier->nama = $request->get('nama');
+            $newSupplier->alamat = $request->get('alamat');
+            $newSupplier->no_hp = $request->get('no_hp');
+            $newSupplier->hutang = $request->get('hutang');
     
-            $newKodeInduk->kode_induk = $request->get('kode_induk');
-            $newKodeInduk->nama = $request->get('nama');
-    
-            $newKodeInduk->save();
+            $newSupplier->save();
     
             return redirect()->back()->withStatus('Data berhasil ditambahkan.');
         }
@@ -81,6 +71,73 @@ class SupplierController extends Controller
         }
         catch(\Illuminate\Database\QueryException $e){
             return redirect()->back()->withStatus('Terjadi kesalahan pada database : '. $e->getMessage());
+        }
+    }
+
+    public function edit($kode_supplier)
+    {
+        try{
+            $this->param['pageInfo'] = 'Manage Supplier / Edit Data';
+            $this->param['btnRight']['text'] = 'Lihat Data';
+            $this->param['btnRight']['link'] = route('supplier.index');
+            $this->param['supplier'] = Supplier::where('kode_supplier', $kode_supplier)->first();
+
+            return \view('supplier.edit-supplier', $this->param);
+        }
+        catch(\Exception $e){
+            return redirect()->back()->withError('Terjadi kesalahan : '. $e->getMessage());
+        }
+        catch(\Illuminate\Database\QueryException $e){
+            return redirect()->back()->withError('Terjadi kesalahan pada database : '. $e->getMessage());
+        }   
+    }
+
+    public function update(Request $request, $kode_supplier)
+    {
+        $supplier = Supplier::where('kode_supplier', $kode_supplier)->first();
+
+        $isKodeUnique = $supplier->kode_supplier == $kode_supplier ? '' : '|unique:supplier';
+        $isPhoneUnique = $supplier->no_hp == $request->no_hp ? '' : '|unique:supplier';
+
+        $validatedData = $request->validate([
+            'kode_supplier' => 'required'.$isKodeUnique,
+            'nama' => 'required',
+            'alamat' => 'required',
+            'no_hp' => 'required'.$isPhoneUnique,
+            'hutang' => 'required'
+        ]);
+        try{
+            $supplier->kode_supplier = $request->get('kode_supplier');
+            $supplier->nama = $request->get('nama');
+            $supplier->alamat = $request->get('alamat');
+            $supplier->no_hp = $request->get('no_hp');
+            $supplier->hutang = $request->get('hutang');
+            $supplier->save();
+
+            return redirect()->back()->withStatus('Data berhasil diperbarui.');
+        }
+        catch(\Exception $e){
+            return redirect()->back()->withError('Terjadi kesalahan : '. $e->getMessage());
+        }
+        catch(\Illuminate\Database\QueryException $e){
+            return redirect()->back()->withError('Terjadi kesalahan pada database : '. $e->getMessage());
+        }
+    }
+
+    public function destroy($kode_supplier)
+    {
+        try{
+            $supplier = Supplier::findOrFail($kode_supplier);
+            $supplier->delete();
+
+            return redirect()->route('supplier.index')->withStatus('Data berhasil dihapus.');
+        }
+        catch(\Exception $e){
+            return $e->getMessage();
+            return redirect()->route('supplier.index')->withError('Terjadi kesalahan : '. $e->getMessage());
+        }
+        catch(\Illuminate\Database\QueryException $e){
+            return redirect()->route('supplier.index')->withError('Terjadi kesalahan pada database : '. $e->getMessage());
         }
     }
 }

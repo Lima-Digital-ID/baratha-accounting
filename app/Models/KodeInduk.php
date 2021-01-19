@@ -11,4 +11,10 @@ class KodeInduk extends Model
 
     protected $table = 'kode_induk';
     protected $primaryKey = 'kode_induk';
+    public $incrementing = false;
+
+    public function kodeRekening()
+    {
+        return $this->hasMany('App\Models\KodeRekening');
+    }
 }

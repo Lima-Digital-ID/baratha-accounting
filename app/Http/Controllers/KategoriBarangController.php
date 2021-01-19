@@ -3,65 +3,57 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use \App\Models\User;
-
-class UserController extends Controller
+use \App\Models\KategoriBarang;
+class KategoriBarangController extends Controller
 {
     private $param;
     public function __construct()
     {
-        $this->param['icon'] = 'fa-cog';
+        $this->param['icon'] = 'fa-boxes';
     }
 
     public function index(Request $request)
     {
-        $this->param['pageInfo'] = 'Manage User / List User';
+        $this->param['pageInfo'] = 'Manage Kategori Barang / List Kategori Barang';
         $this->param['btnRight']['text'] = 'Tambah Data';
-        $this->param['btnRight']['link'] = route('user.create');
+        $this->param['btnRight']['link'] = route('kategori-barang.create');
 
         try {
             $keyword = $request->get('keyword');
             if ($keyword) {
-                $user = User::where('name', 'LIKE', "%$keyword%")->orWhere('email', 'LIKE', "%$keyword%")->paginate(10);
+                $kategoriBarang = KategoriBarang::where('nama', 'LIKE', "%$keyword%")->paginate(10);
             }
             else{
-                $user = User::paginate(10);
+                $kategoriBarang = KategoriBarang::paginate(10);
             }
         } catch (\Illuminate\Database\QueryException $e) {
             return redirect()->back()->withStatus('Terjadi Kesalahan');
         }
                 
-        return \view('data-master.user.list-user', ['user' => $user], $this->param);
+        return \view('persediaan.kategori-barang.list-kategori-barang', ['kategoriBarang' => $kategoriBarang], $this->param);
     }
 
     public function create()
     {
-        $this->param['pageInfo'] = 'Manage User / Tambah Data';
+        $this->param['pageInfo'] = 'Manage Kategori Barang / Tambah Data';
         $this->param['btnRight']['text'] = 'Lihat Data';
-        $this->param['btnRight']['link'] = route('user.index');
+        $this->param['btnRight']['link'] = route('kategori-barang.index');
 
-        return \view('data-master.user.tambah-user', $this->param);
+        return \view('persediaan.kategori-barang.tambah-kategori-barang', $this->param);
     }
 
     public function store(Request $request)
     {
         $validatedData = $request->validate([
-            'name' => 'required',
-            'email' => 'required|email|unique:users',
-            'akses' => 'required',
-            'password' => 'required',
-            'konfirmasi_password' => 'required|same:password',
+            'nama' => 'required|unique:kategori_barang',
         ]);
         try{
     
-            $newUser = new User;
+            $newKategoriBarang = new KategoriBarang;
     
-            $newUser->name = $request->get('name');
-            $newUser->email = $request->get('email');
-            $newUser->password = \Hash::make($request->get('password'));
-            $newUser->akses = $request->get('akses');
+            $newKategoriBarang->nama = $request->get('nama');
     
-            $newUser->save();
+            $newKategoriBarang->save();
     
             return redirect()->back()->withStatus('Data berhasil ditambahkan.');
         }
@@ -76,12 +68,12 @@ class UserController extends Controller
     public function edit($id)
     {
         try{
-            $this->param['pageInfo'] = 'Manage User / Edit Data';
+            $this->param['pageInfo'] = 'Manage Kategori Barang / Edit Data';
             $this->param['btnRight']['text'] = 'Lihat Data';
-            $this->param['btnRight']['link'] = route('user.index');
-            $this->param['user'] = User::find($id);
+            $this->param['btnRight']['link'] = route('kategori-barang.index');
+            $this->param['kategoriBarang'] = KategoriBarang::find($id);
 
-            return \view('data-master.user.edit-user', $this->param);
+            return \view('persediaan.kategori-barang.edit-kategori-barang', $this->param);
         }
         catch(\Exception $e){
             return redirect()->back()->withError('Terjadi kesalahan : '. $e->getMessage());
@@ -93,20 +85,19 @@ class UserController extends Controller
 
     public function update(Request $request, $id)
     {
-        $user = User::find($id);
+        $kategoriBarang = KategoriBarang::find($id);
 
-        $isUnique = $user->email == $request->email ? '' : '|unique:users';
+        $isUniqueNama = $kategoriBarang->nama == $request->nama ? '' : '|unique:kategori_barang';
 
         $validatedData = $request->validate([
-            'name' => 'required',
-            'email' => 'required|email'.$isUnique,
+            'nama' => 'required'.$isUniqueNama,
         ]);
         try{
 
-            $user->name = $request->get('name');
-            $user->email = $request->get('email');
-            $user->akses = $request->get('akses');
-            $user->save();
+            // $kategoriBarang->kategori_barang = $request->get('kategori_barang');
+            $kategoriBarang->nama = $request->get('nama');
+            
+            $kategoriBarang->save();
 
             return redirect()->back()->withStatus('Data berhasil diperbarui.');
         }
@@ -121,17 +112,17 @@ class UserController extends Controller
     public function destroy($id)
     {
         try{
-            $member = User::findOrFail($id);
+            $kategoriBarang = KategoriBarang::findOrFail($id);
 
-            $member->delete();
+            $kategoriBarang->delete();
 
-            return redirect()->route('user.index')->withStatus('Data berhasil dihapus.');
+            return redirect()->route('kategori-barang.index')->withStatus('Data berhasil dihapus.');
         }
         catch(\Exception $e){
-            return redirect()->route('user.index')->withError('Terjadi kesalahan : '. $e->getMessage());
+            return redirect()->route('kategori-barang.index')->withError('Terjadi kesalahan : '. $e->getMessage());
         }
         catch(\Illuminate\Database\QueryException $e){
-            return redirect()->route('user.index')->withError('Terjadi kesalahan pada database : '. $e->getMessage());
+            return redirect()->route('kategori-barang.index')->withError('Terjadi kesalahan pada database : '. $e->getMessage());
         }
         
     }

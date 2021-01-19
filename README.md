@@ -1,6 +1,6 @@
 How To Run
 1. Pull repository
-2. jalankan composer intall
+2. jalankan composer install
 3. buat database dengan nama : baratha_accounting_db
 3. jalankan php artisan migrate
 4. jalankan php artisan db:seed --class=SuperAdminSeeder
