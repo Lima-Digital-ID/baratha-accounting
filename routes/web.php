@@ -36,4 +36,6 @@ Route::group(['middleware' => ['auth:sanctum', 'verified']], function () {
         Route::resource('kategori-barang', 'KategoriBarangController');
         Route::resource('barang', 'BarangController');
     });
+
+    Route::resource('supplier', 'SupplierController');
 });
