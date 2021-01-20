@@ -31,7 +31,7 @@ class SupplierController extends Controller
             return redirect()->back()->withStatus('Terjadi Kesalahan');
         }
                 
-        return \view('supplier.list-supplier', ['supplier' => $supplier], $this->param);
+        return \view('pembelian.supplier.list-supplier', ['supplier' => $supplier], $this->param);
     }
 
     public function create()
@@ -40,7 +40,7 @@ class SupplierController extends Controller
         $this->param['btnRight']['text'] = 'Lihat Data';
         $this->param['btnRight']['link'] = route('supplier.index');
 
-        return \view('supplier.tambah-supplier', $this->param);
+        return \view('pembelian.supplier.tambah-supplier', $this->param);
     }
 
     public function store(Request $request)
@@ -82,7 +82,7 @@ class SupplierController extends Controller
             $this->param['btnRight']['link'] = route('supplier.index');
             $this->param['supplier'] = Supplier::where('kode_supplier', $kode_supplier)->first();
 
-            return \view('supplier.edit-supplier', $this->param);
+            return \view('pembelian.supplier.edit-supplier', $this->param);
         }
         catch(\Exception $e){
             return redirect()->back()->withError('Terjadi kesalahan : '. $e->getMessage());
@@ -130,14 +130,14 @@ class SupplierController extends Controller
             $supplier = Supplier::findOrFail($kode_supplier);
             $supplier->delete();
 
-            return redirect()->route('supplier.index')->withStatus('Data berhasil dihapus.');
+            return redirect()->route('pembelian.supplier.index')->withStatus('Data berhasil dihapus.');
         }
         catch(\Exception $e){
             return $e->getMessage();
-            return redirect()->route('supplier.index')->withError('Terjadi kesalahan : '. $e->getMessage());
+            return redirect()->route('pembelian.supplier.index')->withError('Terjadi kesalahan : '. $e->getMessage());
         }
         catch(\Illuminate\Database\QueryException $e){
-            return redirect()->route('supplier.index')->withError('Terjadi kesalahan pada database : '. $e->getMessage());
+            return redirect()->route('pembelian.supplier.index')->withError('Terjadi kesalahan pada database : '. $e->getMessage());
         }
     }
 }

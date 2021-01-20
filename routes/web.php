@@ -38,5 +38,11 @@ Route::group(['middleware' => ['auth:sanctum', 'verified']], function () {
         Route::resource('barang', 'BarangController');
     });
 
-    Route::resource('supplier', 'SupplierController');
+    Route::group(['prefix' => 'pembelian'], function(){
+        Route::resource('supplier', 'SupplierController');
+    });
+
+    Route::group(['prefix' => 'penjualan'], function(){
+        Route::resource('customer', 'CustomerController');
+    });
 });

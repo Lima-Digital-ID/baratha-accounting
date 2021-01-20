@@ -125,12 +125,6 @@
               </div>
             </div>
           </li>
-
-          <li class="nav-item {{Request::segment(1) == 'supplier' ? 'active' : ''}}">
-            <a class="nav-link" href="{{url('supplier')}}">
-              <i class="fas fa-fw fa-cogs"></i>
-              <span>Manage Supplier</span></a>
-          </li>
           
           <li class="nav-item {{Request::segment(1) == 'persediaan' ? 'active' : ''}}">
             <a
@@ -156,6 +150,58 @@
                 </a>
                 <a class="nav-link" href="{{url('persediaan/barang')}}">
                   <span>Barang</span>
+                </a>
+              </div>
+            </div>
+          </li>
+
+          <li class="nav-item {{Request::segment(1) == 'pembelian' ? 'active' : ''}}">
+            <a
+              class="nav-link collapsed"
+              href="#"
+              data-toggle="collapse"
+              data-target="#pembelian"
+              aria-expanded="true"
+              aria-controls="pembelian"
+            >
+            <i class="fas fa-fw fa-cash-register "></i>
+              <span>Pembelian</span>
+            </a>
+            <div
+              id="pembelian"
+              class="collapse"
+              aria-labelledby="headingTwo"
+              data-parent="#accordionSidebar"
+            >
+              <div class="py-2 collapse-inner rounded">
+                <a class="nav-link" href="{{url('pembelian/supplier')}}">
+                  <span>Supplier</span>
+                </a>
+              </div>
+            </div>
+          </li>
+
+          <li class="nav-item {{Request::segment(1) == 'penjualan' ? 'active' : ''}}">
+            <a
+              class="nav-link collapsed"
+              href="#"
+              data-toggle="collapse"
+              data-target="#penjualan"
+              aria-expanded="true"
+              aria-controls="penjualan"
+            >
+            <i class="fas fa-fw fa-cash-register "></i>
+              <span>Penjualan</span>
+            </a>
+            <div
+              id="penjualan"
+              class="collapse"
+              aria-labelledby="headingTwo"
+              data-parent="#accordionSidebar"
+            >
+              <div class="py-2 collapse-inner rounded">
+                <a class="nav-link" href="{{url('penjualan/customer')}}">
+                  <span>Customer</span>
                 </a>
               </div>
             </div>
