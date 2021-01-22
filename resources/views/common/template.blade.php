@@ -44,9 +44,9 @@
             href="index.html"
           >
             <div class="sidebar-brand-icon">
-              <i class="fas fa-world"></i>
+              <i class="fa fa-calculator"></i>
             </div>
-            <div class="sidebar-brand-text mx-3">Baratha Accounting </div>
+            <div class="sidebar-brand-text">Baratha Accounting </div>
           </a>
 
           <!-- Nav Item - Dashboard -->
@@ -57,12 +57,6 @@
             >
           </li>
 
-          <!-- Heading -->
-          <div class="sidebar-heading">
-          Data Master
-          </div>
-
-          <!-- Nav Item - Pages Collapse Menu -->
 
           <!-- Nav Item - Pages Collapse Menu -->
           <li class="nav-item {{Request::segment(1) == 'data-master' ? 'active' : ''}}">
@@ -264,11 +258,6 @@
           <!-- Page Heading -->
           <div class="d-sm-flex align-items-center justify-content-between mb-4">
             <div class="h4 mb-0 solid-color font-weight-bold infopage">
-                  @if (!empty($icon))
-                  <span class="fa {{$icon}} info-icon-page"></span>
-                  @else
-                  <span class="fa fa-tachometer-alt info-icon-page"></span>
-                  @endif
                   <?php 
                     $pageSegment = !empty(Request::segment(1)) ? Request::segment(1) : 'Dashboard';
                   ?>
@@ -298,7 +287,7 @@
       <!-- End of Main Content -->
 
       <!-- Footer -->
-      <footer class="sticky-footer bg-white">
+      <footer class="sticky-footer">
         <div class="container my-auto">
           <div class="copyright text-center my-auto">
             <span>Copyright 2020 - <a href="https://limadigital.id" target="_blank">LIMA Digital</a></span>
