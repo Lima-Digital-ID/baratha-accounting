@@ -78,10 +78,10 @@ $(document).ready(function() {
                 //     barang($(this));
                 // });
 
-                $(".totalQty").keyup(function() {
-                    getTotalQty();
+                $(".getTotalQty").keyup(function() {
+                    getTotalQty($(this));
                 });
-                // getTotalQty();
+                getTotalQty();
 
                 // $(".menu").change(function() {
                 //     getDetailMenu($(this));
@@ -150,7 +150,7 @@ $(document).ready(function() {
         $(".getTotalQty").each(function() {
             var getQty = parseFloat($(this).val());
             console.log(getQty);
-            // getQty = isNaN(getQty) ? 0 : getQty;
+            getQty = isNaN(getQty) ? 0 : getQty;
             totalQty += getQty;
         });
         $("#totalQty").html(totalQty);
@@ -161,7 +161,7 @@ $(document).ready(function() {
     });
     
     $(".getTotalQty").keyup(function() {
-        getTotalQty();
+        getTotalQty($(this));
         console.log($(this).val())
     });
 
