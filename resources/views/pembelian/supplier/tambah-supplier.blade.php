@@ -44,7 +44,7 @@
       <br>
 
       <label>Alamat</label>
-      <textarea class="form-control" name="alamat" id="alamat" cols="30" rows="5"></textarea>
+      <textarea class="form-control" name="alamat" id="alamat" rows="2"></textarea>
       @if ($errors->has('alamat'))
           <span class="invalid-feedback" role="alert">
               <strong>{{ $errors->first('name') }}</strong>
@@ -64,7 +64,7 @@
       <br>
 
       <label>Hutang</label>
-      <input type="text" class="form-control {{ $errors->has('hutang') ? ' is-invalid' : '' }}" value="{{ old('hutang') }}" autofocus name="hutang" placeholder="ex : 1.000.000,00">
+      <input type="text" class="form-control {{ $errors->has('hutang') ? ' is-invalid' : '' }}" value="{{ old('hutang',0) }}" autofocus name="hutang" placeholder="ex : 1.000.000,00">
       @if ($errors->has('hutang'))
           <span class="invalid-feedback" role="alert">
               <strong>{{ $errors->first('hutang') }}</strong>

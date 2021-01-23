@@ -158,7 +158,7 @@
               aria-expanded="true"
               aria-controls="pembelian"
             >
-            <i class="fas fa-fw fa-cash-register "></i>
+            <i class="fas fa-fw fa-shopping-cart"></i>
               <span>Pembelian</span>
             </a>
             <div
@@ -170,6 +170,9 @@
               <div class="py-2 collapse-inner rounded">
                 <a class="nav-link" href="{{url('pembelian/supplier')}}">
                   <span>Supplier</span>
+                </a>
+                <a class="nav-link" href="{{url('pembelian/pembelian-barang')}}">
+                  <span>Pembelian Barang</span>
                 </a>
               </div>
             </div>

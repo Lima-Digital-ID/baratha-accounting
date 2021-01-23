@@ -137,6 +137,9 @@ body {
 	background: #585ebe !important;
 	border-color: #585ebe !important;
 }
+.text-primary{
+	color: #3c4099;
+}
 label {
 	font-weight: bold;
 	letter-spacing: 0.5px;

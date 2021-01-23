@@ -11,4 +11,9 @@ class Supplier extends Model
     protected $table = 'supplier';
     protected $primaryKey = 'kode_supplier';
     public $incrementing = false;
+
+    public function pembelianBarang()
+    {
+        return $this->hasMany('App\Models\PembelianBarang');
+    }
 }
