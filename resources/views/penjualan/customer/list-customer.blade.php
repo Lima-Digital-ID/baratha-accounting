@@ -1,7 +1,5 @@
 @extends('common.template')
 @section('container')
-<div class="card shadow py-2">
-    <div class="card-body">
         {{-- <div class="col-12"> --}}
         @if (session('status'))
             <div class="alert alert-success alert-dismissible fade show" role="alert">
@@ -30,7 +28,7 @@
           </div>
         </div>
         <div class="table-responsive">
-            <table class="table table-striped table-hover table-bordered table-custom">
+            <table class="table table-custom">
                 <thead>
                     <tr>
                         <td>#</td>
@@ -55,7 +53,7 @@
                             <td>{{$value->alamat}}</td>
                             <td>{{$value->no_hp}}</td>
                             <td class="text-right">Rp. {{number_format($value->piutang, 2, ',','.')}}</td>
-                            <td class="text-center">
+                            <td>
                                 <div class="dropdown dropdown-link">
                                     <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
                                         Opsi
@@ -82,6 +80,4 @@
             </table>
             {{$customer->appends(Request::all())->links('vendor.pagination.custom')}}
         </div>
-    </div>
-</div>
 @endsection

@@ -28,7 +28,7 @@
           </div>
         </div>
         <div class="table-responsive">
-            <table class="table table-striped table-hover table-custom table-white">
+            <table class="table table-custom">
                 <thead>
                     <tr>
                         <td>#</td>

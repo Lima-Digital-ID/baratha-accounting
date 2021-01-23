@@ -72,12 +72,11 @@
         <option value="Super Admin" {{old('akses') == 'Super Admin' ? 'selected' : ''}} >Super Admin</option>
       </select>
 
-      <br>
-      
-
-      <button type="reset" class="btn btn-default"> <span class="fa fa-times"></span> Cancel</button>
-      &nbsp;
-      <button type="submit" class="btn btn-primary"> <span class="fa fa-save"></span> Save</button>
+        <div class="mt-4">
+            <button type="reset" class="btn btn-default"> <span class="fa fa-times"></span> Cancel</button>
+            &nbsp;
+            <button type="submit" class="btn btn-primary"> <span class="fa fa-save"></span> Save</button>
+        </div>
     </form>
   </div>
 </div>

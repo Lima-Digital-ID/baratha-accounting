@@ -4,6 +4,7 @@ body {
 	background: #f6f6f8;
 	align-items: center;
 	font-size: 15px;
+	overflow-x: hidden;
 }
 .box-login {
 	margin-top: 10%;
@@ -104,8 +105,11 @@ body {
 .table-custom tbody tr {
 	padding-bottom : 20px;
 }
-.table-custom.table-white tbody tr{
+.table-custom tbody tr{
 	background : white;
+}
+.table-custom tbody tr:hover{
+	background : rgba(156, 157, 183, 0.1);
 }
 
 .solid-color {
@@ -116,7 +120,7 @@ body {
 }
 .select2-container--default
 	.select2-results__option--highlighted[aria-selected] {
-	background: #42a5f5;
+	background: #3c4099;
 }
 .datepicker th.prev,
 .datepicker th.next {
@@ -410,12 +414,16 @@ a:hover {
 	text-decoration: none;
 }
 .modal-header {
-	background: #42a5f5;
+	background: #3c4099;
 	color: white;
 }
 .f-15 {
 	font-size: 15px;
 	letter-spacing: 0.5px;
+}
+.alert{
+	border-radius: 0px;
+	font-weight: 500;
 }
 .custom-alert{
 	position: relative;
@@ -447,4 +455,11 @@ a:hover {
 		width: 40% !important;
 		overflow: inherit !important;
 	}
+}
+.select2-container--default .select2-selection--single{
+	border-radius: 0px;
+}
+.select2-container--default:focus, .select2-container--default .selection:focus, .select2-container--default .selection .select2-selection:focus{
+	outline: 0px;
+	box-shadow: 0 0 0 0.1rem rgba(78, 115, 223, 0.25);
 }
