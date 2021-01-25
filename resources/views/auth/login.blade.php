@@ -17,48 +17,54 @@
 <body class="bg-light">
     <div class="container container-login">
         <div class="row justify-content-center">
-            <div class="col-md-7" id="body_form" style="overflow:auto">
+            <div class="col-md-10" id="body_form" style="overflow:auto">
                 <div class="box-login">
-                    <div class="top">
-                        <p>LOGIN</p>
+                    <div class="left">
+                        <img src="{{asset('img/logobaratha.png')}}" width="40px" alt="">
+                        <div class="form mt-3">
+                            <form id="FormLogin" method="post" class="" action="{{ route('login') }}">
+                                @csrf
+        
+                                    <label for="">Email</label>
+                                    <div class="form-underline">
+                                        <input type="email" name="email" placeholder="Masukkan Email" class="@error('email') is-invalid @enderror" value="{{ old('email') }}" required autocomplete="email" autofocus>
+                                        <span class="fa fa-user"></span>
+                                    </div>
+                                    @error('email')
+                                        <span class="invalid-feedback" role="alert">
+                                            <strong>{{ $message }}</strong>
+                                        </span>
+                                    @enderror
+                                    <br>
+                                    <label for="">Password</label>
+                                    <div class="form-underline">
+                                        <input type="password" name="password" class="@error('password') is-invalid @enderror" placeholder="Masukkan Password" autocomplete="current-password" required>
+                                        <span class="fa fa-lock"></span>
+                                    </div>
+                                    @error('password')
+                                        <span class="invalid-feedback" role="alert">
+                                            <strong>{{ $message }}</strong>
+                                        </span>
+                                    @enderror
+                                    <br>
+                                    <div class="form-underline">
+                                    <input style="width:auto" type="checkbox" name="remember" id="remember" {{ old('remember') ? 'checked' : '' }}>
+        
+                                    <label style="font-size:12px" class="form-check-label" for="remember">
+                                        {{ __('Remember Me') }}
+                                    </label>
+        
+                                    </div>
+                                    <br>
+                                    <button type="sumit" class="btn btn-primary px-5 font-weight-bold ls-1">Login</button>
+                                </form>
+                        </div>
                     </div>
-                    <div class="body">
-                        <form id="FormLogin" method="post" class="" action="{{ route('login') }}">
-                        @csrf
-
-                            <label for="">Email</label>
-                            <div class="form-underline">
-                                <input type="email" name="email" placeholder="Masukkan Email" class="@error('email') is-invalid @enderror" value="{{ old('email') }}" required autocomplete="email" autofocus>
-                                <span class="fa fa-user"></span>
-                            </div>
-                            @error('email')
-                                <span class="invalid-feedback" role="alert">
-                                    <strong>{{ $message }}</strong>
-                                </span>
-                            @enderror
-                            <br>
-                            <label for="">Password</label>
-                            <div class="form-underline">
-                                <input type="password" name="password" class="@error('password') is-invalid @enderror" placeholder="Masukkan Password" autocomplete="current-password" required>
-                                <span class="fa fa-lock"></span>
-                            </div>
-                            @error('password')
-                                <span class="invalid-feedback" role="alert">
-                                    <strong>{{ $message }}</strong>
-                                </span>
-                            @enderror
-                            <br>
-                            <div class="form-underline">
-                            <input  type="checkbox" name="remember" id="remember" {{ old('remember') ? 'checked' : '' }}>
-
-                            <label class="form-check-label" for="remember">
-                                {{ __('Remember Me') }}
-                            </label>
-
-                            </div>
-                            <br>
-                            <button type="sumit" class="btn btn-primary px-5 font-weight-bold ls-1">Login</button>
-                        </form>
+                    <div class="right">
+                        <div class="text">
+                            <h5>Baratha Accounting</h5>
+                            <p class="font-weight-light">Application</p>
+                        </div>
                     </div>
                 </div>
             </div>

@@ -10,24 +10,45 @@ body {
 	margin-top: 10%;
 	border-radius: 10px;
 	overflow: auto;
+	min-height: 450px;
 	position: relative;
 	width: 100%;
 	background: white;
 }
-.box-login .top {
-	background: url("../../assets/img/bglogin.jpg");
+.box-login .left {
+	padding: 40px;
+	width: 40%;
+	float: left;
+	position: relative;
+	min-height: 450px;
+}
+.box-login .left .form{
+	display: flex;
+	align-items: center;
+}
+.box-login .left .form form{
+	width:100%;
+}
+.box-login .right {
+	width: 60%;
+	min-height: 450px;
+	float: left;
+	background: url("../img/bg-login.jpg");
 	background-position: top;
 	background-size: cover;
 	background-repeat: no-repeat;
-	padding: 70px 15px;
+	display: flex;
+	align-items: center;
+	padding : 0px 40px;
+	color : white;
 	text-align: center;
 	position: relative;
+	z-index: 1;
 }
-.box-login .body {
-	position: relative;
-	padding: 40px;
+.box-login .right .text{
+	width: 100%;
 }
-.box-login .top p {
+.box-login .left p {
 	color: white;
 	position: relative;
 	z-index: 2;
@@ -35,12 +56,12 @@ body {
 	font-size: 30px;
 	font-weight: bold;
 }
-.box-login .top::before {
+.box-login .right::before {
 	content: "";
-	background: rgba(54, 84, 99, 0.7);
+	background: rgba(60,64,153,0.8);
 	width: 100%;
 	height: 100%;
-	z-index: 1;
+	z-index: -1;
 	position: absolute;
 	left: 0;
 	top: 0;
