@@ -39,7 +39,7 @@
 
                 <div class="col-md-4">
                     <label>Tanggal</label>
-                    <input type="text" class="form-control getKode datepicker {{ $errors->has('tanggal') ? ' is-invalid' : '' }}" value="{{ old('tanggal') }}" name="tanggal" placeholder="Tanggal" data-url="{{url('pembelian/pembelian-barang/getKode')}}">
+                    <input type="text" class="form-control getKode datepicker {{ $errors->has('tanggal') ? ' is-invalid' : '' }}" value="{{ old('tanggal') }}" name="tanggal" placeholder="Tanggal" data-url="{{url('pembelian/pembelian-barang/getKode')}}" autocomplete="off">
                     @if ($errors->has('tanggal'))
                         <span class="invalid-feedback" role="alert">
                             <strong>{{ $errors->first('tanggal') }}</strong>
@@ -85,7 +85,7 @@
 
                 <div class="col-md-4">
                     <label>Jatuh Tempo</label>
-                    <input type="text" class="form-control datepicker {{ $errors->has('jatuh_tempo') ? ' is-invalid' : '' }}" value="{{ old('jatuh_tempo') }}" name="jatuh_tempo" placeholder="Jatuh Tempoo">
+                    <input type="text" class="form-control datepicker {{ $errors->has('jatuh_tempo') ? ' is-invalid' : '' }}" value="{{ old('jatuh_tempo') }}" name="jatuh_tempo" placeholder="Jatuh Tempoo" autocomplete="off">
                     @if ($errors->has('jatuh_tempo'))
                         <span class="invalid-feedback" role="alert">
                             <strong>{{ $errors->first('jatuh_tempo') }}</strong>
@@ -114,6 +114,8 @@
 
             <h5 class='text-right mt-5 pr-5'>Total : <span id='total' class="text-orange">0</span></h5>
             <h5 class='text-right mt-1 pr-5'>Total Qty : <span id='totalQty' class="text-orange">0</span></h5>
+            <h5 class='text-right mt-1 pr-5'>Total PPN : <span id='totalPpn' class="text-orange">0</span></h5>
+            <h5 class='text-right mt-1 pr-5'>Grandtotal : <span id='grandtotal' class="text-orange">0</span></h5>
             <div class="mt-4">
 
             <button type="reset" class="btn btn-default"> <span class="fa fa-times"></span> Cancel</button>

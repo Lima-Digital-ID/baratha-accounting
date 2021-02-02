@@ -11,6 +11,8 @@ class DetailPembelianBarang extends Model
 
     protected $table = 'detail_pembelian_barang';
 
+    protected $fillable = ['kode_pembelian', 'kode_barang', 'harga_satuan', 'qty', 'subtotal', 'ppn'];
+
     public function pembelianBarang()
     {
         return $this->belongsTo('App\Models\PembelianBarang', 'kode_pembelian');

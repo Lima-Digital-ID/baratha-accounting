@@ -142,7 +142,26 @@ $(document).ready(function() {
             subtotalVal = isNaN(subtotalVal) ? 0 : subtotalVal;
             total = total + subtotalVal;
         });
-        $("#total").html(formatRupiah(total));
+        $("#total").html(new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR' }).format(total));
+        getTotalPpn(total)
+    }
+
+    function getTotalPpn(total) {
+        let statusPpn = $('#status_ppn').val();
+        let totalPpn = 0;
+        if (statusPpn == 'Tanpa') {
+            totalPpn = 0;
+        }
+        else if(statusPpn == 'Belum'){
+            totalPpn = 10 / 100 * total;
+        }
+        else{
+            total = (100 / 110) * total;
+            totalPpn = 10 / 100 * total;
+            $("#total").html(new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR' }).format(total));
+        }
+        $("#totalPpn").html(new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR' }).format(totalPpn));
+        $("#grandtotal").html(new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR' }).format(total + totalPpn));
     }
     
     function getTotalQty() {
@@ -163,6 +182,25 @@ $(document).ready(function() {
     $(".getTotalQty").keyup(function() {
         getTotalQty($(this));
         console.log($(this).val())
+    });
+
+    $('#kode_barang').change(function () { 
+        let url = $(this).data('url');
+        let kodeBarang = $(this).val();
+
+        var no = $(this).closest(".row-detail").data("no");
+        var parent = ".row-detail[data-no='" + no + "']";
+
+        $.ajax({
+            type: "get",
+            url: url,
+            data: {kodeBarang : kodeBarang},
+            dataType: 'JSON',
+            success: function (response) {
+                $(parent + " " + "#stock").val(response.stock);
+                $(parent + " " + "#saldo").val(response.saldo);
+            }
+        });
     });
 
 });

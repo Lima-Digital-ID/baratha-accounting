@@ -37,12 +37,21 @@ Route::group(['middleware' => ['auth:sanctum', 'verified']], function () {
     Route::group(['prefix' => 'persediaan'], function () {
         Route::resource('kategori-barang', 'KategoriBarangController');
         Route::resource('barang', 'BarangController');
+
+        Route::get('pemakaian-barang/getKode', 'PemakaianBarangController@getKode');
+        Route::get('pemakaian-barang/getStock', 'PemakaianBarangController@getStock');
+        Route::get('pemakaian-barang/addDetailPemakaian', 'PemakaianBarangController@addDetailPemakaian');
+        Route::get('pemakaian-barang/addEditDetailPemakaian', 'PemakaianBarangController@addEditDetailPemakaian');
+        Route::resource('pemakaian-barang', 'PemakaianBarangController');
+
     });
 
     Route::group(['prefix' => 'pembelian'], function(){
         Route::resource('supplier', 'SupplierController');
+
         Route::get('pembelian-barang/getKode', 'PembelianBarangController@getKode');
         Route::get('pembelian-barang/addDetailPembelian', 'PembelianBarangController@addDetailPembelian');
+        Route::get('pembelian-barang/addEditDetailPembelian', 'PembelianBarangController@addEditDetailPembelian');
         Route::resource('pembelian-barang', 'PembelianBarangController');
     });
 

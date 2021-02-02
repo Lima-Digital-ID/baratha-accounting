@@ -16,4 +16,9 @@ class Supplier extends Model
     {
         return $this->hasMany('App\Models\PembelianBarang');
     }
+
+    public function kartuHutang()
+    {
+        return $this->hasMany('App\Models\KartuHutang');
+    }
 }

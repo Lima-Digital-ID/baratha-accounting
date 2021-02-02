@@ -18,4 +18,9 @@ class Barang extends Model
     {
         return $this->belongsTo('App\Models\KategoriBarang', 'id_kategori');
     }
+
+    public function kartuStock()
+    {
+        return $this->hasMany('App\Models\KartuStock');
+    }
 }
