@@ -1,7 +1,7 @@
 <div class="row row-detail mb-3" data-no='{{$no}}'>
     <div class="col-md-3 {{ isset($n)&&$errors->has('kode_barang.'.$n) ? ' is-invalid' : '' }}">
         <label for="" class="form-control-label">Barang</label>
-        <select name="kode_barang[]" class="form-control select2" id="kode_barang" data-url="{{ url('persediaan/pemakaian-barang/getStock') }}">
+        <select name="kode_barang[]" class="form-control select2 kode_barang" data-url="{{ url('persediaan/pemakaian-barang/getStock') }}">
             <option value=''>---Select---</option>
             @foreach($barang as $value)
                 <option value="{{$value->kode_barang}}" {{ isset($n)&&old('kode_barang.'.$n) == $value->kode_barang ? 'selected' : ''}}>{{$value->kode_barang.' ~ '.$value->nama}}</option>
@@ -16,7 +16,7 @@
 
     <div class="col-md-2">
         <label for="" class="form-control-label">Stock</label>
-        <input type="number" step=".01" name="stock[]" value="{{isset($n) ? old('stock.'.$n) : ''}}" class="form-control getTotalQty {{ isset($n)&&$errors->has('stock.'.$n) ? ' is-invalid' : '' }}" id='stock' readonly>
+        <input type="number" step=".01" name="stock[]" value="{{isset($n) ? old('stock.'.$n) : ''}}" class="form-control stock {{ isset($n)&&$errors->has('stock.'.$n) ? ' is-invalid' : '' }}" readonly>
         @if(isset($n)&&$errors->has('stock.'.$n))
         <span class="invalid-feedback" role="alert">
             <strong>{{ $errors->first('stock.'.$n) }}</strong>
@@ -26,7 +26,7 @@
     
     <div class="col-md-2">
         <label for="" class="form-control-label">Stock</label>
-        <input type="text" step=".01" name="saldo[]" value="{{isset($n) ? old('saldo.'.$n) : ''}}" class="form-control {{ isset($n)&&$errors->has('saldo.'.$n) ? ' is-invalid' : '' }}" id='saldo' readonly>
+        <input type="text" step=".01" name="saldo[]" value="{{isset($n) ? old('saldo.'.$n) : ''}}" class="form-control saldo {{ isset($n)&&$errors->has('saldo.'.$n) ? ' is-invalid' : '' }}" readonly>
         @if(isset($n)&&$errors->has('stock.'.$n))
         <span class="invalid-feedback" role="alert">
             <strong>{{ $errors->first('stock.'.$n) }}</strong>
@@ -36,7 +36,7 @@
 
     <div class="col-md-2">
         <label for="" class="form-control-label">Qty</label>
-        <input type="number" step=".01" name="qty[]" value="{{isset($n) ? old('qty.'.$n) : ''}}" class="form-control getSubtotal getTotalQty {{ isset($n)&&$errors->has('qty.'.$n) ? ' is-invalid' : '' }}" id='qty'>
+        <input type="number" step=".01" name="qty[]" value="{{isset($n) ? old('qty.'.$n) : ''}}" class="form-control {{ isset($n)&&$errors->has('qty.'.$n) ? ' is-invalid' : '' }}" id='qty'>
         @if(isset($n)&&$errors->has('qty.'.$n))
         <span class="invalid-feedback" role="alert">
             <strong>{{ $errors->first('qty.'.$n) }}</strong>

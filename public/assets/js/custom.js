@@ -184,9 +184,10 @@ $(document).ready(function() {
         console.log($(this).val())
     });
 
-    $('#kode_barang').change(function () { 
+    $('.kode_barang').change(function () { 
         let url = $(this).data('url');
         let kodeBarang = $(this).val();
+        console.log($(this));
 
         var no = $(this).closest(".row-detail").data("no");
         var parent = ".row-detail[data-no='" + no + "']";
@@ -197,8 +198,8 @@ $(document).ready(function() {
             data: {kodeBarang : kodeBarang},
             dataType: 'JSON',
             success: function (response) {
-                $(parent + " " + "#stock").val(response.stock);
-                $(parent + " " + "#saldo").val(response.saldo);
+                $(parent + " " + ".stock").val(response.stock);
+                $(parent + " " + ".saldo").val(response.saldo);
             }
         });
     });
