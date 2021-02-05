@@ -73,6 +73,10 @@ $(document).ready(function() {
                 $(".getSubtotal").keyup(function() {
                     getSubtotal($(this));
                 });
+                $('.kode_barang').change(function () { 
+                    kodeBarang($(this))
+                });
+
 
                 // $(".barang").change(function() {
                 //     barang($(this));
@@ -184,12 +188,12 @@ $(document).ready(function() {
         console.log($(this).val())
     });
 
-    $('.kode_barang').change(function () { 
-        let url = $(this).data('url');
-        let kodeBarang = $(this).val();
-        console.log($(this));
+    function kodeBarang(thisParam){
+        let url = thisParam.data('url');
+        let kodeBarang = thisParam.val();
+        console.log(thisParam);
 
-        var no = $(this).closest(".row-detail").data("no");
+        var no = thisParam.closest(".row-detail").data("no");
         var parent = ".row-detail[data-no='" + no + "']";
 
         $.ajax({
@@ -202,6 +206,10 @@ $(document).ready(function() {
                 $(parent + " " + ".saldo").val(response.saldo);
             }
         });
+
+    }
+    $('.kode_barang').change(function () { 
+        kodeBarang($(this))
     });
 
 });
