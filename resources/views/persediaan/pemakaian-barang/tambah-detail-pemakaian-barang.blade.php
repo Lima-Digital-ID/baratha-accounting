@@ -14,7 +14,7 @@
         @endif
     </div>
 
-    <div class="col-md-2">
+    <div class="col-md-1">
         <label for="" class="form-control-label">Stock</label>
         <input type="number" step=".01" name="stock[]" value="{{isset($n) ? old('stock.'.$n) : ''}}" class="form-control stock {{ isset($n)&&$errors->has('stock.'.$n) ? ' is-invalid' : '' }}" readonly>
         @if(isset($n)&&$errors->has('stock.'.$n))
@@ -24,19 +24,11 @@
         @endif
     </div>
     
-    <div class="col-md-2">
-        <label for="" class="form-control-label">Stock</label>
-        <input type="text" step=".01" name="saldo[]" value="{{isset($n) ? old('saldo.'.$n) : ''}}" class="form-control saldo {{ isset($n)&&$errors->has('saldo.'.$n) ? ' is-invalid' : '' }}" readonly>
-        @if(isset($n)&&$errors->has('stock.'.$n))
-        <span class="invalid-feedback" role="alert">
-            <strong>{{ $errors->first('stock.'.$n) }}</strong>
-        </span>
-        @endif
-    </div>
+    <input type="hidden" step=".01" name="saldo[]" value="{{isset($n) ? old('saldo.'.$n) : ''}}" class="form-control saldo {{ isset($n)&&$errors->has('saldo.'.$n) ? ' is-invalid' : '' }}" readonly>
 
     <div class="col-md-2">
         <label for="" class="form-control-label">Qty</label>
-        <input type="number" step=".01" name="qty[]" value="{{isset($n) ? old('qty.'.$n) : ''}}" class="form-control {{ isset($n)&&$errors->has('qty.'.$n) ? ' is-invalid' : '' }}" id='qty'>
+        <input type="number" step=".01" name="qty[]" value="{{isset($n) ? old('qty.'.$n) : ''}}" class="form-control getTotalQty {{ isset($n)&&$errors->has('qty.'.$n) ? ' is-invalid' : '' }}" id='qty'>
         @if(isset($n)&&$errors->has('qty.'.$n))
         <span class="invalid-feedback" role="alert">
             <strong>{{ $errors->first('qty.'.$n) }}</strong>
@@ -55,6 +47,17 @@
         @if(isset($n)&&$errors->has('kode_biaya.'.$n))
         <span class="invalid-feedback" role="alert">
             <strong>{{ $errors->first('kode_biaya.'.$n) }}</strong>
+        </span>
+        @endif
+    </div>
+
+    
+    <div class="col-md-2">
+        <label for="" class="form-control-label">Keterangan</label>
+        <input type="text" name="keterangan[]" value="{{isset($n) ? old('keterangan.'.$n) : ''}}" class="form-control {{ isset($n)&&$errors->has('keterangan.'.$n) ? ' is-invalid' : '' }}">
+        @if(isset($n)&&$errors->has('keterangan.'.$n))
+        <span class="invalid-feedback" role="alert">
+            <strong>{{ $errors->first('keterangan.'.$n) }}</strong>
         </span>
         @endif
     </div>

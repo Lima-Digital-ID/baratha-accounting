@@ -104,56 +104,56 @@
             <h6 class="heading-small text-muted mb-3">Detail Pembelian</h6>
 
             <div class="pl-lg-4" id='urlAddDetail' data-url="{{url('pembelian/pembelian-barang/addEditDetailPembelian')}}">
-              @if(!is_null(old('kode_barang')))
-                @php
-                  $loop = array();
-                  foreach(old('kode_barang') as $i => $val){
-                    $loop[] = array(
-                      'kode_barang' => old('kode_barang.'.$i),
-                      'qty' => (float)old('qty.'.$i),
-                      'harga_satuan' => (float)old('harga_satuan.'.$i),
-                      'subtotal' => (float)old('subtotal.'.$i),
-                      'ppn' => (float)old('ppn.'.$i),
-                    );
-                  }
-                @endphp
-              @else
-                @php
-                    $loop = $detailPembelian;
-                @endphp
-              @endif
+                @if(!is_null(old('kode_barang')))
+                    @php
+                    $loop = array();
+                    foreach(old('kode_barang') as $i => $val){
+                        $loop[] = array(
+                        'kode_barang' => old('kode_barang.'.$i),
+                        'qty' => (float)old('qty.'.$i),
+                        'harga_satuan' => (float)old('harga_satuan.'.$i),
+                        'subtotal' => (float)old('subtotal.'.$i),
+                        'ppn' => (float)old('ppn.'.$i),
+                        );
+                    }
+                    @endphp
+                @else
+                    @php
+                        $loop = $detailPembelian;
+                    @endphp
+                @endif
 
-              @php $no = 0; $total = 0; $totalPpn = 0; $grandtotal = 0; @endphp
-              @foreach($loop as $n => $edit)
-                @php 
-                  $no++;
-                  $linkHapus = $no==1 ? false : true; 
-                  $harga = 0;
-                  $fields = array(
-                      'kode_barang' => 'kode_barang.'.$n,
-                      'qty' => 'qty.'.$n,
-                      'harga_satuan' => 'harga_satuan.'.$n,
-                      'subtotal' => 'subtotal.'.$n,
-                      'ppn' => 'ppn.'.$n,
-                  );
-                  
-                  if(!is_null(old('kode_barang'))){
-                      $total = $total + $edit['subtotal'];
-                      $totalPpn = $totalPpn + $edit['ppn'];
-                      $idDetail = old('id_detail.'.$n);
-                  }
-                  else{
-                      $total = $total + $edit['subtotal'];
-                      $totalPpn = $totalPpn + $edit['ppn'];
-                      $harga = $edit['harga_satuan'];
-                      $idDetail = $edit['id'];
-                  }
+                @php $no = 0; $total = 0; $totalPpn = 0; $grandtotal = 0; @endphp
+                @foreach($loop as $n => $edit)
+                    @php 
+                    $no++;
+                    $linkHapus = $no==1 ? false : true; 
+                    $harga = 0;
+                    $fields = array(
+                        'kode_barang' => 'kode_barang.'.$n,
+                        'qty' => 'qty.'.$n,
+                        'harga_satuan' => 'harga_satuan.'.$n,
+                        'subtotal' => 'subtotal.'.$n,
+                        'ppn' => 'ppn.'.$n,
+                    );
+                    
+                    if(!is_null(old('kode_barang'))){
+                        $total = $total + $edit['subtotal'];
+                        $totalPpn = $totalPpn + $edit['ppn'];
+                        $idDetail = old('id_detail.'.$n);
+                    }
+                    else{
+                        $total = $total + $edit['subtotal'];
+                        $totalPpn = $totalPpn + $edit['ppn'];
+                        $harga = $edit['harga_satuan'];
+                        $idDetail = $edit['id'];
+                    }
+                    @endphp
+                    @include('pembelian.pembelian-barang.edit-detail-pembelian-barang',['hapus' => $linkHapus, 'no' => $no, 'barang' => $barang])
+                @endforeach
+                @php
+                    $grandtotal = $total + $totalPpn;
                 @endphp
-                  @include('pembelian.pembelian-barang.edit-detail-pembelian-barang',['hapus' => $linkHapus, 'no' => $no, 'barang' => $barang])
-              @endforeach
-              @php
-                  $grandtotal = $total + $totalPpn;
-              @endphp
             </div>
             <h5 class='text-right mt-5 pr-5'>Total : <span id='total' class="text-orange">{{number_format($total,0,',','.')}}</span></h5>
             <h5 class='text-right mt-1 pr-5'>Total Qty : <span id='totalQty' class="text-orange">{{$pembelian->total_qty}}</span></h5>

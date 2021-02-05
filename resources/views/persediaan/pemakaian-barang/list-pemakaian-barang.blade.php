@@ -50,7 +50,7 @@
                             <td>{{$value->kode_pemakaian}}</td>
                             <td>{{date('d-m-Y', strtotime($value->tanggal))}}</td>
                             <td>{{$value->total_qty}}</td>
-                            <td class="text-right">Rp. {{number_format($value->total_pemakaian, 2, ',','.')}}</td>
+                            <td>Rp. {{number_format($value->total_pemakaian, 2, ',','.')}}</td>
                             <td>
                                 <div class="dropdown dropdown-link">
                                     <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
