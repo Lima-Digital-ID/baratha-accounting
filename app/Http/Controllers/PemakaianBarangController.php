@@ -179,13 +179,247 @@ class PemakaianBarangController extends Controller
             $this->param['barang'] = Barang::get();
             $this->param['kodeBiaya'] = KodeBiaya::get();
             $this->param['pemakaian'] = PemakaianBarang::find($kode);
-            $this->param['detailPemakaian'] = DetailPemakaianBarang::where('kode_pemakaian', $kode)->get();
+            $this->param['detailPemakaian'] = \DB::table('detail_pemakaian_barang AS dt')
+                                                ->select('dt.id','dt.kode_barang', 'dt.qty', 'dt.subtotal', 'dt.keterangan', 'dt.kode_biaya', \DB::raw('b.stock + dt.qty AS stock'), \DB::raw('b.saldo + dt.subtotal AS saldo'))
+                                                ->join('barang AS b', 'b.kode_barang', '=', 'dt.kode_barang')
+                                                ->where('kode_pemakaian', $kode)
+                                                ->get();
 
             return \view('persediaan.pemakaian-barang.edit-pemakaian-barang', $this->param);
         } catch (\Exception $e) {
-            return redirect()->back()->withError('Terjadi kesalahan : ' . $e->getMessage());
+            return redirect()->back()->withStatus('Terjadi kesalahan : ' . $e->getMessage());
         } catch (\Illuminate\Database\QueryException $e) {
-            return redirect()->back()->withError('Terjadi kesalahan pada database : ' . $e->getMessage());
+            return redirect()->back()->withStatus('Terjadi kesalahan pada database : ' . $e->getMessage());
+        }
+    }
+
+    public function addEditDetailPemakaian()
+    {   
+        $fields = array(
+            'kode_barang' => 'kode_barang',
+            'stock' => 'stock',
+            'saldo' => 'saldo',
+            'qty' => 'qty',
+            'kode_biaya' => 'kode_biaya',
+            'keterangan' => 'keterangan',
+        );
+        $next = $_GET['biggestNo']+1;
+        $barang = Barang::select('kode_barang','nama')->get();
+        $kodeBiaya = KodeBiaya::select('kode_biaya','nama')->get();
+        return view('persediaan.pemakaian-barang.edit-detail-pemakaian-barang',['hapus' => true, 'no' => $next, 'barang' => $barang,'kodeBiaya' => $kodeBiaya, 'fields' => $fields,'idDetail' => '0']);
+    }
+
+    public function update(Request $request, $kode)
+    {
+        $validatedData = $request->validate(
+            [
+                'tanggal' => 'required',
+                'kode_barang.*' => 'required',
+                'qty.*' => 'required|min:1|lte:stock.*',
+                'kode_biaya.*' => 'required',
+            ],
+            [
+                'lte' => 'Quantity tidak boleh melebihi stock.'
+            ] 
+        );
+
+        try {
+
+            $pemakaianBarang = PemakaianBarang::select('tanggal', 'total_pemakaian')->where('kode_pemakaian', $kode)->get()[0];
+
+            $bulanPemakaian = date('m-Y', strtotime($pemakaianBarang->tanggal));
+            $editBulanPemakaian = date('m-Y', strtotime($request->get('tanggal')));
+
+            if ($bulanPemakaian != $editBulanPemakaian) {
+                return redirect()->back()->withStatus('Tidak dapat merubah bulan transaksi');
+            }
+
+            $totalPemakaian = $pemakaianBarang->total_pemakaian;
+
+            $newTotalQty = 0;
+            $newTotalPemakaian = 0;
+
+            foreach ($_POST['kode_barang'] as $key => $value) {
+
+                $subtotal = ($_POST['saldo'][$key] / $_POST['stock'][$key]) * $_POST['qty'][$key];
+                // cek apakah penambahan detail baru atau tidak
+                if ($_POST['id_detail'][$key] != 0) { // perubahan pada detail tanpa menambah detail baru
+                    $getDetail = DetailPemakaianBarang::select('kode_barang', 'qty', 'subtotal', 'kode_biaya', 'keterangan')->where('id', $_POST['id_detail'][$key])->get()[0];
+
+
+                    // cek apakah terdapat perubahan pada detail
+                    if ($_POST['kode_barang'][$key] != $getDetail['kode_barang'] || $_POST['qty'][$key] != $getDetail['qty'] || $_POST['kode_biaya'][$key] != $getDetail['kode_biaya'] || $_POST['keterangan'][$key] != $getDetail['keterangan']) { 
+                    
+
+                        if ($_POST['kode_barang'][$key] == $getDetail['kode_barang']) { //jika kode barang tidak berubah, dan yang lain berubah
+
+                            //kembalikan stock & saldo barang
+                            Barang::where('kode_barang', $_POST['kode_barang'][$key])
+                            ->update([
+                                'stock' => \DB::raw('stock+' . $getDetail->qty),
+                                'saldo' => \DB::raw('saldo+' . $getDetail->subtotal),
+                            ]);
+
+                            //perbarui stock
+                            Barang::where('kode_barang', $_POST['kode_barang'][$key])
+                                ->update([
+                                    'stock' => \DB::raw('stock-' . $_POST['qty'][$key]),
+                                    'saldo' => \DB::raw('saldo-' . $subtotal),
+                                ]);
+
+                            //update detail
+                            DetailPemakaianBarang::where('id', $_POST['id_detail'][$key])
+                                ->update([
+                                    'qty' => $_POST['qty'][$key],
+                                    'subtotal' => $subtotal,
+                                    'kode_biaya' => $_POST['kode_biaya'][$key],
+                                    'keterangan' => $_POST['keterangan'][$key],
+                                ]);
+                            // update kartu stock
+                            KartuStock::where('id_detail', $_POST['id_detail'][$key])
+                                ->where('kode_transaksi', $kode)
+                                ->update([
+                                    'tanggal' => $_POST['tanggal'],
+                                    'qty' => $_POST['qty'][$key],
+                                    'nominal' => $subtotal,
+                                ]);
+                        }
+                        else { //jika terdapat perubahan pada kode barang 
+
+                            //kembalikan stock & saldo pada kode barang yang lama 
+                            Barang::where('kode_barang', $getDetail['kode_barang'])
+                            ->update([
+                                'stock' => \DB::raw('stock+' . $getDetail->qty),
+                                'saldo' => \DB::raw('saldo+' . $getDetail->subtotal),
+                            ]);
+
+                            //perbarui stock & saldo kode barang yang baru
+                            Barang::where('kode_barang', $_POST['kode_barang'][$key])
+                                ->update([
+                                    'stock' => \DB::raw('stock-' . $_POST['qty'][$key]),
+                                    'saldo' => \DB::raw('saldo-' . $subtotal),
+                                ]);
+
+                            //update detail
+                            DetailPemakaianBarang::where('id', $_POST['id_detail'][$key])
+                                ->update([
+                                    'kode_barang' => $_POST['kode_barang'][$key],
+                                    'qty' => $_POST['qty'][$key],
+                                    'subtotal' => $subtotal,
+                                    'kode_biaya' => $_POST['kode_biaya'][$key],
+                                    'keterangan' => $_POST['keterangan'][$key],
+                                ]);
+                            
+                            // update kartu stock
+                            KartuStock::where('id_detail', $_POST['id_detail'][$key])
+                                ->where('kode_transaksi', $kode)
+                                ->update([
+                                    'tanggal' => $_POST['tanggal'],
+                                    'kode_barang' => $_POST['kode_barang'][$key],
+                                    'qty' => $_POST['qty'][$key],
+                                    'nominal' => $subtotal,
+                                ]);
+                        }
+                        
+                    }
+                    
+                } 
+                else { //perubahan pada detail dengan menambah detail baru
+
+                    //update barang
+                    Barang::where('kode_barang', $_POST['kode_barang'][$key])
+                        ->update([
+                            'stock' => \DB::raw('stock-' . $_POST['qty'][$key]),
+                            'saldo' => \DB::raw('saldo-' . $subtotal),
+                        ]);
+
+                    //insert to detail
+                    $newDetail = DetailPemakaianBarang::create([
+                        'kode_pemakaian' => $kode,
+                        'kode_barang' => $_POST['kode_barang'][$key],
+                        'qty' => $_POST['qty'][$key],
+                        'subtotal' => $subtotal,
+                        'kode_biaya' => $_POST['kode_biaya'][$key],
+                        'keterangan' => $_POST['keterangan'][$key],
+                    ]);
+                    
+                    // update kartu stock
+                    KartuStock::insert([
+                            'tanggal' => $_POST['tanggal'],
+                            'kode_barang' => $_POST['kode_barang'][$key],
+                            'kode_transaksi' => $kode,
+                            'id_detail' => $newDetail->id,
+                            'qty' => $_POST['qty'][$key],
+                            'nominal' => $subtotal,
+                            'tipe' => 'Keluar',
+                        ]);
+                }
+                $newTotalQty = $newTotalQty + $_POST['qty'][$key];
+                $newTotalPemakaian = $newTotalPemakaian + $subtotal;
+            }
+
+            if (isset($_POST['id_delete'])) {
+                foreach ($_POST['id_delete'] as $key => $value) {
+                    $getDetail = DetailPemakaianBarang::select('kode_barang', 'qty', 'subtotal')->where('id', $value)->get()[0];
+
+                    //update barang
+                    Barang::where('kode_barang', $getDetail->kode_barang)
+                        ->update([
+                            'stock' => \DB::raw('stock+' . $getDetail->qty),
+                            'saldo' => \DB::raw('saldo+' . $getDetail->subtotal),
+                        ]);
+
+                    //delete detail
+                    DetailPemakaianBarang::where('id', $value)->delete();
+
+                    //delete kartu stock
+                    KartuStock::where('id_detail', $value)->where('tipe', 'Keluar')->delete();
+                }
+            }
+
+            //update pemakaian
+            PemakaianBarang::where('kode_pemakaian', $kode)
+                ->update([
+                    'tanggal' => $_POST['tanggal'],
+                    'total_qty' => $newTotalQty,
+                    'total_pemakaian' => $newTotalPemakaian,
+                ]);
+
+            return redirect()->route('pemakaian-barang.index')->withStatus('Data berhasil diperbarui.');
+        } catch (\Exception $e) {
+            return redirect()->back()->withStatus('Terjadi kesalahan. : ' . $e->getMessage());
+        } catch (\Illuminate\Database\QueryException $e) {
+            return redirect()->back()->withStatus('Terjadi kesalahan pada database : ' . $e->getMessage());
+        }
+    }
+
+    public function destroy($kode)
+    {
+        try {
+            $pemakaianBarang = PemakaianBarang::findOrFail($kode);
+
+            $detail = DetailPemakaianBarang::where('kode_pemakaian', $kode)->get();
+
+            foreach ($detail as $key => $value) {
+                Barang::where('kode_barang', $value->kode_barang)
+                        ->update([
+                            'stock' => \DB::raw('stock+' . $value->qty),
+                            'saldo' => \DB::raw('saldo+' . $value->subtotal),
+                        ]);
+
+                DetailPemakaianBarang::where('id', $value->id)->delete();
+
+                // delete kartu stock
+                KartuStock::where('id_detail', $value->id)->where('tipe', 'Keluar')->delete();
+            }
+
+            $pemakaianBarang->delete();
+
+            return redirect()->route('pemakaian-barang.index')->withStatus('Data berhasil dihapus.');
+        } catch (\Exception $e) {
+            return redirect()->back()->withStatus('Terjadi kesalahan. : ' . $e->getMessage());
+        } catch (\Illuminate\Database\QueryException $e) {
+            return redirect()->back()->withStatus('Terjadi kesalahan pada database : ' . $e->getMessage());
         }
     }
 }

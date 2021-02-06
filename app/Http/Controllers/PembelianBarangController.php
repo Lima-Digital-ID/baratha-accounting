@@ -207,9 +207,9 @@ class PembelianBarangController extends Controller
 
             return \view('pembelian.pembelian-barang.edit-pembelian-barang', $this->param);
         } catch (\Exception $e) {
-            return redirect()->back()->withError('Terjadi kesalahan : ' . $e->getMessage());
+            return redirect()->back()->withStatus('Terjadi kesalahan : ' . $e->getMessage());
         } catch (\Illuminate\Database\QueryException $e) {
-            return redirect()->back()->withError('Terjadi kesalahan pada database : ' . $e->getMessage());
+            return redirect()->back()->withStatus('Terjadi kesalahan pada database : ' . $e->getMessage());
         }
     }
 

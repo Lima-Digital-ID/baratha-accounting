@@ -57,7 +57,7 @@
             <hr class="my-2">
             <h6 class="heading-small text-muted mb-3">Detail Pemakaian</h6>
 
-            <div class="pl-lg-4" id='urlAddDetail' data-url="{{url('pemakaian-barang/pemakaian/addEditDetailPemakaian')}}">
+            <div class="pl-lg-4" id='urlAddDetail' data-url="{{url('persediaan/pemakaian-barang/addEditDetailPemakaian')}}">
               @if(!is_null(old('kode_barang')))
                 @php
                   $loop = array();
@@ -81,9 +81,9 @@
               @php $no = 0; $total = 0; @endphp
               @foreach($loop as $n => $edit)
                 @php 
+                    $edit = (array)$edit;
                   $no++;
-                  $linkHapus = $no==1 ? false : true; 
-                  // $harga = 0;
+                  $linkHapus = $no==1 ? false : true;
                   $fields = array(
                     'kode_barang' => 'kode_barang.'.$n,
                     'stock' => 'stock.'.$n,
@@ -93,12 +93,12 @@
                     'kode_biaya' => 'kode_biaya.'.$n,
                   );
                   if(!is_null(old('kode_barang'))){
-                      $total = $total + $edit->qty;
+                      $total = $total + $edit['qty'];
                       $idDetail = old('id_detail.'.$n);
                   }
                   else{
-                      $total = $total + $edit->qty;
-                      $idDetail = $edit->id;
+                      $total = $total + $edit['qty'];
+                      $idDetail = $edit['id'];
                   }
                 @endphp
                   @include('persediaan.pemakaian-barang.edit-detail-pemakaian-barang',['hapus' => $linkHapus, 'no' => $no, 'barang' => $barang])
