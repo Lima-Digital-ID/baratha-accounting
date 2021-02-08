@@ -42,7 +42,7 @@
 
                 <div class="col-md-4">
                     <label>Tanggal</label>
-                    <input type="text" class="form-control getKode datepicker {{ $errors->has('tanggal') ? ' is-invalid' : '' }}" value="{{ old('tanggal', $pemakaian->tanggal) }}" name="tanggal" placeholder="Tanggal" data-url="{{url('persediaan/pemakaian-barang/getKode')}}" autocomplete="off">
+                    <input type="text" class="form-control datepicker {{ $errors->has('tanggal') ? ' is-invalid' : '' }}" value="{{ old('tanggal', $pemakaian->tanggal) }}" name="tanggal" placeholder="Tanggal" autocomplete="off">
                     @if ($errors->has('tanggal'))
                         <span class="invalid-feedback" role="alert">
                             <strong>{{ $errors->first('tanggal') }}</strong>

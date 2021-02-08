@@ -151,6 +151,16 @@
                 <a class="nav-link" href="{{url('persediaan/pemakaian-barang')}}">
                   <span>Pemakaian Barang</span>
                 </a>
+                <div class="dropdown-divider"></div>
+                <a class="nav-link" href="{{url('persediaan/laporan-pemakaian-barang')}}">
+                  <span>Laporan Pemakaian Barang</span>
+                </a>
+                <a class="nav-link" href="{{url('persediaan/kartu-stock')}}">
+                  <span>Kartu Stock</span>
+                </a>
+                <a class="nav-link" href="{{url('persediaan/posisi-stock')}}">
+                  <span>Posisi Stock</span>
+                </a>
               </div>
             </div>
           </li>
@@ -179,6 +189,10 @@
                 </a>
                 <a class="nav-link" href="{{url('pembelian/pembelian-barang')}}">
                   <span>Pembelian Barang</span>
+                </a>
+                <div class="dropdown-divider"></div>
+                <a class="nav-link" href="{{url('pembelian/laporan-pembelian-barang')}}">
+                  <span>Laporan Pembelian Barang</span>
                 </a>
               </div>
             </div>

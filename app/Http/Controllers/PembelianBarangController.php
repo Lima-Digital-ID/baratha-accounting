@@ -346,6 +346,14 @@ class PembelianBarangController extends Controller
                         }
                         
                     }
+                    else{ //hanya mengupdate tanggal di kartu stock
+                        // update kartu stock
+                        KartuStock::where('id_detail', $_POST['id_detail'][$key])
+                        ->where('kode_transaksi', $kode)
+                        ->update([
+                            'tanggal' => $_POST['tanggal'],
+                        ]);
+                    }
                     
                 } 
                 else { //perubahan pada detail dengan menambah detail baru

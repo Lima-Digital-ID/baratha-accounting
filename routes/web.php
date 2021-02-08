@@ -44,6 +44,8 @@ Route::group(['middleware' => ['auth:sanctum', 'verified']], function () {
         Route::get('pemakaian-barang/addEditDetailPemakaian', 'PemakaianBarangController@addEditDetailPemakaian');
         Route::resource('pemakaian-barang', 'PemakaianBarangController');
 
+        Route::get('kartu-stock', 'KartuStockController@index');
+        Route::get('posisi-stock', 'KartuStockController@posisiStock');
     });
 
     Route::group(['prefix' => 'pembelian'], function(){
