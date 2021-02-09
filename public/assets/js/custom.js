@@ -63,11 +63,13 @@ $(document).ready(function() {
         let tipe = $(this).val();
         if (tipe == 'Masuk') {
             // $('#kode_supplier').val("");
+            $('#kode_supplier').val('').trigger('change');
             $('#kode_supplier').attr('disabled', true);
             $('#kode_customer').attr('disabled', false);
         }
         else{
             $('#kode_customer').attr('disabled', true);
+            $('#kode_customer').val('').trigger('change');
             $('#kode_supplier').attr('disabled', false);
         }
     });
