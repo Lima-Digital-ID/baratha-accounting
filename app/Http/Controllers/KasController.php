@@ -158,4 +158,179 @@ class KasController extends Controller
             return redirect()->back()->withStatus('Terjadi kesalahan pada database : ' . $e->getMessage());
         }
     }
+
+    public function edit($kode)
+    {
+        try {
+            $this->param['pageInfo'] = 'Transaksi Kas / Edit Data';
+            $this->param['btnRight']['text'] = 'Lihat Data';
+            $this->param['btnRight']['link'] = route('transaksi-kas.index');
+            $this->param['kodeRekeningKas'] = KodeRekening::select('kode_rekening', 'kode_rekening.nama')->join('kode_induk', 'kode_induk.kode_induk', '=', 'kode_rekening.kode_induk')->where('kode_induk.nama', 'Kas')->get();
+
+            $this->param['lawan'] = KodeRekening::select('kode_rekening', 'kode_rekening.nama')->join('kode_induk', 'kode_induk.kode_induk', '=', 'kode_rekening.kode_induk')->where('kode_induk.nama', '!=','Kas')->where('kode_induk.nama', '!=','Bank')->get();
+
+            $this->param['supplier'] = Supplier::get();
+            $this->param['customer'] = Customer::get();
+
+            $this->param['kas'] = Kas::find($kode);
+            $this->param['detailTransaksiKas'] = DetailKas::where('kode_kas', $kode)->get();
+
+            return \view('kas.edit-transaksi-kas', $this->param);
+        } catch (\Exception $e) {
+            return redirect()->back()->withStatus('Terjadi kesalahan : ' . $e->getMessage());
+        } catch (\Illuminate\Database\QueryException $e) {
+            return redirect()->back()->withStatus('Terjadi kesalahan pada database : ' . $e->getMessage());
+        }
+    }
+
+    public function addEditDetailTransaksiKas()
+    {
+        $fields = array(
+            'lawan' => 'lawan',
+            'subtotal' => 'subtotal',
+            'keterangan' => 'keterangan',
+        );
+        $next = $_GET['biggestNo'] + 1;
+        $lawan = KodeRekening::select('kode_rekening', 'kode_rekening.nama')->join('kode_induk', 'kode_induk.kode_induk', '=', 'kode_rekening.kode_induk')->where('kode_induk.nama', '!=','Kas')->where('kode_induk.nama', '!=','Bank')->get();
+        return view('kas.edit-detail-transaksi-kas', ['hapus' => true, 'no' => $next, 'lawan' => $lawan, 'fields' => $fields, 'idDetail' => '0']);
+    }
+
+    public function update(Request $request, $kode)
+    {
+        $validatedData = $request->validate([
+            'kode_kas' => 'required',
+            'tanggal' => 'required',
+            'kode_rekening' => 'required',
+            'lawan.*' => 'required',
+            'subtotal.*' => 'required|min:1',
+            'keterangan.*' => 'required',
+        ]);
+
+        try {
+
+            $transaksiKas = Kas::where('kode_kas', $kode)->get()[0];
+
+            $bulanTransaksiKas = date('m-Y', strtotime($transaksiKas->tanggal));
+            $editBulanTransaksiKas = date('m-Y', strtotime($request->get('tanggal')));
+
+            if ($bulanTransaksiKas != $editBulanTransaksiKas) {
+                return redirect()->back()->withStatus('Tidak dapat merubah bulan transaksi');
+            }
+
+            $tipe = $transaksiKas->tipe;
+            // $grandtotal = $transaksiKas->grandtotal;
+            // $kodeSupplier = $transaksiKas->kode_supplier;
+
+            $newTotal = 0;
+
+            foreach ($_POST['lawan'] as $key => $value) {
+                // cek apakah penambahan detail baru atau tidak
+                if ($_POST['id_detail'][$key] != 0) { // perubahan pada detail tanpa menambah detail baru
+                    $getDetail = DetailKas::select('lawan', 'keterangan', 'subtotal')->where('id', $_POST['id_detail'][$key])->get()[0];
+
+                    // cek apakah terdapat perubahan pada detail
+                    if ($_POST['lawan'][$key] != $getDetail['lawan'] || $_POST['keterangan'][$key] != $getDetail['keterangan'] || $_POST['subtotal'][$key] != $getDetail['subtotal']) { 
+                        //update detail
+                        DetailKas::where('id', $_POST['id_detail'][$key])
+                        ->update([
+                            'lawan' => $_POST['lawan'][$key],
+                            'subtotal' => $_POST['subtotal'][$key],
+                            'keterangan' => $_POST['keterangan'][$key],
+                        ]);
+
+                    // update jurnal
+                        Jurnal::where('id_detail', $_POST['id_detail'][$key])
+                        ->where('kode_transaksi', $kode)
+                        ->update([
+                            'tanggal' => $_POST['tanggal'],
+                            'keterangan' => $_POST['keterangan'][$key],
+                            'kode' => $request->get('kode_rekening'),
+                            'lawan' => $_POST['lawan'][$key],
+                            'nominal' => $_POST['subtotal'][$key],
+                        ]);
+                        
+                    }
+                    else{ //hanya mengupdate jurnal
+                        // update jurnal
+                        Jurnal::where('id_detail', $_POST['id_detail'][$key])
+                        ->where('kode_transaksi', $kode)
+                        ->update([
+                            'tanggal' => $_POST['tanggal'],
+                            'kode' => $request->get('kode_rekening'),
+                        ]);
+                    }
+                    
+                } 
+                else { //perubahan pada detail dengan menambah detail baru
+
+                    //insert to detail
+                    $newDetail = DetailKas::create([
+                            'kode_kas' => $_POST['kode_kas'],
+                            'keterangan' => $_POST['keterangan'][$key],
+                            'lawan' => $_POST['lawan'][$key],
+                            'subtotal' => $_POST['subtotal'][$key],
+                        ]);
+                    
+                    // update kartu stock
+                    Jurnal::insert([
+                            'tanggal' => $_POST['tanggal'],
+                            'jenis_transaksi' => 'Kas',
+                            'kode_transaksi' => $_POST['kode_kas'],
+                            'keterangan' => $_POST['keterangan'][$key],
+                            'kode' => $_POST['kode_rekening'],
+                            'lawan' => $_POST['lawan'][$key],
+                            'tipe' => $tipe == 'Masuk' ? 'Debet' : 'Kredit',
+                            'nominal' => $_POST['subtotal'][$key],
+                            'id_detail' => $newDetail->id
+                        ]);
+                }
+                $newTotal = $newTotal + $_POST['subtotal'][$key];
+            }
+
+            if (isset($_POST['id_delete'])) {
+                foreach ($_POST['id_delete'] as $key => $value) {
+
+                    //delete detail
+                    DetailKas::where('id', $value)->delete();
+
+                    //delete kartu stock
+                    Jurnal::where('id_detail', $value)->where('kode_transaksi', $kode)->delete();
+                }
+            }
+
+            //update kas
+            Kas::where('kode_kas', $kode)
+                ->update([
+                    'tanggal' => $_POST['tanggal'],
+                    'kode_rekening' => $_POST['kode_rekening'],
+                    'kode_supplier' => $_POST['kode_supplier'],
+                    'kode_customer' => $_POST['kode_customer'],
+                    'total' => $newTotal,
+                ]);
+            return redirect()->route('transaksi-kas.index')->withStatus('Data berhasil diperbarui.');
+        } catch (\Exception $e) {
+            return redirect()->back()->withStatus('Terjadi kesalahan. : ' . $e->getMessage());
+        } catch (\Illuminate\Database\QueryException $e) {
+            return redirect()->back()->withStatus('Terjadi kesalahan pada database : ' . $e->getMessage());
+        }
+    }
+
+    public function destroy($kode)
+    {
+        try {
+            // delete detail
+            DetailKas::where('kode_kas', $kode)->delete();
+            
+            // delete jurnal
+            Jurnal::where('kode_transaksi', $kode)->delete();
+            // delete kas
+            Kas::where('kode_kas', $kode)->delete();
+
+            return redirect()->route('transaksi-kas.index')->withStatus('Data berhasil dihapus.');
+        } catch (\Exception $e) {
+            return redirect()->back()->withStatus('Terjadi kesalahan. : ' . $e->getMessage());
+        } catch (\Illuminate\Database\QueryException $e) {
+            return redirect()->back()->withStatus('Terjadi kesalahan pada database : ' . $e->getMessage());
+        }
+    }
 }

@@ -52,7 +52,7 @@
                             <td>{{$no}}</td>
                             <td>{{$value->kode_kas}}</td>
                             <td>{{date('d-m-Y', strtotime($value->tanggal))}}</td>
-                            <td>{{$value->kode}}</td>
+                            <td>{{$value->kode_rekening}}</td>
                             <td>{{$value->tipe}}</td>
                             <td>{{$value->kode_supplier}}</td>
                             <td>{{$value->kode_customer}}</td>

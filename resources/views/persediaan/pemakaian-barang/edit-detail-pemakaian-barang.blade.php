@@ -51,7 +51,6 @@
         </span>
         @endif
     </div>
-
     
     <div class="col-md-2">
         <label for="" class="form-control-label">Keterangan</label>

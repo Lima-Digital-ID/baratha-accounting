@@ -11,6 +11,8 @@ class DetailKas extends Model
 
     protected $table = 'detail_kas';
 
+    protected $fillable = ['kode_kas', 'lawan', 'subtotal', 'keterangan'];
+
     public function kodeRekening()
     {
         return $this->belongsTo('App\Models\Kas', 'kode_kas');
