@@ -25,11 +25,20 @@
     <link href="{{ asset('vendor/datatables/dataTables.bootstrap4.min.css') }}" rel="stylesheet" />
     <link href="{{ asset('vendor/select2-develop/dist/css/select2.min.css') }}" rel="stylesheet" />
     <link href="{{ asset('vendor/bootstrap-datepicker/dist/css/bootstrap-datepicker3.standalone.min.css') }}" rel="stylesheet" />
+    <link href="{{asset('vendor/sweetalert-master/dist/sweetalert.css')}}" rel="stylesheet" />
+
     <link href="{{ asset('css/custom.css') }}" rel="stylesheet" />
     <script src="{{ asset('vendor/ckeditor/ckeditor.js') }}"></script>
   </head>
 
   <body id="page-top">
+    <div class="loading">
+      <div class="info">
+        <img src="{{asset('img/loading.gif')}}" alt="">
+        <p>Loading...</p>
+      </div>
+  </div>
+
     <!-- Page Wrapper -->
     <div id="wrapper">
       <!-- Sidebar -->
@@ -217,6 +226,12 @@
               data-parent="#accordionSidebar"
             >
               <div class="py-2 collapse-inner rounded">
+                <a class="nav-link" href="{{url('penjualan/rekap-hotel')}}">
+                  <span>Rekap Hotel</span>
+                </a>
+                <a class="nav-link" href="{{url('penjualan/rekap-resto')}}">
+                  <span>Rekap Resto</span>
+                </a>
                 <a class="nav-link" href="{{url('penjualan/customer')}}">
                   <span>Customer</span>
                 </a>
@@ -386,6 +401,7 @@
     <script src="{{ asset('vendor/select2-develop/dist/js/select2.min.js') }}"></script>
     {{-- <script src="{{ asset('vendor/bootstrap-datepicker-master/dist/js/bootstrap-datepicker.min.js') }}"></script> --}}
     <script src="{{ asset('vendor/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js') }}"></script>
+    <script src="{{asset('vendor/sweetalert-master/dist/sweetalert-dev.js')}}"></script>
     <script src="{{ asset('js/custom.js') }}"></script>
   </body>
 </html>
