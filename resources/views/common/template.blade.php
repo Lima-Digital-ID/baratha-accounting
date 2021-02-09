@@ -239,6 +239,32 @@
             </div>
           </li>
           
+          <li class="nav-item {{Request::segment(1) == 'kas' ? 'active' : ''}}">
+            <a
+              class="nav-link collapsed"
+              href="#"
+              data-toggle="collapse"
+              data-target="#kas"
+              aria-expanded="true"
+              aria-controls="kas"
+            >
+            <i class="fas fa-fw fa-wallet"></i>
+              <span>Kas</span>
+            </a>
+            <div
+              id="kas"
+              class="collapse"
+              aria-labelledby="headingTwo"
+              data-parent="#accordionSidebar"
+            >
+              <div class="py-2 collapse-inner rounded">
+                <a class="nav-link" href="{{url('kas/transaksi-kas')}}">
+                  <span>Transaksi Kas</span>
+                </a>
+              </div>
+            </div>
+          </li>
+          
           <!-- Sidebar Toggler (Sidebar) -->
           <div class="text-center d-none d-md-inline">
             <button class="rounded-circle border-0" id="sidebarToggle"></button>

@@ -65,4 +65,11 @@ Route::group(['middleware' => ['auth:sanctum', 'verified']], function () {
         Route::resource('rekap-resto', 'RekapRestoController');
         Route::resource('customer', 'CustomerController');
     });
+
+    Route::group(['prefix' => 'kas'], function () {
+        Route::get('transaksi-kas/getKode', 'KasController@getKode');
+        Route::get('transaksi-kas/addDetailTransaksiKas', 'KasController@addDetailTransaksiKas');
+        Route::get('transaksi-kas/addEditDetailTransaksiKas', 'KasController@addEditDetailTransaksiKas');
+        Route::resource('transaksi-kas', 'KasController');
+    });
 });

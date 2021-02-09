@@ -42,7 +42,7 @@ class PemakaianBarangController extends Controller
     public function create()
     {
         try {
-            $this->param['pageInfo'] = 'Pemakaian Barang / List Pemakaian Barang';
+            $this->param['pageInfo'] = 'Pemakaian Barang / Tambah Pemakaian Barang';
             $this->param['btnRight']['text'] = 'Lihat Data';
             $this->param['btnRight']['link'] = route('pemakaian-barang.index');
             $this->param['barang'] = Barang::get();

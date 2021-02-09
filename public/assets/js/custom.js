@@ -43,6 +43,35 @@ $(document).ready(function() {
         });
     });
 
+    $(".getKodeKas").change(function() {
+        var tanggal = $("#tanggal").val();
+        var tipe = $("#tipe").val();
+        var url = $(this).data("url");
+        if (tipe !== "" && tanggal !== "") {
+            $.ajax({
+                type: "get",
+                url: url,
+                data: { tanggal: tanggal, tipe: tipe },
+                success: function(data) {
+                    $("#kode").val(data);
+                }
+            });
+        }
+    });
+
+    $('#tipe').change(function () { 
+        let tipe = $(this).val();
+        if (tipe == 'Masuk') {
+            // $('#kode_supplier').val("");
+            $('#kode_supplier').attr('disabled', true);
+            $('#kode_customer').attr('disabled', false);
+        }
+        else{
+            $('#kode_customer').attr('disabled', true);
+            $('#kode_supplier').attr('disabled', false);
+        }
+    });
+
     function addDetail(thisParam) {
         var biggestNo = 0; //setting awal No/Id terbesar
         $(".row-detail").each(function() {
@@ -82,7 +111,10 @@ $(document).ready(function() {
                 $('.kode_barang').change(function () { 
                     kodeBarang($(this))
                 });
-
+                $(".getTotalKas").keyup(function() {
+                    getTotalKas($(this));
+                });
+                
 
                 // $(".barang").change(function() {
                 //     barang($(this));
@@ -235,4 +267,19 @@ $(document).ready(function() {
 			}
 		);
 	});
+
+    function getTotalKas() {
+        var total = 0;
+        $(".getTotalKas").each(function() {
+            console.log($(this).val());
+            var subtotalVal = parseFloat($(this).val());
+            subtotalVal = isNaN(subtotalVal) ? 0 : subtotalVal;
+            total = total + subtotalVal;
+        });
+        $("#total").html(new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR' }).format(total));
+    }
+
+    $(".getTotalKas").keyup(function() {
+        getTotalKas();        
+    });
 });
