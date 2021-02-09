@@ -4,6 +4,12 @@ $(document).ready(function() {
     $(".datepicker").datepicker({
         format: "yyyy-mm-dd"
     });
+    $(".datepickerDate").datepicker({
+        format: "yyyy-mm-dd",
+    });
+    $("form").submit(function() {
+        $(".loading").addClass("show");
+    });
     
     function formatRupiah(angka) {
         var number_string = angka.toString(),
@@ -210,5 +216,23 @@ $(document).ready(function() {
     $('.kode_barang').change(function () { 
         kodeBarang($(this))
     });
-
+	$(".confirm-alert").click(function(e) {
+		e.preventDefault();
+		var url = $(this).attr("href");
+		var text = $(this).data('alert')
+		swal(
+			{
+				title: "Apakah anda yakin?",
+				text: text,
+				type: "warning",
+				showCancelButton: true,
+				confirmButtonColor: "#3c4099",
+				confirmButtonText: 'Submit',
+				closeOnConfirm: false
+			},
+			function() {
+				window.location = url;
+			}
+		);
+	});
 });

@@ -48,14 +48,19 @@ Route::group(['middleware' => ['auth:sanctum', 'verified']], function () {
 
     Route::group(['prefix' => 'pembelian'], function(){
         Route::resource('supplier', 'SupplierController');
-
+        
         Route::get('pembelian-barang/getKode', 'PembelianBarangController@getKode');
         Route::get('pembelian-barang/addDetailPembelian', 'PembelianBarangController@addDetailPembelian');
         Route::get('pembelian-barang/addEditDetailPembelian', 'PembelianBarangController@addEditDetailPembelian');
         Route::resource('pembelian-barang', 'PembelianBarangController');
     });
-
+    
     Route::group(['prefix' => 'penjualan'], function(){
+        Route::get('rekap-hotel', 'RekapHotelController@index');
+        Route::get('rekap-hotel/save', 'RekapHotelController@save');
+        Route::get('rekap-resto', 'RekapRestoController@index');
+        Route::get('rekap-resto/save', 'RekapRestoController@save');
+        Route::resource('rekap-resto', 'RekapRestoController');
         Route::resource('customer', 'CustomerController');
     });
 });
