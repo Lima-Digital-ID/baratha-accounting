@@ -13,6 +13,9 @@
     <link href="{{asset('css/custom.css')}}" rel="stylesheet" />
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>LOGIN</title>
+    {{-- favicon --}}
+    <link href="{{ asset('img/logobaratha.png') }}" rel="icon">
+    <link href="{{ asset('img/logobaratha.png') }}" rel="apple-touch-icon">
 </head>
 <body class="bg-light">
     <div class="container container-login">

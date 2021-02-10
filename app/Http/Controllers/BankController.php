@@ -4,50 +4,47 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use \App\Models\Jurnal;
-use \App\Models\Kas;
-use \App\Models\DetailKas;
+use \App\Models\Bank;
+use \App\Models\DetailBank;
 use \App\Models\KodeRekening;
 use \App\Models\Supplier;
 use \App\Models\Customer;
-use \App\Models\KartuHutang;
-use \App\Models\PembelianBarang;
-use Illuminate\Support\Facades\DB;
 
-class KasController extends Controller
+class BankController extends Controller
 {
     private $param;
     public function __construct()
     {
-        $this->param['icon'] = 'fa-wallet';
+        $this->param['icon'] = 'fa-credit-card';
     }
 
     public function index(Request $request)
     {
-        $this->param['pageInfo'] = 'Transaksi Kas / List Transaksi Kas';
+        $this->param['pageInfo'] = 'Transaksi Bank / List Transaksi Bank';
         $this->param['btnRight']['text'] = 'Tambah Data';
-        $this->param['btnRight']['link'] = route('transaksi-kas.create');
+        $this->param['btnRight']['link'] = route('transaksi-bank.create');
 
         try {
             $keyword = $request->get('keyword');
             if ($keyword) {
-                $this->param['kas'] = Kas::where('kode_kas', 'LIKE', "%$keyword%")->orWhere('kode_supplier', 'LIKE', "%$keyword%")->orWhere('kode_customer', 'LIKE', "%$keyword%")->orderBy('tanggal', 'DESC')->paginate(10);
+                $this->param['bank'] = Bank::where('kode_bank', 'LIKE', "%$keyword%")->orWhere('kode_supplier', 'LIKE', "%$keyword%")->orWhere('kode_customer', 'LIKE', "%$keyword%")->orderBy('tanggal', 'DESC')->paginate(10);
             } else {
-                $this->param['kas'] = Kas::orderBy('tanggal', 'DESC')->paginate(10);
+                $this->param['bank'] = Bank::orderBy('tanggal', 'DESC')->paginate(10);
             }
         } catch (\Illuminate\Database\QueryException $e) {
             return redirect()->back()->withStatus('Terjadi Kesalahan');
         }
 
-        return \view('kas.list-transaksi-kas', $this->param);
+        return \view('bank.list-transaksi-bank', $this->param);
     }
 
     public function create()
     {
         try {
-            $this->param['pageInfo'] = 'Transaksi Kas / Tambah Transaksi Kas';
+            $this->param['pageInfo'] = 'Transaksi Bank / Tambah Transaksi Bank';
             $this->param['btnRight']['text'] = 'Lihat Data';
-            $this->param['btnRight']['link'] = route('transaksi-kas.index');
-            $this->param['kodeRekeningKas'] = KodeRekening::select('kode_rekening', 'kode_rekening.nama')->join('kode_induk', 'kode_induk.kode_induk', '=', 'kode_rekening.kode_induk')->where('kode_induk.nama', 'Kas')->get();
+            $this->param['btnRight']['link'] = route('transaksi-bank.index');
+            $this->param['kodeRekeningBank'] = KodeRekening::select('kode_rekening', 'kode_rekening.nama')->join('kode_induk', 'kode_induk.kode_induk', '=', 'kode_rekening.kode_induk')->where('kode_induk.nama', 'Bank')->get();
 
             $this->param['lawan'] = KodeRekening::select('kode_rekening', 'kode_rekening.nama')->join('kode_induk', 'kode_induk.kode_induk', '=', 'kode_rekening.kode_induk')->where('kode_induk.nama', '!=','Kas')->where('kode_induk.nama', '!=','Bank')->get();
 
@@ -58,7 +55,7 @@ class KasController extends Controller
             return redirect()->back()->withStatus('Terjadi kesalahan. : ' . $e->getMessage());
         }
 
-        return \view('kas.tambah-transaksi-kas', $this->param);
+        return \view('bank.tambah-transaksi-bank', $this->param);
     }
 
     public function getKode()
@@ -67,25 +64,25 @@ class KasController extends Controller
         $y = $tgl[0];
         $m = $tgl[1];
         $tipe = $_GET['tipe'];
-        $lastKode = \DB::table('kas')
-        ->select('kode_kas')
-        ->where(\DB::raw('length(kode_kas)'), 13)
+        $lastKode = \DB::table('bank')
+        ->select('kode_bank')
+        ->where(\DB::raw('length(kode_bank)'), 13)
         ->whereMonth('tanggal', $m)
         ->whereYear('tanggal', $y)
         ->where('tipe', $tipe)
-        ->orderBy('kode_kas','desc')
+        ->orderBy('kode_bank','desc')
         ->skip(0)->take(1)
         ->get();
         $dateCreate = date_create($_GET['tanggal']);
         $date = date_format($dateCreate, 'my');
         if(count($lastKode)==0 && $tipe == 'Masuk'){
-            $kode = "BKM-".$date."-0001";
+            $kode = "BBM-".$date."-0001";
         }
         elseif(count($lastKode)==0 && $tipe == 'Keluar'){
-            $kode = "BKK-".$date."-0001";
+            $kode = "BBK-".$date."-0001";
         }
         else{
-            $ex = explode('-', $lastKode[0]->kode_kas);
+            $ex = explode('-', $lastKode[0]->kode_bank);
             $no = (int)$ex[2] + 1;
             $newNo = sprintf("%04s", $no);
             $kode = $ex[0].'-'.$date.'-'.$newNo;
@@ -93,17 +90,17 @@ class KasController extends Controller
         return $kode;
     }
 
-    public function addDetailTransaksiKas()
+    public function addDetailTransaksiBank()
     {
         $next = $_GET['biggestNo'] + 1;
         $lawan = KodeRekening::select('kode_rekening', 'kode_rekening.nama')->join('kode_induk', 'kode_induk.kode_induk', '=', 'kode_rekening.kode_induk')->where('kode_induk.nama', '!=','Kas')->where('kode_induk.nama', '!=','Bank')->get();
-        return view('kas.tambah-detail-transaksi-kas', ['hapus' => true, 'no' => $next, 'lawan' => $lawan]);
+        return view('bank.tambah-detail-transaksi-bank', ['hapus' => true, 'no' => $next, 'lawan' => $lawan]);
     }
 
     public function store(Request $request)
     {
         $validatedData = $request->validate([
-            'kode_kas' => 'required',
+            'kode_bank' => 'required',
             'tanggal' => 'required',
             'tipe' => 'required',
             'kode_rekening' => 'required',
@@ -120,20 +117,20 @@ class KasController extends Controller
                 $total += $value;
             }
 
-            $newKas = new Kas;
-            $newKas->kode_kas = $request->get('kode_kas');
-            $newKas->tanggal = $request->get('tanggal');
-            $newKas->tipe = $request->get('tipe');
-            $newKas->kode_rekening = $request->get('kode_rekening');
-            $newKas->kode_supplier = $request->get('kode_supplier');
-            $newKas->kode_customer = $request->get('kode_customer');
-            $newKas->total = $total;
-            $newKas->save();
+            $newBank = new Bank;
+            $newBank->kode_bank = $request->get('kode_bank');
+            $newBank->tanggal = $request->get('tanggal');
+            $newBank->tipe = $request->get('tipe');
+            $newBank->kode_rekening = $request->get('kode_rekening');
+            $newBank->kode_supplier = $request->get('kode_supplier');
+            $newBank->kode_customer = $request->get('kode_customer');
+            $newBank->total = $total;
+            $newBank->save();
 
             foreach ($_POST['subtotal'] as $key => $value) {
 
-                $newDetail = new DetailKas;
-                $newDetail->kode_kas = $request->get('kode_kas');
+                $newDetail = new DetailBank;
+                $newDetail->kode_bank = $request->get('kode_bank');
                 $newDetail->keterangan = $_POST['keterangan'][$key];
                 $newDetail->lawan = $_POST['lawan'][$key];
                 $newDetail->subtotal = $value;
@@ -142,8 +139,8 @@ class KasController extends Controller
 
                 $newJurnal = new Jurnal;
                 $newJurnal->tanggal = $request->get('tanggal');
-                $newJurnal->jenis_transaksi = 'Kas';
-                $newJurnal->kode_transaksi = $request->get('kode_kas');
+                $newJurnal->jenis_transaksi = 'Bank';
+                $newJurnal->kode_transaksi = $request->get('kode_bank');
                 $newJurnal->keterangan = $_POST['keterangan'][$key];
                 $newJurnal->kode = $request->get('kode_rekening');
                 $newJurnal->lawan = $_POST['lawan'][$key];
@@ -154,7 +151,7 @@ class KasController extends Controller
 
             }
 
-            return redirect()->route('transaksi-kas.edit', $request->get('kode_kas'))->withStatus('Data berhasil ditambahkan.');
+            return redirect()->route('transaksi-bank.index')->withStatus('Data berhasil ditambahkan.');
         } catch (\Exception $e) {
             return redirect()->back()->withStatus('Terjadi kesalahan. : ' . $e->getMessage());
         } catch (\Illuminate\Database\QueryException $e) {
@@ -165,28 +162,20 @@ class KasController extends Controller
     public function edit($kode)
     {
         try {
-            $this->param['pageInfo'] = 'Transaksi Kas / Edit Data';
+            $this->param['pageInfo'] = 'Transaksi Bank / Edit Data';
             $this->param['btnRight']['text'] = 'Lihat Data';
-            $this->param['btnRight']['link'] = route('transaksi-kas.index');
-            $this->param['kodeRekeningKas'] = KodeRekening::select('kode_rekening', 'kode_rekening.nama')->join('kode_induk', 'kode_induk.kode_induk', '=', 'kode_rekening.kode_induk')->where('kode_induk.nama', 'Kas')->get();
+            $this->param['btnRight']['link'] = route('transaksi-bank.index');
+            $this->param['kodeRekeningBank'] = KodeRekening::select('kode_rekening', 'kode_rekening.nama')->join('kode_induk', 'kode_induk.kode_induk', '=', 'kode_rekening.kode_induk')->where('kode_induk.nama', 'Bank')->get();
 
             $this->param['lawan'] = KodeRekening::select('kode_rekening', 'kode_rekening.nama')->join('kode_induk', 'kode_induk.kode_induk', '=', 'kode_rekening.kode_induk')->where('kode_induk.nama', '!=','Kas')->where('kode_induk.nama', '!=','Bank')->get();
 
             $this->param['supplier'] = Supplier::get();
             $this->param['customer'] = Customer::get();
 
-            $this->param['kas'] = Kas::find($kode);
-            $this->param['detailTransaksiKas'] = DetailKas::where('kode_kas', $kode)->get();
-            if(isset($_GET['page'])){
-                if($this->param['kas']->kode_supplier!=''){
-                    $this->param['totalBayar'] = KartuHutang::select(DB::raw('sum(nominal) as total'))->where('kode_transaksi', $kode)->get()[0];
-                    $this->param['hutang'] = PembelianBarang::select('kode_pembelian','grandtotal','terbayar','tanggal','jatuh_tempo')->where("kode_supplier",$this->param['kas']->kode_supplier)->whereRaw('terbayar != grandtotal')->get();
-                }
-                else{
+            $this->param['bank'] = Bank::find($kode);
+            $this->param['detailTransaksiBank'] = DetailBank::where('kode_bank', $kode)->get();
 
-                }
-            }
-            return \view('kas.edit-transaksi-kas', $this->param);
+            return \view('bank.edit-transaksi-bank', $this->param);
         } catch (\Exception $e) {
             return redirect()->back()->withStatus('Terjadi kesalahan : ' . $e->getMessage());
         } catch (\Illuminate\Database\QueryException $e) {
@@ -194,7 +183,7 @@ class KasController extends Controller
         }
     }
 
-    public function addEditDetailTransaksiKas()
+    public function addEditDetailTransaksiBank()
     {
         $fields = array(
             'lawan' => 'lawan',
@@ -203,13 +192,13 @@ class KasController extends Controller
         );
         $next = $_GET['biggestNo'] + 1;
         $lawan = KodeRekening::select('kode_rekening', 'kode_rekening.nama')->join('kode_induk', 'kode_induk.kode_induk', '=', 'kode_rekening.kode_induk')->where('kode_induk.nama', '!=','Kas')->where('kode_induk.nama', '!=','Bank')->get();
-        return view('kas.edit-detail-transaksi-kas', ['hapus' => true, 'no' => $next, 'lawan' => $lawan, 'fields' => $fields, 'idDetail' => '0']);
+        return view('bank.edit-detail-transaksi-bank', ['hapus' => true, 'no' => $next, 'lawan' => $lawan, 'fields' => $fields, 'idDetail' => '0']);
     }
 
     public function update(Request $request, $kode)
     {
         $validatedData = $request->validate([
-            'kode_kas' => 'required',
+            'kode_bank' => 'required',
             'tanggal' => 'required',
             'kode_rekening' => 'required',
             'lawan.*' => 'required',
@@ -219,30 +208,30 @@ class KasController extends Controller
 
         try {
 
-            $transaksiKas = Kas::where('kode_kas', $kode)->get()[0];
+            $transaksiBank = Bank::where('kode_bank', $kode)->get()[0];
 
-            $bulanTransaksiKas = date('m-Y', strtotime($transaksiKas->tanggal));
-            $editBulanTransaksiKas = date('m-Y', strtotime($request->get('tanggal')));
+            $bulanTransaksiBank = date('m-Y', strtotime($transaksiBank->tanggal));
+            $editBulanTransaksiBank = date('m-Y', strtotime($request->get('tanggal')));
 
-            if ($bulanTransaksiKas != $editBulanTransaksiKas) {
+            if ($bulanTransaksiBank != $editBulanTransaksiBank) {
                 return redirect()->back()->withStatus('Tidak dapat merubah bulan transaksi');
             }
 
-            $tipe = $transaksiKas->tipe;
-            // $grandtotal = $transaksiKas->grandtotal;
-            // $kodeSupplier = $transaksiKas->kode_supplier;
+            $tipe = $transaksiBank->tipe;
+            // $grandtotal = $transaksiBank->grandtotal;
+            // $kodeSupplier = $transaksiBank->kode_supplier;
 
             $newTotal = 0;
 
             foreach ($_POST['lawan'] as $key => $value) {
                 // cek apakah penambahan detail baru atau tidak
                 if ($_POST['id_detail'][$key] != 0) { // perubahan pada detail tanpa menambah detail baru
-                    $getDetail = DetailKas::select('lawan', 'keterangan', 'subtotal')->where('id', $_POST['id_detail'][$key])->get()[0];
+                    $getDetail = DetailBank::select('lawan', 'keterangan', 'subtotal')->where('id', $_POST['id_detail'][$key])->get()[0];
 
                     // cek apakah terdapat perubahan pada detail
                     if ($_POST['lawan'][$key] != $getDetail['lawan'] || $_POST['keterangan'][$key] != $getDetail['keterangan'] || $_POST['subtotal'][$key] != $getDetail['subtotal']) { 
                         //update detail
-                        DetailKas::where('id', $_POST['id_detail'][$key])
+                        DetailBank::where('id', $_POST['id_detail'][$key])
                         ->update([
                             'lawan' => $_POST['lawan'][$key],
                             'subtotal' => $_POST['subtotal'][$key],
@@ -275,8 +264,8 @@ class KasController extends Controller
                 else { //perubahan pada detail dengan menambah detail baru
 
                     //insert to detail
-                    $newDetail = DetailKas::create([
-                            'kode_kas' => $_POST['kode_kas'],
+                    $newDetail = DetailBank::create([
+                            'kode_bank' => $_POST['kode_bank'],
                             'keterangan' => $_POST['keterangan'][$key],
                             'lawan' => $_POST['lawan'][$key],
                             'subtotal' => $_POST['subtotal'][$key],
@@ -285,8 +274,8 @@ class KasController extends Controller
                     // update kartu stock
                     Jurnal::insert([
                             'tanggal' => $_POST['tanggal'],
-                            'jenis_transaksi' => 'Kas',
-                            'kode_transaksi' => $_POST['kode_kas'],
+                            'jenis_transaksi' => 'Bank',
+                            'kode_transaksi' => $_POST['kode_bank'],
                             'keterangan' => $_POST['keterangan'][$key],
                             'kode' => $_POST['kode_rekening'],
                             'lawan' => $_POST['lawan'][$key],
@@ -302,15 +291,15 @@ class KasController extends Controller
                 foreach ($_POST['id_delete'] as $key => $value) {
 
                     //delete detail
-                    DetailKas::where('id', $value)->delete();
+                    DetailBank::where('id', $value)->delete();
 
                     //delete kartu stock
                     Jurnal::where('id_detail', $value)->where('kode_transaksi', $kode)->delete();
                 }
             }
 
-            //update kas
-            Kas::where('kode_kas', $kode)
+            //update bank
+            Bank::where('kode_bank', $kode)
                 ->update([
                     'tanggal' => $_POST['tanggal'],
                     'kode_rekening' => $_POST['kode_rekening'],
@@ -318,7 +307,7 @@ class KasController extends Controller
                     'kode_customer' => $_POST['kode_customer'],
                     'total' => $newTotal,
                 ]);
-            return redirect()->route('transaksi-kas.index')->withStatus('Data berhasil diperbarui.');
+            return redirect()->route('transaksi-bank.index')->withStatus('Data berhasil diperbarui.');
         } catch (\Exception $e) {
             return redirect()->back()->withStatus('Terjadi kesalahan. : ' . $e->getMessage());
         } catch (\Illuminate\Database\QueryException $e) {
@@ -330,43 +319,18 @@ class KasController extends Controller
     {
         try {
             // delete detail
-            DetailKas::where('kode_kas', $kode)->delete();
+            DetailBank::where('kode_bank', $kode)->delete();
             
             // delete jurnal
             Jurnal::where('kode_transaksi', $kode)->delete();
-            // delete kas
-            Kas::where('kode_kas', $kode)->delete();
+            // delete bank
+            Bank::where('kode_bank', $kode)->delete();
 
-            return redirect()->route('transaksi-kas.index')->withStatus('Data berhasil dihapus.');
+            return redirect()->route('transaksi-bank.index')->withStatus('Data berhasil dihapus.');
         } catch (\Exception $e) {
             return redirect()->back()->withStatus('Terjadi kesalahan. : ' . $e->getMessage());
         } catch (\Illuminate\Database\QueryException $e) {
             return redirect()->back()->withStatus('Terjadi kesalahan pada database : ' . $e->getMessage());
         }
-    }
-    
-    public function pembayaranHutang(Request $request)
-    {
-        try {
-            //insert ke kartu hutang
-            $kartuHutang = new KartuHutang;
-            $kartuHutang->tanggal = date('Y-m-d');
-            $kartuHutang->kode_supplier = $request->get('kode_supplier');
-            $kartuHutang->kode_transaksi = $request->get('kode_transaksi');
-            $kartuHutang->nominal = $request->get('nominal_bayar');
-            $kartuHutang->tipe = 'Pembayaran';
-            $kartuHutang->save();
-
-            //update terbayar pembelian barang
-            PembelianBarang::where('kode_pembelian', $request->get('kode_pembelian'))
-            ->update([
-                'terbayar' => \DB::raw('terbayar+' . $request->get('nominal_bayar')),
-            ]);
-            return redirect()->back()->withStatus('Pembayaran Hutang Berhasil.');
-        } catch (\Exception $e) {
-            return redirect()->back()->withStatus('Terjadi kesalahan. : ' . $e->getMessage());
-        } catch (\Illuminate\Database\QueryException $e) {
-            return redirect()->back()->withStatus('Terjadi kesalahan pada database : ' . $e->getMessage());
-        }    
     }
 }
