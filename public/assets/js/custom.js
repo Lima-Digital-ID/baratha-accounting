@@ -295,4 +295,12 @@ $(document).ready(function() {
         $("#total").html(new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR' }).format(total));
         getTotalPpn(total);
     });
+    $(".btn-pembayaran").click(function(e) {
+        e.preventDefault();
+        
+        var param = $(this).data('param')
+        $("#kode-pembelian").val(param[0])
+        $("#jml-hutang").val(param[1])
+        $("#sisa").val(param[2])
+    })
 });

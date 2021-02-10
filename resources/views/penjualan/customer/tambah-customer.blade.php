@@ -64,7 +64,7 @@
       <br>
 
       <label>Piutang</label>
-      <input type="text" class="form-control {{ $errors->has('piutang') ? ' is-invalid' : '' }}" value="{{ old('piutang') }}" autofocus name="piutang" placeholder="ex : 1.000.000,00">
+      <input type="text" class="form-control {{ $errors->has('piutang') ? ' is-invalid' : '' }}" value="{{ old('piutang', 0) }}" autofocus name="piutang" placeholder="ex : 1.000.000,00">
       @if ($errors->has('piutang'))
           <span class="invalid-feedback" role="alert">
               <strong>{{ $errors->first('piutang') }}</strong>
