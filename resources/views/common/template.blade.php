@@ -226,14 +226,17 @@
               data-parent="#accordionSidebar"
             >
               <div class="py-2 collapse-inner rounded">
+                <a class="nav-link" href="{{url('penjualan/customer')}}">
+                  <span>Customer</span>
+                </a>
                 <a class="nav-link" href="{{url('penjualan/rekap-hotel')}}">
                   <span>Rekap Hotel</span>
                 </a>
                 <a class="nav-link" href="{{url('penjualan/rekap-resto')}}">
                   <span>Rekap Resto</span>
                 </a>
-                <a class="nav-link" href="{{url('penjualan/customer')}}">
-                  <span>Customer</span>
+                <a class="nav-link" href="{{url('penjualan/penjualan-catering')}}">
+                  <span>Penjualan Catering</span>
                 </a>
               </div>
             </div>

@@ -64,6 +64,8 @@ Route::group(['middleware' => ['auth:sanctum', 'verified']], function () {
         Route::get('rekap-resto/save', 'RekapRestoController@save');
         Route::resource('rekap-resto', 'RekapRestoController');
         Route::resource('customer', 'CustomerController');
+        Route::get('penjualan-catering/getKode', 'PenjualanCateringController@getKode');
+        Route::resource('penjualan-catering', 'PenjualanCateringController');
     });
 
     Route::group(['prefix' => 'kas'], function () {

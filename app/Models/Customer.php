@@ -11,4 +11,14 @@ class Customer extends Model
     protected $table = 'customer';
     protected $primaryKey = 'kode_customer';
     public $incrementing = false;
+
+    public function penjualanCatering()
+    {
+        return $this->hasMany('App\Models\PenjualanCatering');
+    }
+
+    public function kartuPiutang()
+    {
+        return $this->hasMany('App\Models\KartuPiutang');
+    }
 }

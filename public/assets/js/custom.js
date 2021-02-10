@@ -284,4 +284,15 @@ $(document).ready(function() {
     $(".getTotalKas").keyup(function() {
         getTotalKas();        
     });
+
+    $(".getTotalCatering").keyup(function() {
+
+        var thisval = parseFloat($(this).val());
+        var other = parseFloat($($(this).data("other")).val());
+        // console.log(other);
+        other = isNaN(other) ? 0 : other;
+        var total = thisval * other;
+        $("#total").html(new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR' }).format(total));
+        getTotalPpn(total);
+    });
 });

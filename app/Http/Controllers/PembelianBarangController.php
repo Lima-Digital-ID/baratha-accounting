@@ -41,7 +41,7 @@ class PembelianBarangController extends Controller
     public function create()
     {
         try {
-            $this->param['pageInfo'] = 'Pembelian Barang / List Pembelian Barang';
+            $this->param['pageInfo'] = 'Pembelian Barang / Tambah Pembelian Barang';
             $this->param['btnRight']['text'] = 'Lihat Data';
             $this->param['btnRight']['link'] = route('pembelian-barang.index');
             $this->param['supplier'] = Supplier::get();
