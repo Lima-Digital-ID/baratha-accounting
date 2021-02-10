@@ -333,4 +333,86 @@ class BankController extends Controller
             return redirect()->back()->withStatus('Terjadi kesalahan pada database : ' . $e->getMessage());
         }
     }
+
+    public function reportBank()
+    {
+        try{
+            $this->param['kodeRekeningBank'] = KodeRekening::select('kode_rekening', 'kode_rekening.nama')->join('kode_induk', 'kode_induk.kode_induk', '=', 'kode_rekening.kode_induk')->where('kode_induk.nama', 'Bank')->get();
+            $this->param['report'] = null;
+
+            return view('bank.laporan-bank', $this->param);
+        }
+        catch(\Exception $e){
+            return redirect()->back()->withStatus('Terjadi kesalahan. : ' . $e->getMessage());
+        }
+        catch(\Illuminate\Database\QueryException $e){
+            return redirect()->back()->withStatus('Terjadi kesalahan pada database : ' . $e->getMessage());
+        }
+    }
+
+    public function getReport(Request $request)
+    {
+        $validatedData = $request->validate([
+            'kode_perkiraan' => 'required',
+            'start' => 'required',
+            'end' => 'required'
+        ]);
+        try{
+            $this->param['kodeRekeningBank'] = KodeRekening::select('kode_rekening', 'kode_rekening.nama')->join('kode_induk', 'kode_induk.kode_induk', '=', 'kode_rekening.kode_induk')->where('kode_induk.nama', 'Bank')->get();
+            $this->param['report'] = Bank::select(
+                                        'bank.kode_bank',
+                                        'bank.tanggal',
+                                        'bank.kode_rekening',
+                                        'bank.tipe',
+                                        'bank.total',
+                                        'detail.keterangan',
+                                        'detail.lawan',
+                                        'detail.subtotal'
+                                    )
+                                    ->join('detail_bank AS detail', 'detail.kode_bank', 'bank.kode_bank')
+                                    ->where('bank.kode_rekening', $request->get('kode_perkiraan'))
+                                    ->whereBetween('bank.tanggal', [$request->get('start'), $request->get('end')])
+                                    ->get();
+            return view('bank.laporan-bank', $this->param);
+        }
+        catch(\Exception $e){
+            return redirect()->back()->withStatus('Terjadi kesalahan. : ' . $e->getMessage());
+        }
+        catch(\Illuminate\Database\QueryException $e){
+            return redirect()->back()->withStatus('Terjadi kesalahan pada database : ' . $e->getMessage());
+        }
+    }
+
+    public function printReport(Request $request)
+    {
+        $validatedData = $request->validate([
+            'kode_perkiraan' => 'required',
+            'start' => 'required',
+            'end' => 'required'
+        ]);
+        try{
+            $this->param['kodeRekeningBank'] = KodeRekening::select('kode_rekening', 'kode_rekening.nama')->join('kode_induk', 'kode_induk.kode_induk', '=', 'kode_rekening.kode_induk')->where('kode_induk.nama', 'Bank')->get();
+            $this->param['report'] = Bank::select(
+                                        'bank.kode_bank',
+                                        'bank.tanggal',
+                                        'bank.kode_rekening',
+                                        'bank.tipe',
+                                        'bank.total',
+                                        'detail.keterangan',
+                                        'detail.lawan',
+                                        'detail.subtotal'
+                                    )
+                                    ->join('detail_bank AS detail', 'detail.kode_bank', 'bank.kode_bank')
+                                    ->where('bank.kode_rekening', $request->get('kode_perkiraan'))
+                                    ->whereBetween('bank.tanggal', [$request->get('start'), $request->get('end')])
+                                    ->get();
+            return view('bank.print-laporan-bank', $this->param);
+        }
+        catch(\Exception $e){
+            return redirect()->back()->withStatus('Terjadi kesalahan. : ' . $e->getMessage());
+        }
+        catch(\Illuminate\Database\QueryException $e){
+            return redirect()->back()->withStatus('Terjadi kesalahan pada database : ' . $e->getMessage());
+        }
+    }
 }

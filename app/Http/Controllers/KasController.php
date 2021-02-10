@@ -369,4 +369,86 @@ class KasController extends Controller
             return redirect()->back()->withStatus('Terjadi kesalahan pada database : ' . $e->getMessage());
         }    
     }
+
+    public function reportKas()
+    {
+        try{
+            $this->param['kodeRekeningKas'] = KodeRekening::select('kode_rekening', 'kode_rekening.nama')->join('kode_induk', 'kode_induk.kode_induk', '=', 'kode_rekening.kode_induk')->where('kode_induk.nama', 'Kas')->get();
+            $this->param['report'] = null;
+
+            return view('kas.laporan-kas', $this->param);
+        }
+        catch(\Exception $e){
+            return redirect()->back()->withStatus('Terjadi kesalahan. : ' . $e->getMessage());
+        }
+        catch(\Illuminate\Database\QueryException $e){
+            return redirect()->back()->withStatus('Terjadi kesalahan pada database : ' . $e->getMessage());
+        }
+    }
+
+    public function getReport(Request $request)
+    {
+        $validatedData = $request->validate([
+            'kode_perkiraan' => 'required',
+            'start' => 'required',
+            'end' => 'required'
+        ]);
+        try{
+            $this->param['kodeRekeningKas'] = KodeRekening::select('kode_rekening', 'kode_rekening.nama')->join('kode_induk', 'kode_induk.kode_induk', '=', 'kode_rekening.kode_induk')->where('kode_induk.nama', 'Kas')->get();
+            $this->param['report'] = Kas::select(
+                                        'kas.kode_kas',
+                                        'kas.tanggal',
+                                        'kas.kode_rekening',
+                                        'kas.tipe',
+                                        'kas.total',
+                                        'detail.keterangan',
+                                        'detail.lawan',
+                                        'detail.subtotal'
+                                    )
+                                    ->join('detail_kas AS detail', 'detail.kode_kas', 'kas.kode_kas')
+                                    ->where('kas.kode_rekening', $request->get('kode_perkiraan'))
+                                    ->whereBetween('kas.tanggal', [$request->get('start'), $request->get('end')])
+                                    ->get();
+            return view('kas.laporan-kas', $this->param);
+        }
+        catch(\Exception $e){
+            return redirect()->back()->withStatus('Terjadi kesalahan. : ' . $e->getMessage());
+        }
+        catch(\Illuminate\Database\QueryException $e){
+            return redirect()->back()->withStatus('Terjadi kesalahan pada database : ' . $e->getMessage());
+        }
+    }
+
+    public function printReport(Request $request)
+    {
+        $validatedData = $request->validate([
+            'kode_perkiraan' => 'required',
+            'start' => 'required',
+            'end' => 'required'
+        ]);
+        try{
+            $this->param['kodeRekeningKas'] = KodeRekening::select('kode_rekening', 'kode_rekening.nama')->join('kode_induk', 'kode_induk.kode_induk', '=', 'kode_rekening.kode_induk')->where('kode_induk.nama', 'Kas')->get();
+            $this->param['report'] = Kas::select(
+                                        'kas.kode_kas',
+                                        'kas.tanggal',
+                                        'kas.kode_rekening',
+                                        'kas.tipe',
+                                        'kas.total',
+                                        'detail.keterangan',
+                                        'detail.lawan',
+                                        'detail.subtotal'
+                                    )
+                                    ->join('detail_kas AS detail', 'detail.kode_kas', 'kas.kode_kas')
+                                    ->where('kas.kode_rekening', $request->get('kode_perkiraan'))
+                                    ->whereBetween('kas.tanggal', [$request->get('start'), $request->get('end')])
+                                    ->get();
+            return view('kas.print-laporan-kas', $this->param);
+        }
+        catch(\Exception $e){
+            return redirect()->back()->withStatus('Terjadi kesalahan. : ' . $e->getMessage());
+        }
+        catch(\Illuminate\Database\QueryException $e){
+            return redirect()->back()->withStatus('Terjadi kesalahan pada database : ' . $e->getMessage());
+        }
+    }
 }

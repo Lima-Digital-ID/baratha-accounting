@@ -26,7 +26,7 @@
             <h6 class="heading-small text-muted mb-3">Informasi Umum</h6>
             <div class="row">
                 <div class="col-md-4">
-                    <label>Kode TransaksiKas</label>
+                    <label>Kode Transaksi Kas</label>
                     <input type="text" id="kode" class="form-control {{ $errors->has('kode_kas') ? ' is-invalid' : '' }}" value="{{ old('kode_kas') }}" name="kode_kas" placeholder="Kode Transaksi Kas" readonly>
                     @if ($errors->has('kode_kas'))
                         <span class="invalid-feedback" role="alert">

@@ -264,6 +264,10 @@
                 <a class="nav-link" href="{{url('kas/transaksi-kas')}}">
                   <span>Transaksi Kas</span>
                 </a>
+                <div class="dropdown-divider"></div>
+                <a class="nav-link" href="{{url('kas/laporan-kas')}}">
+                  <span>Laporan Kas</span>
+                </a>
               </div>
             </div>
           </li>
@@ -289,6 +293,10 @@
               <div class="py-2 collapse-inner rounded">
                 <a class="nav-link" href="{{url('bank/transaksi-bank')}}">
                   <span>Transaksi Bank</span>
+                </a>
+                <div class="dropdown-divider"></div>
+                <a class="nav-link" href="{{url('bank/laporan-bank')}}">
+                  <span>Laporan bank</span>
                 </a>
               </div>
             </div>
