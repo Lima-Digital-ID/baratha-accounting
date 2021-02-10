@@ -22,4 +22,9 @@ class KodeRekening extends Model
     {
         return $this->hasMany('App\Models\KodeBiaya');
     }
+    
+    public function kas()
+    {
+        return $this->hasMany('App\Models\Kas');
+    }
 }

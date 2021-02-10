@@ -14,7 +14,7 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
-    return view('welcome');
+    return view('auth.login');
 });
 
 Route::middleware(['auth:sanctum', 'verified'])->get('/dashboard', function () {
@@ -74,5 +74,19 @@ Route::group(['middleware' => ['auth:sanctum', 'verified']], function () {
         Route::get('rekap-resto/save', 'RekapRestoController@save');
         Route::resource('rekap-resto', 'RekapRestoController');
         Route::resource('customer', 'CustomerController');
+    });
+
+    Route::group(['prefix' => 'kas'], function () {
+        Route::get('transaksi-kas/getKode', 'KasController@getKode');
+        Route::get('transaksi-kas/addDetailTransaksiKas', 'KasController@addDetailTransaksiKas');
+        Route::get('transaksi-kas/addEditDetailTransaksiKas', 'KasController@addEditDetailTransaksiKas');
+        Route::resource('transaksi-kas', 'KasController');
+    });
+    
+    Route::group(['prefix' => 'bank'], function () {
+        Route::get('transaksi-bank/getKode', 'BankController@getKode');
+        Route::get('transaksi-bank/addDetailTransaksiBank', 'BankController@addDetailTransaksiBank');
+        Route::get('transaksi-bank/addEditDetailTransaksiBank', 'BankController@addEditDetailTransaksiBank');
+        Route::resource('transaksi-bank', 'BankController');
     });
 });

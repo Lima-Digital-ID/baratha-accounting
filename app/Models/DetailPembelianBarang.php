@@ -11,7 +11,7 @@ class DetailPembelianBarang extends Model
 
     protected $table = 'detail_pembelian_barang';
 
-    protected $fillable = ['kode_pembelian', 'kode_barang', 'harga_satuan', 'qty', 'subtotal', 'ppn'];
+    protected $fillable = ['kode_pembelian', 'kode_barang', 'harga_satuan', 'qty', 'subtotal', 'ppn', 'created_at', 'updated_at'];
 
     public function pembelianBarang()
     {
