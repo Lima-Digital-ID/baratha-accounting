@@ -9,6 +9,9 @@ use \App\Models\DetailKas;
 use \App\Models\KodeRekening;
 use \App\Models\Supplier;
 use \App\Models\Customer;
+use \App\Models\KartuHutang;
+use \App\Models\PembelianBarang;
+use Illuminate\Support\Facades\DB;
 
 class KasController extends Controller
 {
@@ -151,7 +154,7 @@ class KasController extends Controller
 
             }
 
-            return redirect()->route('transaksi-kas.index')->withStatus('Data berhasil ditambahkan.');
+            return redirect()->route('transaksi-kas.edit', $request->get('kode_kas'))->withStatus('Data berhasil ditambahkan.');
         } catch (\Exception $e) {
             return redirect()->back()->withStatus('Terjadi kesalahan. : ' . $e->getMessage());
         } catch (\Illuminate\Database\QueryException $e) {
@@ -174,7 +177,15 @@ class KasController extends Controller
 
             $this->param['kas'] = Kas::find($kode);
             $this->param['detailTransaksiKas'] = DetailKas::where('kode_kas', $kode)->get();
+            if(isset($_GET['page'])){
+                if($this->param['kas']->kode_supplier!=''){
+                    $this->param['totalBayar'] = KartuHutang::select(DB::raw('sum(nominal) as total'))->where('kode_transaksi', $kode)->get()[0];
+                    $this->param['hutang'] = PembelianBarang::select('kode_pembelian','grandtotal','terbayar','tanggal','jatuh_tempo')->where("kode_supplier",$this->param['kas']->kode_supplier)->whereRaw('terbayar != grandtotal')->get();
+                }
+                else{
 
+                }
+            }
             return \view('kas.edit-transaksi-kas', $this->param);
         } catch (\Exception $e) {
             return redirect()->back()->withStatus('Terjadi kesalahan : ' . $e->getMessage());
@@ -332,5 +343,30 @@ class KasController extends Controller
         } catch (\Illuminate\Database\QueryException $e) {
             return redirect()->back()->withStatus('Terjadi kesalahan pada database : ' . $e->getMessage());
         }
+    }
+    
+    public function pembayaranHutang(Request $request)
+    {
+        try {
+            //insert ke kartu hutang
+            $kartuHutang = new KartuHutang;
+            $kartuHutang->tanggal = date('Y-m-d');
+            $kartuHutang->kode_supplier = $request->get('kode_supplier');
+            $kartuHutang->kode_transaksi = $request->get('kode_transaksi');
+            $kartuHutang->nominal = $request->get('nominal_bayar');
+            $kartuHutang->tipe = 'Pembayaran';
+            $kartuHutang->save();
+
+            //update terbayar pembelian barang
+            PembelianBarang::where('kode_pembelian', $request->get('kode_pembelian'))
+            ->update([
+                'terbayar' => \DB::raw('terbayar+' . $request->get('nominal_bayar')),
+            ]);
+            return redirect()->back()->withStatus('Pembayaran Hutang Berhasil.');
+        } catch (\Exception $e) {
+            return redirect()->back()->withStatus('Terjadi kesalahan. : ' . $e->getMessage());
+        } catch (\Illuminate\Database\QueryException $e) {
+            return redirect()->back()->withStatus('Terjadi kesalahan pada database : ' . $e->getMessage());
+        }    
     }
 }

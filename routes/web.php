@@ -49,6 +49,7 @@ Route::group(['middleware' => ['auth:sanctum', 'verified']], function () {
     });
 
     Route::group(['prefix' => 'pembelian'], function(){
+        Route::get('supplier/hutang', 'SupplierController@getHutang');
         Route::resource('supplier', 'SupplierController');
         
         Route::get('pembelian-barang/getKode', 'PembelianBarangController@getKode');
@@ -67,6 +68,7 @@ Route::group(['middleware' => ['auth:sanctum', 'verified']], function () {
     });
 
     Route::group(['prefix' => 'kas'], function () {
+        Route::post('pembayaran-hutang', 'KasController@pembayaranHutang');
         Route::get('transaksi-kas/getKode', 'KasController@getKode');
         Route::get('transaksi-kas/addDetailTransaksiKas', 'KasController@addDetailTransaksiKas');
         Route::get('transaksi-kas/addEditDetailTransaksiKas', 'KasController@addEditDetailTransaksiKas');

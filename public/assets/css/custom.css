@@ -108,6 +108,9 @@ body {
 .ls-1 {
 	letter-spacing: 1px;
 }
+.table td, .table th{
+	vertical-align: baseline;
+}
 .table-custom thead {
 	background: #e2e3f7;
 	font-weight: 500;
@@ -128,6 +131,12 @@ body {
 }
 .table-custom tbody tr{
 	background : white;
+}
+.table-custom.td-grey tbody tr{
+	background : rgba(156, 157, 183, 0.1);
+}
+.table-custom.td-grey tbody tr:hover{
+	background : rgba(156, 157, 183, 0.2);
 }
 .table-custom tbody tr:hover{
 	background : rgba(156, 157, 183, 0.1);
@@ -509,4 +518,17 @@ a:hover {
 .loading img {
     width: 100px;
     border-radius: 100%;
+}
+.nav-tabs li a{
+	border-radius: 0px !important;
+	color : #858796;
+}
+.nav-tabs li a.active{
+	color : #3c4099 !important;
+}
+.body-tab-content{
+	border:1px solid #dddfeb;
+	border-top:0px;
+	padding-top : 1.5rem;	
+	padding-bottom : 1.5rem;	
 }

@@ -1,5 +1,5 @@
 <div class="row row-detail mb-3" data-no='{{$no}}'>
-    <div class="col-md-3 {{ isset($n)&&$errors->has('lawan.'.$n) ? ' is-invalid' : '' }}">
+    <div class="col-md-4 {{ isset($n)&&$errors->has('lawan.'.$n) ? ' is-invalid' : '' }}">
         <label for="" class="form-control-label">Lawan</label>
         <select name="lawan[]" class="form-control select2">
             <option value=''>---Select---</option>

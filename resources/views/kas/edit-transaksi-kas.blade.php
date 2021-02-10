@@ -117,60 +117,92 @@
 
             </div>
 
-            <hr class="my-2">
-            <h6 class="heading-small text-muted mb-3">Detail Transaksi Kas</h6>
+            <ul class="nav nav-tabs mt-4">
+                <li class="nav-item">
+                    <a class="nav-link <?= empty($_GET['page']) ? "active" : ""   ?>" href="edit">Detail Transaksi Kas</a>
+                </li>
+                <?php 
+                    if($kas->kode_supplier!='' || $kas->kode_customer!=''){
+                ?>
+                <li class="nav-item">
+                    <a class="nav-link <?= isset($_GET['page']) ? "active" : ""   ?>" href="edit?page=hutang-piutang">Pembayaran Hutang / Piutang</a>
+                </li>
+                <?php } ?>
+            </ul>
+            <div class="tab-content mb-4">
+                <div class="tab-pane <?= empty($_GET['page']) ? "active" : ""   ?>">
+                    <div class="body-tab-content">
+                        <div class="px-4" id='urlAddDetail' data-url="{{url('kas/transaksi-kas/addEditDetailTransaksiKas')}}">
+                            @if(!is_null(old('lawan')))
+                                @php
+                                $loop = array();
+                                foreach(old('lawan') as $i => $val){
+                                    $loop[] = array(
+                                    'lawan' => old('lawan.'.$i),
+                                    'subtotal' => (float)old('subtotal.'.$i),
+                                    'keterangan' => old('keterangan.'.$i),
+                                    );
+                                }
+                                @endphp
+                            @else
+                                @php
+                                    $loop = $detailTransaksiKas;
+                                @endphp
+                            @endif
 
-            <div class="pl-lg-4" id='urlAddDetail' data-url="{{url('kas/transaksi-kas/addEditDetailTransaksiKas')}}">
-                @if(!is_null(old('lawan')))
-                    @php
-                    $loop = array();
-                    foreach(old('lawan') as $i => $val){
-                        $loop[] = array(
-                        'lawan' => old('lawan.'.$i),
-                        'subtotal' => (float)old('subtotal.'.$i),
-                        'keterangan' => old('keterangan.'.$i),
-                        );
-                    }
-                    @endphp
-                @else
-                    @php
-                        $loop = $detailTransaksiKas;
-                    @endphp
-                @endif
+                            @php $no = 0; $total = 0; @endphp
+                            @foreach($loop as $n => $edit)
+                                @php 
+                                $no++;
+                                $linkHapus = $no==1 ? false : true; 
+                                $harga = 0;
+                                $fields = array(
+                                    'lawan' => 'lawan.'.$n,
+                                    'subtotal' => 'subtotal.'.$n,
+                                    'keterangan' => 'keterangan.'.$n,
+                                );
+                                
+                                if(!is_null(old('lawan'))){
+                                    $total = $total + $edit['subtotal'];
+                                    $idDetail = old('id_detail.'.$n);
+                                }
+                                else{
+                                    $total = $total + $edit['subtotal'];
+                                    $idDetail = $edit['id'];
+                                }
+                                @endphp
+                                @include('kas.edit-detail-transaksi-kas',['hapus' => $linkHapus, 'no' => $no, 'lawan' => $lawan])
+                            @endforeach
+                            @php
+                                // $total = $total;
+                            @endphp
+                        </div>
+                    <h5 class='text-right mt-5 pr-5'>Total : <span id='total' class="text-orange">{{number_format($total,0,',','.')}}</span></h5>
+                    </div>
+                    <div class="mt-4">
+                    <button type="reset" class="btn btn-default"> <span class="fa fa-times"></span> Cancel</button>
+                    &nbsp;
+                    <button type="submit" class="btn btn-primary"> <span class="fa fa-save"></span> Save</button>
+                    </div>
+                </form>
 
-                @php $no = 0; $total = 0; @endphp
-                @foreach($loop as $n => $edit)
-                    @php 
-                    $no++;
-                    $linkHapus = $no==1 ? false : true; 
-                    $harga = 0;
-                    $fields = array(
-                        'lawan' => 'lawan.'.$n,
-                        'subtotal' => 'subtotal.'.$n,
-                        'keterangan' => 'keterangan.'.$n,
-                    );
-                    
-                    if(!is_null(old('lawan'))){
-                        $total = $total + $edit['subtotal'];
-                        $idDetail = old('id_detail.'.$n);
-                    }
-                    else{
-                        $total = $total + $edit['subtotal'];
-                        $idDetail = $edit['id'];
-                    }
-                    @endphp
-                    @include('kas.edit-detail-transaksi-kas',['hapus' => $linkHapus, 'no' => $no, 'lawan' => $lawan])
-                @endforeach
-                @php
-                    // $total = $total;
-                @endphp
+                </div>
+                <?php 
+                    if(isset($_GET['page'])){
+                ?>
+                <div class="tab-pane active">
+                    <?php
+                        if($kas->kode_supplier!=''){    
+                    ?>
+                        @include('pembelian.supplier.list-hutang',['hutang' => $hutang, 'sisaDetail' => $total- $totalBayar->total, 'kode_transaksi' => $kas->kode_kas,'kode_supplier' => $kas->kode_supplier])
+                        <h5 class='text-right mt-3 pr-5'>Sisa Saldo Detail: <span id='total' class="text-orange">{{number_format($total- $totalBayar->total,0,',','.')}}</span></h5>
+                    <?php } else{?>
+                        <h1>Piutang</h1>
+                    <?php }  ?>
+
+                </div>
+                <?php } ?>
             </div>
-            <h5 class='text-right mt-5 pr-5'>Total : <span id='total' class="text-orange">{{number_format($total,0,',','.')}}</span></h5>
-
-            <button type="reset" class="btn btn-default"> <span class="fa fa-times"></span> Cancel</button>
-            &nbsp;
-            <button type="submit" class="btn btn-primary"> <span class="fa fa-save"></span> Save</button>
-        </form>
     </div>
 </div>
 @endsection

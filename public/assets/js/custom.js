@@ -284,4 +284,12 @@ $(document).ready(function() {
     $(".getTotalKas").keyup(function() {
         getTotalKas();        
     });
+    $(".btn-pembayaran").click(function(e) {
+        e.preventDefault();
+        
+        var param = $(this).data('param')
+        $("#kode-pembelian").val(param[0])
+        $("#jml-hutang").val(param[1])
+        $("#sisa").val(param[2])
+    })
 });
