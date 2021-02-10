@@ -429,4 +429,225 @@ class PemakaianBarangController extends Controller
             return redirect()->back()->withStatus('Terjadi kesalahan pada database : ' . $e->getMessage());
         }
     }
+
+    public function reportPemakaianBarang()
+    {
+        try {
+            $this->param['pageInfo'] = 'Pemakaian Barang / List Pemakaian Barang';
+            $this->param['kode_biaya'] = KodeBiaya::get();
+            $this->param['barang'] = Barang::get();
+            $this->param['report'] = null;
+        } catch (\Exception $e) {
+            return redirect()->back()->withStatus('Terjadi kesalahan. : ' . $e->getMessage());
+        }
+        catch(\Illuminate\Database\QueryException $e){
+            return redirect()->back()->withStatus('Terjadi kesalahan pada database. : ' . $e->getMessage());
+        }
+        return \view('persediaan.pemakaian-barang.laporan-pemakaian-barang', $this->param);
+    }
+
+    public function getReport(Request $request)
+    {
+        try {
+            $this->param['pageInfo'] = 'Pemakaian Barang / List Pemakaian Barang';
+            $this->param['kode_biaya'] = KodeBiaya::get();
+            $this->param['barang'] = Barang::get();
+            $order = null;
+            if($request->get('order') == 'tanggal'){
+                $order = 'pemakaian_barang.'.$request->get('order');
+            }
+            else{
+                $order = 'detail.'.$request->get('order');
+            }
+            if($request->kode_stok != null && $request->kode_biaya == null){ //Jika kode stok dipilih dan kode biaya tidak dipilih
+                $this->param['report'] = PemakaianBarang::select(
+                                            'pemakaian_barang.kode_pemakaian',
+                                            'pemakaian_barang.tanggal',
+                                            'detail.kode_pemakaian',
+                                            'detail.kode_barang',
+                                            'detail.qty',
+                                            'detail.subtotal',
+                                            'detail.kode_biaya',
+                                            'detail.keterangan',
+                                            'b.nama',
+                                            'b.satuan'
+                                        )
+                                        ->join('detail_pemakaian_barang AS detail', 'detail.kode_pemakaian', 'pemakaian_barang.kode_pemakaian')
+                                        ->join('barang AS b', 'b.kode_barang', 'detail.kode_barang')
+                                        ->whereBetween('pemakaian_barang.tanggal', [$request->get('start'), $request->get('end')])
+                                        ->where('detail.kode_barang', $request->get('kode_stok'))
+                                        ->orderBy($order, 'ASC')
+                                        ->get();
+            }
+            elseif($request->kode_stok == null && $request->kode_biaya != null){ //Jika kode stok tidak dipilih dan kode biaya dipilih
+                $this->param['report'] = PemakaianBarang::select(
+                                            'pemakaian_barang.kode_pemakaian',
+                                            'pemakaian_barang.tanggal',
+                                            'detail.kode_pemakaian',
+                                            'detail.kode_barang',
+                                            'detail.qty',
+                                            'detail.subtotal',
+                                            'detail.kode_biaya',
+                                            'detail.keterangan',
+                                            'b.nama',
+                                            'b.satuan'
+                                        )
+                                        ->join('detail_pemakaian_barang AS detail', 'detail.kode_pemakaian', 'pemakaian_barang.kode_pemakaian')
+                                        ->join('barang AS b', 'b.kode_barang', 'detail.kode_barang')
+                                        ->whereBetween('pemakaian_barang.tanggal', [$request->get('start'), $request->get('end')])
+                                        ->where('detail.kode_biaya', $request->kode_biaya)
+                                        ->orderBy($order, 'ASC')
+                                        ->get();
+            }
+            elseif($request->kode_stok != null && $request->kode_biaya != null){ //Jika kode stok dan kode biaya dipilih
+                $this->param['report'] = PemakaianBarang::select(
+                                            'pemakaian_barang.kode_pemakaian',
+                                            'pemakaian_barang.tanggal',
+                                            'detail.kode_pemakaian',
+                                            'detail.kode_barang',
+                                            'detail.qty',
+                                            'detail.subtotal',
+                                            'detail.kode_biaya',
+                                            'detail.keterangan',
+                                            'b.nama',
+                                            'b.satuan'
+                                        )
+                                        ->join('detail_pemakaian_barang AS detail', 'detail.kode_pemakaian', 'pemakaian_barang.kode_pemakaian')
+                                        ->join('barang AS b', 'b.kode_barang', 'detail.kode_barang')
+                                        ->whereBetween('pemakaian_barang.tanggal', [$request->get('start'), $request->get('end')])
+                                        ->where([
+                                            ['detail.kode_biaya', $request->get('kode_biaya')],
+                                            ['detail.kode_barang', $request->get('kode_stok')]
+                                        ])
+                                        ->orderBy($order, 'ASC')
+                                        ->get();
+            }
+            else{ //Jika tidak memilih kode stok dan kode biaya
+                $this->param['report'] = PemakaianBarang::select(
+                                            'pemakaian_barang.kode_pemakaian',
+                                            'pemakaian_barang.tanggal',
+                                            'detail.kode_pemakaian',
+                                            'detail.kode_barang',
+                                            'detail.qty',
+                                            'detail.subtotal',
+                                            'detail.kode_biaya',
+                                            'detail.keterangan',
+                                            'b.nama',
+                                            'b.satuan'
+                                        )
+                                        ->join('detail_pemakaian_barang AS detail', 'detail.kode_pemakaian', 'pemakaian_barang.kode_pemakaian')
+                                        ->join('barang AS b', 'b.kode_barang', 'detail.kode_barang')
+                                        ->whereBetween('pemakaian_barang.tanggal', [$request->get('start'), $request->get('end')])
+                                        ->orderBy($order, 'ASC')
+                                        ->get();
+            }
+            return \view('persediaan.pemakaian-barang.laporan-pemakaian-barang', $this->param);
+        } catch (\Exception $e) {
+            return redirect()->back()->withError('Terjadi kesalahan. : ' . $e->getMessage());
+        }
+        catch(\Illuminate\Database\QueryException $e){
+            return redirect()->back()->withError('Terjadi kesalahan pada database. : ' . $e->getMessage());
+        }
+    }
+
+    public function printReport(Request $request)
+    {
+        try {
+            $order = null;
+            if($request->get('order') == 'tanggal'){
+                $order = 'pemakaian_barang.'.$request->get('order');
+            }
+            else{
+                $order = 'detail.'.$request->get('order');
+            }
+            if($request->kode_stok != null && $request->kode_biaya == null){ //Jika kode stok dipilih dan kode biaya tidak dipilih
+                $this->param['report'] = PemakaianBarang::select(
+                                            'pemakaian_barang.kode_pemakaian',
+                                            'pemakaian_barang.tanggal',
+                                            'detail.kode_pemakaian',
+                                            'detail.kode_barang',
+                                            'detail.qty',
+                                            'detail.subtotal',
+                                            'detail.kode_biaya',
+                                            'detail.keterangan',
+                                            'b.nama',
+                                            'b.satuan'
+                                        )
+                                        ->join('detail_pemakaian_barang AS detail', 'detail.kode_pemakaian', 'pemakaian_barang.kode_pemakaian')
+                                        ->join('barang AS b', 'b.kode_barang', 'detail.kode_barang')
+                                        ->whereBetween('pemakaian_barang.tanggal', [$request->get('start'), $request->get('end')])
+                                        ->where('detail.kode_barang', $request->get('kode_stok'))
+                                        ->orderBy($order, 'ASC')
+                                        ->get();
+            }
+            elseif($request->kode_stok == null && $request->kode_biaya != null){ //Jika kode stok tidak dipilih dan kode biaya dipilih
+                $this->param['report'] = PemakaianBarang::select(
+                                            'pemakaian_barang.kode_pemakaian',
+                                            'pemakaian_barang.tanggal',
+                                            'detail.kode_pemakaian',
+                                            'detail.kode_barang',
+                                            'detail.qty',
+                                            'detail.subtotal',
+                                            'detail.kode_biaya',
+                                            'detail.keterangan',
+                                            'b.nama',
+                                            'b.satuan'
+                                        )
+                                        ->join('detail_pemakaian_barang AS detail', 'detail.kode_pemakaian', 'pemakaian_barang.kode_pemakaian')
+                                        ->join('barang AS b', 'b.kode_barang', 'detail.kode_barang')
+                                        ->whereBetween('pemakaian_barang.tanggal', [$request->get('start'), $request->get('end')])
+                                        ->where('detail.kode_biaya', $request->kode_biaya)
+                                        ->orderBy($order, 'ASC')
+                                        ->get();
+            }
+            elseif($request->kode_stok != null && $request->kode_biaya != null){ //Jika kode stok dan kode biaya dipilih
+                $this->param['report'] = PemakaianBarang::select(
+                                            'pemakaian_barang.kode_pemakaian',
+                                            'pemakaian_barang.tanggal',
+                                            'detail.kode_pemakaian',
+                                            'detail.kode_barang',
+                                            'detail.qty',
+                                            'detail.subtotal',
+                                            'detail.kode_biaya',
+                                            'detail.keterangan',
+                                            'b.nama',
+                                            'b.satuan'
+                                        )
+                                        ->join('detail_pemakaian_barang AS detail', 'detail.kode_pemakaian', 'pemakaian_barang.kode_pemakaian')
+                                        ->join('barang AS b', 'b.kode_barang', 'detail.kode_barang')
+                                        ->whereBetween('pemakaian_barang.tanggal', [$request->get('start'), $request->get('end')])
+                                        ->where([
+                                            ['detail.kode_biaya', $request->get('kode_biaya')],
+                                            ['detail.kode_barang', $request->get('kode_stok')]
+                                        ])
+                                        ->orderBy($order, 'ASC')
+                                        ->get();
+            }
+            else{ //Jika tidak memilih kode stok dan kode biaya
+                $this->param['report'] = PemakaianBarang::select(
+                                            'pemakaian_barang.kode_pemakaian',
+                                            'pemakaian_barang.tanggal',
+                                            'detail.kode_pemakaian',
+                                            'detail.kode_barang',
+                                            'detail.qty',
+                                            'detail.subtotal',
+                                            'detail.kode_biaya',
+                                            'detail.keterangan',
+                                            'b.nama',
+                                            'b.satuan'
+                                        )
+                                        ->join('detail_pemakaian_barang AS detail', 'detail.kode_pemakaian', 'pemakaian_barang.kode_pemakaian')
+                                        ->join('barang AS b', 'b.kode_barang', 'detail.kode_barang')
+                                        ->whereBetween('pemakaian_barang.tanggal', [$request->get('start'), $request->get('end')])
+                                        ->orderBy($order, 'ASC')
+                                        ->get();
+            }
+            return \view('persediaan.pemakaian-barang.print-laporan-pemakaian-barang', $this->param);
+        } catch (\Exception $e) {
+            return redirect()->back()->withError('Terjadi kesalahan. : ' . $e->getMessage());
+        }
+        catch(\Illuminate\Database\QueryException $e){
+            return redirect()->back()->withError('Terjadi kesalahan pada database. : ' . $e->getMessage());
+        }
+    }
 }

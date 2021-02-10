@@ -43,6 +43,11 @@ Route::group(['middleware' => ['auth:sanctum', 'verified']], function () {
         Route::get('pemakaian-barang/addDetailPemakaian', 'PemakaianBarangController@addDetailPemakaian');
         Route::get('pemakaian-barang/addEditDetailPemakaian', 'PemakaianBarangController@addEditDetailPemakaian');
         Route::resource('pemakaian-barang', 'PemakaianBarangController');
+        Route::group(['prefix' => 'laporan-pemakaian-barang'], function(){
+            Route::get('/', 'PemakaianBarangController@reportPemakaianBarang');
+            Route::get('result', 'PemakaianBarangController@getReport')->name('laporan-pemakaian');
+            Route::get('print', 'PemakaianBarangController@printReport')->name('print-pemakaian');
+        });
 
         Route::get('kartu-stock', 'KartuStockController@index');
         Route::get('posisi-stock', 'KartuStockController@posisiStock');
@@ -54,6 +59,11 @@ Route::group(['middleware' => ['auth:sanctum', 'verified']], function () {
         Route::get('pembelian-barang/getKode', 'PembelianBarangController@getKode');
         Route::get('pembelian-barang/addDetailPembelian', 'PembelianBarangController@addDetailPembelian');
         Route::get('pembelian-barang/addEditDetailPembelian', 'PembelianBarangController@addEditDetailPembelian');
+        Route::group(['prefix' => 'laporan-pembelian-barang'], function(){
+            Route::get('/', 'PembelianBarangController@reportPembelianBarang');
+            Route::get('result', 'PembelianBarangController@getReport')->name('laporan-pembelian');
+            Route::get('print', 'PembelianBarangController@printReport')->name('print-pembelian');
+        });
         Route::resource('pembelian-barang', 'PembelianBarangController');
     });
     

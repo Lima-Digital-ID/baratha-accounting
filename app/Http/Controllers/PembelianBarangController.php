@@ -484,4 +484,91 @@ class PembelianBarangController extends Controller
             return redirect()->back()->withStatus('Terjadi kesalahan pada database : ' . $e->getMessage());
         }
     }
+
+    public function reportPembelianBarang()
+    {
+        try {
+            $this->param['pageInfo'] = 'Pembelian Barang / List Pembelian Barang';
+            $this->param['supplier'] = Supplier::get();
+            $this->param['barang'] = Barang::get();
+            $this->param['report'] = null;
+        } catch (\Exception $e) {
+            return redirect()->back()->withStatus('Terjadi kesalahan. : ' . $e->getMessage());
+        }
+        catch(\Illuminate\Database\QueryException $e){
+            return redirect()->back()->withStatus('Terjadi kesalahan pada database. : ' . $e->getMessage());
+        }
+        return \view('pembelian.pembelian-barang.laporan-pembelian-barang', $this->param);
+    }
+
+    public function getReport(Request $request)
+    {
+        try {
+            $this->param['pageInfo'] = 'Pembelian Barang / List Pembelian Barang';
+            $this->param['supplier'] = Supplier::get();
+            $this->param['barang'] = Barang::get();
+            $whereSupplier = null;
+            if($request->get('kode_supplier') != ''){
+                $whereSupplier = 'pembelian_barang.kode_supplier';
+            }
+            if($request->nilai == 'Rekap'){
+                $this->param['nilai'] = 'Rekap';
+                $this->param['report'] = PembelianBarang::select('pembelian_barang.*', 's.kode_supplier', 's.nama')
+                                    ->join('supplier AS s', 's.kode_supplier', 'pembelian_barang.kode_supplier')
+                                    ->where($whereSupplier, $request->get('kode_supplier'))
+                                    ->whereBetween('tanggal', [$request->get('start'), $request->get('end')])
+                                    ->orderBy('pembelian_barang.'.$request->get('order'), 'ASC')
+                                    ->get();
+            }
+            else{
+                $this->param['nilai'] = 'Detail';
+                $this->param['report'] = PembelianBarang::select('pembelian_barang.*', 's.kode_supplier', 's.nama', 'detail.*', 'b.nama', 'b.satuan')
+                    ->join('detail_pembelian_barang AS detail', 'detail.kode_pembelian', 'pembelian_barang.kode_pembelian')
+                    ->join('supplier AS s', 's.kode_supplier', 'pembelian_barang.kode_supplier')
+                    ->join('barang AS b', 'b.kode_barang', 'detail.kode_barang')
+                    ->where($whereSupplier, $request->get('kode_supplier'))
+                    ->whereBetween('tanggal', [$request->get('start'), $request->get('end')])
+                    ->orderBy('pembelian_barang.'.$request->get('order'), 'ASC')
+                    ->get();
+            }    
+        } catch (\Exception $e) {
+            return redirect()->back()->withError('Terjadi kesalahan. : ' . $e->getMessage());
+        }
+        catch(\Illuminate\Database\QueryException $e){
+            return redirect()->back()->withError('Terjadi kesalahan pada database. : ' . $e->getMessage());
+        }
+        return \view('pembelian.pembelian-barang.laporan-pembelian-barang', $this->param);
+    }
+
+    public function printReport(Request $request)
+    {
+        try {
+            if($request->nilai == 'Rekap'){
+                $this->param['nilai'] = 'Rekap';
+                $this->param['report'] = PembelianBarang::select('pembelian_barang.*', 's.kode_supplier', 's.nama')
+                                    ->join('supplier AS s', 's.kode_supplier', 'pembelian_barang.kode_supplier')
+                                    ->where('pembelian_barang.kode_supplier', $request->get('kode_supplier'))
+                                    ->whereBetween('tanggal', [$request->get('start'), $request->get('end')])
+                                    ->orderBy('pembelian_barang.'.$request->get('order'), 'ASC')
+                                    ->get();
+            }
+            else{
+                $this->param['nilai'] = 'Detail';
+                $this->param['report'] = PembelianBarang::select('pembelian_barang.*', 's.kode_supplier', 's.nama', 'detail.*', 'b.nama', 'b.satuan')
+                    ->join('detail_pembelian_barang AS detail', 'detail.kode_pembelian', 'pembelian_barang.kode_pembelian')
+                    ->join('supplier AS s', 's.kode_supplier', 'pembelian_barang.kode_supplier')
+                    ->join('barang AS b', 'b.kode_barang', 'detail.kode_barang')
+                    ->where('pembelian_barang.kode_supplier', $request->get('kode_supplier'))
+                    ->whereBetween('tanggal', [$request->get('start'), $request->get('end')])
+                    ->orderBy('pembelian_barang.'.$request->get('order'), 'ASC')
+                    ->get();
+            }    
+        } catch (\Exception $e) {
+            return redirect()->back()->withError('Terjadi kesalahan. : ' . $e->getMessage());
+        }
+        catch(\Illuminate\Database\QueryException $e){
+            return redirect()->back()->withError('Terjadi kesalahan pada database. : ' . $e->getMessage());
+        }
+        return \view('pembelian.pembelian-barang.print-laporan-pembelian-barang', $this->param);
+    }
 }
