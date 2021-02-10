@@ -11,7 +11,7 @@ class DetailKas extends Model
 
     protected $table = 'detail_kas';
 
-    protected $fillable = ['kode_kas', 'lawan', 'subtotal', 'keterangan'];
+    protected $fillable = ['kode_kas', 'lawan', 'subtotal', 'keterangan', 'created_at', 'updated_at'];
 
     public function kodeRekening()
     {
