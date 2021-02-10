@@ -11,7 +11,7 @@ class DetailBank extends Model
 
     protected $table = 'detail_bank';
 
-    protected $fillable = ['kode_bank', 'lawan', 'subtotal', 'keterangan'];
+    protected $fillable = ['kode_bank', 'lawan', 'subtotal', 'keterangan', 'created_at', 'updated_at'];
 
     public function kodeRekening()
     {
