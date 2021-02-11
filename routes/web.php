@@ -55,6 +55,8 @@ Route::group(['middleware' => ['auth:sanctum', 'verified']], function () {
 
     Route::group(['prefix' => 'pembelian'], function(){
         Route::get('supplier/hutang', 'SupplierController@getHutang');
+        Route::post('pembayaran-hutang', 'SupplierController@pembayaranHutang');
+
         Route::resource('supplier', 'SupplierController');
         
         Route::get('pembelian-barang/getKode', 'PembelianBarangController@getKode');
@@ -80,11 +82,15 @@ Route::group(['middleware' => ['auth:sanctum', 'verified']], function () {
     });
 
     Route::group(['prefix' => 'kas'], function () {
-        Route::post('pembayaran-hutang', 'KasController@pembayaranHutang');
         Route::get('transaksi-kas/getKode', 'KasController@getKode');
         Route::get('transaksi-kas/addDetailTransaksiKas', 'KasController@addDetailTransaksiKas');
         Route::get('transaksi-kas/addEditDetailTransaksiKas', 'KasController@addEditDetailTransaksiKas');
         Route::resource('transaksi-kas', 'KasController');
+        Route::group(['prefix' => 'laporan-kas'], function(){
+            Route::get('/', 'KasController@reportKas');
+            Route::get('result', 'KasController@getReport')->name('laporan-kas');
+            Route::get('print', 'KasController@printReport')->name('print-kas');
+        });
     });
     
     Route::group(['prefix' => 'bank'], function () {
@@ -92,5 +98,10 @@ Route::group(['middleware' => ['auth:sanctum', 'verified']], function () {
         Route::get('transaksi-bank/addDetailTransaksiBank', 'BankController@addDetailTransaksiBank');
         Route::get('transaksi-bank/addEditDetailTransaksiBank', 'BankController@addEditDetailTransaksiBank');
         Route::resource('transaksi-bank', 'BankController');
+        Route::group(['prefix' => 'laporan-bank'], function(){
+            Route::get('/', 'BankController@reportBank');
+            Route::get('result', 'BankController@getReport')->name('laporan-bank');
+            Route::get('print', 'BankController@printReport')->name('print-bank');
+        });
     });
 });

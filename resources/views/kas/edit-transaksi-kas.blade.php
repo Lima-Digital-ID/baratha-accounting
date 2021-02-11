@@ -177,15 +177,14 @@
                                 // $total = $total;
                             @endphp
                         </div>
-                    <h5 class='text-right mt-5 pr-5'>Total : <span id='total' class="text-orange">{{number_format($total,0,',','.')}}</span></h5>
+                        <h5 class='text-right mt-5 pr-5'>Total : <span id='total' class="text-orange">{{number_format($total,0,',','.')}}</span></h5>
                     </div>
                     <div class="mt-4">
-                    <button type="reset" class="btn btn-default"> <span class="fa fa-times"></span> Cancel</button>
-                    &nbsp;
-                    <button type="submit" class="btn btn-primary"> <span class="fa fa-save"></span> Save</button>
+                        <button type="reset" class="btn btn-default"> <span class="fa fa-times"></span> Cancel</button>
+                        &nbsp;
+                        <button type="submit" class="btn btn-primary"> <span class="fa fa-save"></span> Save</button>
                     </div>
                 </form>
-
                 </div>
                 <?php 
                     if(isset($_GET['page'])){

@@ -47,7 +47,7 @@
             </button>
           </div>
           <div class="modal-body">
-            <form action="{{url('kas/pembayaran-hutang')}}" method="post">
+            <form action="{{url('pembelian/pembayaran-hutang')}}" method="post">
             @csrf
             <input type="hidden" name="kode_transaksi" value="{{$kode_transaksi}}">
             <input type="hidden" name="kode_supplier" value="{{$kode_supplier}}">
