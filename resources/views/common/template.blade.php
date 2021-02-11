@@ -294,6 +294,32 @@
             </div>
           </li>
           
+          <li class="nav-item {{Request::segment(1) == 'memorial' ? 'active' : ''}}">
+            <a
+              class="nav-link collapsed"
+              href="#"
+              data-toggle="collapse"
+              data-target="#memorial"
+              aria-expanded="true"
+              aria-controls="memorial"
+            >
+            <i class="fas fa-fw fa-file-invoice-dollar"></i>
+              <span>Memorial</span>
+            </a>
+            <div
+              id="memorial"
+              class="collapse"
+              aria-labelledby="headingTwo"
+              data-parent="#accordionSidebar"
+            >
+              <div class="py-2 collapse-inner rounded">
+                <a class="nav-link" href="{{url('memorial/transaksi-memorial')}}">
+                  <span>Memorial</span>
+                </a>
+              </div>
+            </div>
+          </li>
+          
           <!-- Sidebar Toggler (Sidebar) -->
           <div class="text-center d-none d-md-inline">
             <button class="rounded-circle border-0" id="sidebarToggle"></button>
