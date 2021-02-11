@@ -318,7 +318,7 @@ class KasController extends Controller
                     'kode_customer' => $_POST['kode_customer'],
                     'total' => $newTotal,
                 ]);
-            return redirect()->route('transaksi-kas.index')->withStatus('Data berhasil diperbarui.');
+            return redirect()->back()->withStatus('Data berhasil diperbarui.');
         } catch (\Exception $e) {
             return redirect()->back()->withStatus('Terjadi kesalahan. : ' . $e->getMessage());
         } catch (\Illuminate\Database\QueryException $e) {
@@ -345,31 +345,6 @@ class KasController extends Controller
         }
     }
     
-    public function pembayaranHutang(Request $request)
-    {
-        try {
-            //insert ke kartu hutang
-            $kartuHutang = new KartuHutang;
-            $kartuHutang->tanggal = date('Y-m-d');
-            $kartuHutang->kode_supplier = $request->get('kode_supplier');
-            $kartuHutang->kode_transaksi = $request->get('kode_transaksi');
-            $kartuHutang->nominal = $request->get('nominal_bayar');
-            $kartuHutang->tipe = 'Pembayaran';
-            $kartuHutang->save();
-
-            //update terbayar pembelian barang
-            PembelianBarang::where('kode_pembelian', $request->get('kode_pembelian'))
-            ->update([
-                'terbayar' => \DB::raw('terbayar+' . $request->get('nominal_bayar')),
-            ]);
-            return redirect()->back()->withStatus('Pembayaran Hutang Berhasil.');
-        } catch (\Exception $e) {
-            return redirect()->back()->withStatus('Terjadi kesalahan. : ' . $e->getMessage());
-        } catch (\Illuminate\Database\QueryException $e) {
-            return redirect()->back()->withStatus('Terjadi kesalahan pada database : ' . $e->getMessage());
-        }    
-    }
-
     public function reportKas()
     {
         try{

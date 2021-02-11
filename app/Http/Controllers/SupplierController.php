@@ -4,6 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Models\Supplier;
 use Illuminate\Http\Request;
+use \App\Models\KartuHutang;
+use \App\Models\PembelianBarang;
+use Illuminate\Support\Facades\DB;
 
 class SupplierController extends Controller
 {
@@ -140,4 +143,29 @@ class SupplierController extends Controller
             return redirect()->route('pembelian.supplier.index')->withError('Terjadi kesalahan pada database : '. $e->getMessage());
         }
     }
+    public function pembayaranHutang(Request $request)
+    {
+        try {
+            //insert ke kartu hutang
+            $kartuHutang = new KartuHutang;
+            $kartuHutang->tanggal = date('Y-m-d');
+            $kartuHutang->kode_supplier = $request->get('kode_supplier');
+            $kartuHutang->kode_transaksi = $request->get('kode_transaksi');
+            $kartuHutang->nominal = $request->get('nominal_bayar');
+            $kartuHutang->tipe = 'Pembayaran';
+            $kartuHutang->save();
+
+            //update terbayar pembelian barang
+            PembelianBarang::where('kode_pembelian', $request->get('kode_pembelian'))
+            ->update([
+                'terbayar' => \DB::raw('terbayar+' . $request->get('nominal_bayar')),
+            ]);
+            return redirect()->back()->withStatus('Pembayaran Hutang Berhasil.');
+        } catch (\Exception $e) {
+            return redirect()->back()->withStatus('Terjadi kesalahan. : ' . $e->getMessage());
+        } catch (\Illuminate\Database\QueryException $e) {
+            return redirect()->back()->withStatus('Terjadi kesalahan pada database : ' . $e->getMessage());
+        }    
+    }
+
 }
