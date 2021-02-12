@@ -104,4 +104,16 @@ Route::group(['middleware' => ['auth:sanctum', 'verified']], function () {
             Route::get('print', 'BankController@printReport')->name('print-bank');
         });
     });
+    
+    Route::group(['prefix' => 'memorial'], function () {
+        Route::get('memorial/getKode', 'MemorialController@getKode');
+        Route::get('memorial/addDetailMemorial', 'MemorialController@addDetailMemorial');
+        Route::get('memorial/addEditDetailMemorial', 'MemorialController@addEditDetailMemorial');
+        Route::resource('memorial', 'MemorialController');
+        Route::group(['prefix' => 'laporan-memorial'], function(){
+            Route::get('/', 'MemorialController@reportMemorial');
+            Route::get('result', 'MemorialController@getReport')->name('laporan-memorial');
+            Route::get('print', 'MemorialController@printReport')->name('print-memorial');
+        });
+    });
 });

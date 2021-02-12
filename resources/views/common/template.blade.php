@@ -321,7 +321,7 @@
               data-parent="#accordionSidebar"
             >
               <div class="py-2 collapse-inner rounded">
-                <a class="nav-link" href="{{url('memorial/transaksi-memorial')}}">
+                <a class="nav-link" href="{{url('memorial/memorial')}}">
                   <span>Memorial</span>
                 </a>
               </div>
