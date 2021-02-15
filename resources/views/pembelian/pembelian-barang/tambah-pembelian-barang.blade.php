@@ -33,7 +33,6 @@
                             <strong>{{ $errors->first('kode_pembelian') }}</strong>
                         </span>
                     @endif
-
                     <br>
                 </div>
 

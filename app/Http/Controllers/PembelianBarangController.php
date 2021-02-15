@@ -26,13 +26,20 @@ class PembelianBarangController extends Controller
 
         try {
             $keyword = $request->get('keyword');
-            if ($keyword) {
+            $start = $request->get('start');
+            $end = $request->get('end');
+            // return $end;
+            if ($keyword && $start == null && $end == null) {
                 $pembelianBarang = PembelianBarang::with('supplier')->where('kode_pembelian', 'LIKE', "%$keyword%")->orWhere('kode_supplier', 'LIKE', "%$keyword%")->paginate(10);
-            } else {
+            }elseif($keyword == null && $start != null && $end != null){
+                $pembelianBarang = PembelianBarang::with('supplier')->whereBetween('tanggal', [$start, $end])->paginate(10);
+            }elseif($keyword && $start && $end){
+                $pembelianBarang = PembelianBarang::with('supplier')->whereBetween('tanggal', [$start, $end])->where('kode_pembelian', 'LIKE', "%$keyword%")->where('kode_supplier', 'LIKE', "%$keyword%")->paginate(10);
+            }else {
                 $pembelianBarang = PembelianBarang::with('supplier')->paginate(10);
             }
         } catch (\Illuminate\Database\QueryException $e) {
-            return redirect()->back()->withStatus('Terjadi Kesalahan');
+            return redirect()->back()->withErrors('Terjadi Kesalahan');
         }
 
         return \view('pembelian.pembelian-barang.list-pembelian-barang', ['pembelianBarang' => $pembelianBarang], $this->param);

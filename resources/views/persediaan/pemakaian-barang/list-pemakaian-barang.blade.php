@@ -10,23 +10,51 @@
             </div>
         @endif
         {{-- </div> --}}
-        <div class="row">
-          <div class="col-2">
-            <a href="{{$btnRight['link']}}" class="btn btn-primary mb-3"> <span class="fa fa-plus-circle"></span> {{$btnRight['text']}}</a>
-          </div>
-          <div class="col-auto ml-auto">
-            <form class="d-none d-sm-inline-block form-inline mr-auto ml-md-3 my-2 my-md-0 mw-100 navbar-search" action="{{ route('pemakaian-barang.index') }}" method="get">
-              <div class="input-group">
-                <input type="text" class="form-control bg-light border-1 small" placeholder="Cari Data..." aria-label="Search" name="keyword" aria-describedby="basic-addon2" value="{{Request::get('keyword')}}">
-                <div class="input-group-append">
-                  <button class="btn btn-primary" type="submit">
-                    <i class="fas fa-search fa-sm"></i>
-                  </button>
+        <form class="mr-auto ml-md-3 my-2 my-md-0 mw-100 navbar-search" action="{{ route('pemakaian-barang.index') }}" method="get">
+            <div class="row">
+                <div class="col-2">
+                    <a href="{{$btnRight['link']}}" class="btn btn-primary mb-3"> <span class="fa fa-plus-circle"></span> {{$btnRight['text']}}</a>
                 </div>
-              </div>
-            </form>
-          </div>
-        </div>
+                <div class="col-auto ml-auto">
+                    <input type="text" class="form-control start datepicker {{ $errors->has('start') ? ' is-invalid' : '' }}" value="{{ old('start', isset($_GET['start']) ? $_GET['start'] : '') }}" name="start" placeholder="Tanggal" autocomplete="off">
+                        @if ($errors->has('start'))
+                            <span class="invalid-feedback" role="alert">
+                                <strong>{{ $errors->first('start') }}</strong>
+                            </span>
+                        @endif
+                </div>
+                <div class="col-auto my-auto">
+                    <label>s/d</label>
+                </div>
+                <div class="col-auto">
+                    <input type="text" class="form-control end datepicker {{ $errors->has('end') ? ' is-invalid' : '' }}" value="{{ old('end', isset($_GET['end']) ? $_GET['end'] : '') }}" name="end" placeholder="Tanggal" autocomplete="off">    
+                    @if ($errors->has('end'))
+                        <span class="invalid-feedback" role="alert">
+                            <strong>{{ $errors->first('end') }}</strong>
+                        </span>
+                    @endif
+                </div>
+                <div class="col-auto">
+                    <div class="input-group">
+                        <input type="text" class="form-control bg-light border-1 small" placeholder="Cari Data..." aria-label="Search" name="keyword" aria-describedby="basic-addon2" value="{{Request::get('keyword')}}">
+                        <div class="input-group-append">
+                        <button class="btn btn-primary" type="submit">
+                            <i class="fas fa-search fa-sm"></i>
+                        </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                @if (isset($_GET['keyword']) && !isset($_GET['start']) && !isset($_GET['end']))
+                <label>Menampilkan data berdasarkan " {{ $_GET['keyword'] }} "</label>
+                @elseif (!isset($_GET['keyword']) && isset($_GET['start']) && isset($_GET['end']))
+                <label>Menampilkan data dari tanggal {{ isset($_GET['start']) ? $_GET['start'] : '' }} sampai {{ isset($_GET['end']) ? $_GET['end'] : '' }}</label>
+                @elseif (isset($_GET['keyword']) && isset($_GET['start']) && isset($_GET['end']))
+                <label>Menampilkan data berdasarkan " {{ $_GET['keyword'] }} " dari tanggal {{ $_GET['start'] }} sampai {{ $_GET['end'] }}.</label>
+                @endif
+            </div>
+        </form>
         <div class="table-responsive">
             <table class="table table-custom">
                 <thead>
