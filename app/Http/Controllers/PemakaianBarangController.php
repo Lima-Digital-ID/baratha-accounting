@@ -101,7 +101,7 @@ class PemakaianBarangController extends Controller
             'kode_pemakaian' => 'required',
             'tanggal' => 'required',
             'kode_barang.*' => 'required',
-            'qty.*' => 'required|min:1|lte:stock.*',
+            'qty.*' => 'required|numeric|gt:0|lte:stock.*',
             'kode_biaya.*' => 'required',
             ],
             [
@@ -215,7 +215,7 @@ class PemakaianBarangController extends Controller
             [
                 'tanggal' => 'required',
                 'kode_barang.*' => 'required',
-                'qty.*' => 'required|min:1|lte:stock.*',
+                'qty.*' => 'required|numeric|gt:0|lte:stock.*',
                 'kode_biaya.*' => 'required',
             ],
             [

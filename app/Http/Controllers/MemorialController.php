@@ -106,7 +106,7 @@ class MemorialController extends Controller
             'tipe' => 'required',
             'kode.*' => 'required',
             'lawan.*' => 'required',
-            'subtotal.*' => 'required|min:1',
+            'subtotal.*' => 'required|numeric|gt:0',
             'keterangan.*' => 'required',
             ]
         );
@@ -203,7 +203,7 @@ class MemorialController extends Controller
             'tanggal' => 'required',
             'kode.*' => 'required',
             'lawan.*' => 'required',
-            'subtotal.*' => 'required|min:1',
+            'subtotal.*' => 'required|numeric|gt:0',
             'keterangan.*' => 'required',
         ]);
 

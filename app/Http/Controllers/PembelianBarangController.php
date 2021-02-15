@@ -90,8 +90,8 @@ class PembelianBarangController extends Controller
             'tanggal' => 'required',
             'kode_supplier' => 'required',
             'kode_barang.*' => 'required',
-            'qty.*' => 'required|min:1',
-            'harga_satuan.*' => 'required|min:1',
+            'qty.*' => 'required|numeric|gt:0',
+            'harga_satuan.*' => 'required|numeric|gt:0',
         ]);
 
         try {
@@ -233,8 +233,8 @@ class PembelianBarangController extends Controller
             'tanggal' => 'required',
             'kode_supplier' => 'required',
             'kode_barang.*' => 'required',
-            'qty.*' => 'required|min:1',
-            'harga_satuan.*' => 'required|min:1',
+            'qty.*' => 'required|numeric|gt:0',
+            'harga_satuan.*' => 'required|numeric|gt:0',
         ]);
 
         try {

@@ -108,7 +108,7 @@ class KasController extends Controller
             'tipe' => 'required',
             'kode_rekening' => 'required',
             'lawan.*' => 'required',
-            'subtotal.*' => 'required|min:1',
+            'subtotal.*' => 'required|numeric|gt:0',
             'keterangan.*' => 'required',
             ]
         );
@@ -213,7 +213,7 @@ class KasController extends Controller
             'tanggal' => 'required',
             'kode_rekening' => 'required',
             'lawan.*' => 'required',
-            'subtotal.*' => 'required|min:1',
+            'subtotal.*' => 'required|numeric|gt:0',
             'keterangan.*' => 'required',
         ]);
 
