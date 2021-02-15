@@ -324,6 +324,10 @@
                 <a class="nav-link" href="{{url('memorial/memorial')}}">
                   <span>Memorial</span>
                 </a>
+                <div class="dropdown-divider"></div>
+                <a class="nav-link" href="{{url('memorial/laporan-memorial')}}">
+                  <span>Laporan Memorial</span>
+                </a>
               </div>
             </div>
           </li>

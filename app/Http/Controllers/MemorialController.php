@@ -106,7 +106,7 @@ class MemorialController extends Controller
             'tipe' => 'required',
             'kode.*' => 'required',
             'lawan.*' => 'required',
-            'subtotal.*' => 'required|min:1',
+            'subtotal.*' => 'required|numeric|gt:0',
             'keterangan.*' => 'required',
             ]
         );
@@ -203,7 +203,7 @@ class MemorialController extends Controller
             'tanggal' => 'required',
             'kode.*' => 'required',
             'lawan.*' => 'required',
-            'subtotal.*' => 'required|min:1',
+            'subtotal.*' => 'required|numeric|gt:0',
             'keterangan.*' => 'required',
         ]);
 
@@ -331,6 +331,63 @@ class MemorialController extends Controller
         } catch (\Exception $e) {
             return redirect()->back()->withStatus('Terjadi kesalahan. : ' . $e->getMessage());
         } catch (\Illuminate\Database\QueryException $e) {
+            return redirect()->back()->withStatus('Terjadi kesalahan pada database : ' . $e->getMessage());
+        }
+    }
+
+    public function reportMemorial()
+    {
+        try {
+            $this->param['pageInfo'] = 'Memorial / List Memorial';
+            $this->param['report'] = null;
+        } catch (\Exception $e) {
+            return redirect()->back()->withError('Terjadi kesalahan. : ' . $e->getMessage());
+        }
+        catch(\Illuminate\Database\QueryException $e){
+            return redirect()->back()->withError('Terjadi kesalahan pada database. : ' . $e->getMessage());
+        }
+        return \view('memorial.laporan-memorial', $this->param);
+    }
+
+    public function getReport(Request $request)
+    {
+        $validatedData = $request->validate([
+            'start' => 'required',
+            'end' => 'required',
+            ]
+        );
+        try {
+            $this->param['pageInfo'] = 'Memorial / List Memorial';
+            $this->param['kode_memorial'] = Memorial::select('kode_memorial')->get();
+            $this->param['report'] = Memorial::join('detail_memorial', 'detail_memorial.kode_memorial', 'memorial.kode_memorial')
+                                            ->whereBetween('memorial.tanggal', [$request->get('start'), $request->get('end')])
+                                            ->get();
+        } catch (\Exception $e) {
+            return redirect()->back()->withError('Terjadi kesalahan. : ' . $e->getMessage());
+        }
+        catch(\Illuminate\Database\QueryException $e){
+            return redirect()->back()->withError('Terjadi kesalahan pada database. : ' . $e->getMessage());
+        }
+        return \view('memorial.laporan-memorial', $this->param);
+    }
+
+    public function printReport(Request $request)
+    {
+        $validatedData = $request->validate([
+            'start' => 'required',
+            'end' => 'required'
+        ]);
+        try{
+            $this->param['kodeRekeningKas'] = KodeRekening::select('kode_rekening', 'kode_rekening.nama')->join('kode_induk', 'kode_induk.kode_induk', '=', 'kode_rekening.kode_induk')->where('kode_induk.nama', 'Kas')->get();
+            $this->param['report'] = Memorial::join('detail_memorial', 'detail_memorial.kode_memorial', 'memorial.kode_memorial')
+                                            ->whereBetween('memorial.tanggal', [$request->get('start'), $request->get('end')])
+                                            ->get();
+            return view('memorial.print-laporan-memorial', $this->param);
+        }
+        catch(\Exception $e){
+            return redirect()->back()->withStatus('Terjadi kesalahan. : ' . $e->getMessage());
+        }
+        catch(\Illuminate\Database\QueryException $e){
             return redirect()->back()->withStatus('Terjadi kesalahan pada database : ' . $e->getMessage());
         }
     }

@@ -75,8 +75,8 @@ class PenjualanCateringController extends Controller
             'tanggal' => 'required',
             'kode_customer' => 'required',
             'status_ppn' => 'required',
-            'qty' => 'required|min:1',
-            'harga_satuan' => 'required|min:1',
+            'qty' => 'required|numeric|gt:0',
+            'harga_satuan' => 'required|numeric|gt:0',
             'keterangan' => 'required',
         ]);
 
@@ -158,8 +158,8 @@ class PenjualanCateringController extends Controller
             'kode_penjualan' => 'required',
             'tanggal' => 'required',
             'kode_customer' => 'required',
-            'qty' => 'required|min:1',
-            'harga_satuan' => 'required|min:1',
+            'qty' => 'required|numeric|gt:0',
+            'harga_satuan' => 'required|numeric|gt:0',
             'keterangan' => 'required',
         ]);
 

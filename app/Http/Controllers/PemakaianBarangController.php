@@ -27,13 +27,22 @@ class PemakaianBarangController extends Controller
 
         try {
             $keyword = $request->get('keyword');
+            $start = $request->get('start');
+            $end = $request->get('end');
+            // $pemakaianBarang = PemakaianBarang::where('kode_pemakaian', 'LIKE', "%$keyword%")->orWhere('kode_supplier', 'LIKE', "%$keyword%")->paginate(10);
             if ($keyword) {
-                $pemakaianBarang = PemakaianBarang::where('kode_pemakaian', 'LIKE', "%$keyword%")->orWhere('kode_supplier', 'LIKE', "%$keyword%")->paginate(10);
-            } else {
+                $pemakaianBarang = PemakaianBarang::where('kode_pemakaian', 'LIKE', "%$keyword%")->paginate(10);
+            }elseif($keyword == null && $start != null && $end != null){
+                $pemakaianBarang = PemakaianBarang::whereBetween('tanggal', [$start, $end])->paginate(10);
+            }elseif($keyword && $start && $end){
+                $pemakaianBarang = PemakaianBarang::whereBetween('tanggal', [$start, $end])->where('kode_pemakaian', 'LIKE', "%$keyword%")->paginate(10);
+            }else {
                 $pemakaianBarang = PemakaianBarang::paginate(10);
             }
         } catch (\Illuminate\Database\QueryException $e) {
-            return redirect()->back()->withStatus('Terjadi Kesalahan');
+            return $e;
+            return redirect()->back()->withErrors('Terjadi Kesalahan');
+            // return redirect()->back()->withStatus('Terjadi Kesalahan');
         }
 
         return \view('persediaan.pemakaian-barang.list-pemakaian-barang', ['pemakaianBarang' => $pemakaianBarang], $this->param);
@@ -101,7 +110,7 @@ class PemakaianBarangController extends Controller
             'kode_pemakaian' => 'required',
             'tanggal' => 'required',
             'kode_barang.*' => 'required',
-            'qty.*' => 'required|min:1|lte:stock.*',
+            'qty.*' => 'required|numeric|gt:0|lte:stock.*',
             'kode_biaya.*' => 'required',
             ],
             [
@@ -215,7 +224,7 @@ class PemakaianBarangController extends Controller
             [
                 'tanggal' => 'required',
                 'kode_barang.*' => 'required',
-                'qty.*' => 'required|min:1|lte:stock.*',
+                'qty.*' => 'required|numeric|gt:0|lte:stock.*',
                 'kode_biaya.*' => 'required',
             ],
             [
