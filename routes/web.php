@@ -75,6 +75,7 @@ Route::group(['middleware' => ['auth:sanctum', 'verified']], function () {
         Route::get('rekap-hotel/save', 'RekapHotelController@save');
         Route::get('rekap-resto', 'RekapRestoController@index');
         Route::get('rekap-resto/save', 'RekapRestoController@save');
+        Route::post('pembayaran-piutang', 'CustomerController@pembayaranPiutang');
         Route::resource('rekap-resto', 'RekapRestoController');
         Route::resource('customer', 'CustomerController');
         Route::get('penjualan-catering/getKode', 'PenjualanCateringController@getKode');

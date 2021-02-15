@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\Customer;
+use App\Models\KartuPiutang;
+use App\Models\PenjualanLain;
 use Illuminate\Http\Request;
 
 class CustomerController extends Controller
@@ -140,4 +142,29 @@ class CustomerController extends Controller
             return redirect()->route('penjualan.customer.index')->withError('Terjadi kesalahan pada database : '. $e->getMessage());
         }
     }
+    public function pembayaranPiutang(Request $request)
+    {
+        try {
+            //insert ke kartu hutang
+            $kartuHutang = new KartuPiutang;
+            $kartuHutang->tanggal = date('Y-m-d');
+            $kartuHutang->kode_customer = $request->get('kode_customer');
+            $kartuHutang->kode_transaksi = $request->get('kode_transaksi');
+            $kartuHutang->nominal = $request->get('nominal_bayar');
+            $kartuHutang->tipe = 'Pelunasan';
+            $kartuHutang->save();
+
+            //update terbayar penjualan barang
+            PenjualanLain::where('kode_penjualan', $request->get('kode_penjualan'))
+            ->update([
+                'terbayar' => \DB::raw('terbayar+' . $request->get('nominal_bayar')),
+            ]);
+            return redirect()->back()->withStatus('Pembayaran Piutang Berhasil.');
+        } catch (\Exception $e) {
+            return redirect()->back()->withStatus('Terjadi kesalahan. : ' . $e->getMessage());
+        } catch (\Illuminate\Database\QueryException $e) {
+            return redirect()->back()->withStatus('Terjadi kesalahan pada database : ' . $e->getMessage());
+        }    
+    }
+
 }

@@ -299,8 +299,8 @@ $(document).ready(function() {
         e.preventDefault();
         
         var param = $(this).data('param')
-        $("#kode-pembelian").val(param[0])
-        $("#jml-hutang").val(param[1])
+        $("#kode-hutangpiutang").val(param[0])
+        $("#jml-hutangpiutang").val(param[1])
         $("#sisa").val(param[2])
     })
 });

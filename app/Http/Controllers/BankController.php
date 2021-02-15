@@ -11,6 +11,8 @@ use \App\Models\Supplier;
 use \App\Models\Customer;
 use \App\Models\KartuHutang;
 use \App\Models\PembelianBarang;
+use \App\Models\KartuPiutang;
+use \App\Models\PenjualanLain;
 use Illuminate\Support\Facades\DB;
 
 class BankController extends Controller
@@ -183,7 +185,8 @@ class BankController extends Controller
                     $this->param['hutang'] = PembelianBarang::select('kode_pembelian','grandtotal','terbayar','tanggal','jatuh_tempo')->where("kode_supplier",$this->param['bank']->kode_supplier)->whereRaw('terbayar != grandtotal')->get();
                 }
                 else{
-
+                    $this->param['totalBayar'] = KartuPiutang::select(DB::raw('sum(nominal) as total'))->where('kode_transaksi', $kode)->get()[0];
+                    $this->param['piutang'] = PenjualanLain::select('kode_penjualan','grandtotal','terbayar','tanggal','jatuh_tempo')->where("kode_customer",$this->param['bank']->kode_customer)->whereRaw('terbayar != grandtotal')->get();
                 }
             }
             return \view('bank.edit-transaksi-bank', $this->param);

@@ -167,5 +167,4 @@ class SupplierController extends Controller
             return redirect()->back()->withStatus('Terjadi kesalahan pada database : ' . $e->getMessage());
         }    
     }
-
 }

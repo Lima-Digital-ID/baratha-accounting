@@ -5,22 +5,22 @@
                 <td>#</td>
                 <td>Kode Transaksi</td>
                 <td>Tanggal Transaksi</td>
-                <td>Jumlah Hutang</td>
+                <td>Jumlah Piutang</td>
                 <td>Sisa</td>
                 <td>Opsi</td>
             </tr>
         </thead>
         <tbody>
             @php $no=0 @endphp
-            @foreach($hutang as $data)
+            @foreach($piutang as $data)
                 @php $no++ @endphp
                 <tr>
                     <td>{{$no}}</td>
-                    <td>{{$data->kode_pembelian}}</td>
+                    <td>{{$data->kode_penjualan}}</td>
                     <td>{{date('m-d-Y', strtotime($data->tanggal))}}</td>
                     <td>{{number_format($data->grandtotal,0,',','.')}}</td>
                     <td>{{number_format($data->grandtotal-$data->terbayar,0,',','.')}}</td>
-                    <td><a href="" class="btn btn-default btn-pembayaran" data-param='["{{$data->kode_pembelian}}","{{$data->grandtotal}}","{{$data->grandtotal-$data->terbayar}}"]' data-toggle="modal" data-target=".modal-pembayaran"><span class="fa fa-credit-card"></span> Pembayaran</a></td>
+                    <td><a href="" class="btn btn-default btn-pembayaran" data-param='["{{$data->kode_penjualan}}","{{$data->grandtotal}}","{{$data->grandtotal-$data->terbayar}}"]' data-toggle="modal" data-target=".modal-pembayaran"><span class="fa fa-credit-card"></span> Pembayaran</a></td>
                 </tr>
             @endforeach
         </tbody>
@@ -36,7 +36,7 @@
       <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
           <div class="modal-header">
-            <h5 class="modal-title" id="exampleModalLabel">Pembayaran Hutang</h5>
+            <h5 class="modal-title" id="exampleModalLabel">Pembayaran Piutang</h5>
             <button
               class="close"
               type="button"
@@ -47,17 +47,17 @@
             </button>
           </div>
           <div class="modal-body">
-            <form action="{{url('pembelian/pembayaran-hutang')}}" method="post">
+            <form action="{{url('penjualan/pembayaran-piutang')}}" method="post">
             @csrf
             <input type="hidden" name="kode_transaksi" value="{{$kode_transaksi}}">
-            <input type="hidden" name="kode_supplier" value="{{$kode_supplier}}">
+            <input type="hidden" name="kode_customer" value="{{$kode_customer}}">
                 <div class="row">
                     <div class="col-md-6 mb-3">
-                        <label for="">Kode Pembelian</label>
-                        <input type="text" class="form-control" name="kode_pembelian" id='kode-hutangpiutang' readonly>
+                        <label for="">Kode Penjualan</label>
+                        <input type="text" class="form-control" name="kode_penjualan" id="kode-hutangpiutang" readonly>
                     </div>
                     <div class="col-md-6 mb-3">
-                        <label for="">Jumlah Hutang</label>
+                        <label for="">Jumlah Piutang</label>
                         <input type="text" class="form-control" id='jml-hutangpiutang' readonly>
                     </div>
                     <div class="col-md-6 mb-3">
