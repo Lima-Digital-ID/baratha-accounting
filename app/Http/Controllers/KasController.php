@@ -285,7 +285,7 @@ class KasController extends Controller
                             'subtotal' => $_POST['subtotal'][$key],
                         ]);
                     
-                    // insert kartu stock
+                    // insert jurnal
                     Jurnal::insert([
                             'tanggal' => $_POST['tanggal'],
                             'jenis_transaksi' => 'Kas',
@@ -307,7 +307,7 @@ class KasController extends Controller
                     //delete detail
                     DetailKas::where('id', $value)->delete();
 
-                    //delete kartu stock
+                    //delete jurnal
                     Jurnal::where('id_detail', $value)->where('kode_transaksi', $kode)->delete();
                 }
             }
