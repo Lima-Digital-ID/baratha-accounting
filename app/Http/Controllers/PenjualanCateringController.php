@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 
-use \App\Models\PenjualanCatering;
+use \App\Models\PenjualanLain;
 use \App\Models\Customer;
 use \App\Models\KartuPiutang;
 use \App\Models\Jurnal;
@@ -20,9 +20,9 @@ class PenjualanCateringController extends Controller
         try {
             $keyword = $request->get('keyword');
             if ($keyword) {
-                $penjualanCatering = PenjualanCatering::with('customer')->where('kode_penjualan', 'LIKE', "%$keyword%")->orWhere('kode_customer', 'LIKE', "%$keyword%")->paginate(10);
+                $penjualanCatering = PenjualanLain::with('customer')->where('kode_penjualan', 'LIKE', "%$keyword%")->orWhere('kode_customer', 'LIKE', "%$keyword%")->paginate(10);
             } else {
-                $penjualanCatering = PenjualanCatering::with('customer')->paginate(10);
+                $penjualanCatering = PenjualanLain::with('customer')->paginate(10);
             }
         } catch (\Illuminate\Database\QueryException $e) {
             return redirect()->back()->withStatus('Terjadi Kesalahan');
@@ -50,7 +50,7 @@ class PenjualanCateringController extends Controller
         $tgl = explode('-', $_GET['tanggal']);
         $y = $tgl[0];
         $m = $tgl[1];
-        $lastKode = PenjualanCatering::select('kode_penjualan')
+        $lastKode = PenjualanLain::select('kode_penjualan')
             ->whereMonth('tanggal', $m)
             ->whereYear('tanggal', $y)
             ->orderBy('kode_penjualan', 'desc')
@@ -97,7 +97,7 @@ class PenjualanCateringController extends Controller
 
             $grandtotal = $total + $totalPpn;
 
-            $newPenjualan = new PenjualanCatering;
+            $newPenjualan = new PenjualanLain;
             $newPenjualan->kode_penjualan = $request->get('kode_penjualan');
             $newPenjualan->kode_customer = $request->get('kode_customer');
             $newPenjualan->tanggal = $request->get('tanggal');
@@ -172,7 +172,7 @@ class PenjualanCateringController extends Controller
             $this->param['btnRight']['text'] = 'Lihat Data';
             $this->param['btnRight']['link'] = route('penjualan-catering.index');
             $this->param['customer'] = Customer::get();
-            $this->param['penjualan'] = PenjualanCatering::find($kode);
+            $this->param['penjualan'] = PenjualanLain::find($kode);
 
             return \view('penjualan.penjualan-catering.edit-penjualan-catering', $this->param);
         } catch (\Exception $e) {
@@ -195,7 +195,7 @@ class PenjualanCateringController extends Controller
 
         try {
 
-            $penjualan = PenjualanCatering::select('tanggal', 'kode_customer','status_ppn', 'grandtotal')->where('kode_penjualan', $kode)->get()[0];
+            $penjualan = PenjualanLain::select('tanggal', 'kode_customer','status_ppn', 'grandtotal')->where('kode_penjualan', $kode)->get()[0];
 
             $bulanPembelian = date('m-Y', strtotime($penjualan->tanggal));
             $editBulanPembelian = date('m-Y', strtotime($request->get('tanggal')));
@@ -216,12 +216,14 @@ class PenjualanCateringController extends Controller
             }
             elseif ($statusPpn == 'Belum') {
                 $newTotalPpn = 10 / 100 * $newTotal;
+            }else{
+                $newTotalPpn = 0;
             }
 
             $newGrandtotal = $newTotal + $newTotalPpn;
 
             //update penjualan
-            PenjualanCatering::where('kode_penjualan', $kode)
+            PenjualanLain::where('kode_penjualan', $kode)
                 ->update([
                     'kode_customer' => $request->get('kode_customer'),
                     'tanggal' => $request->get('tanggal'),
@@ -280,7 +282,7 @@ class PenjualanCateringController extends Controller
     public function destroy($kode)
     {
         try {
-            $penjualan = PenjualanCatering::findOrFail($kode);
+            $penjualan = PenjualanLain::findOrFail($kode);
 
             KartuPiutang::where('kode_transaksi', $kode)->delete();
 

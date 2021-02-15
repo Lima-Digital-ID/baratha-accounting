@@ -194,11 +194,10 @@
                         if($kas->kode_supplier!=''){    
                     ?>
                         @include('pembelian.supplier.list-hutang',['hutang' => $hutang, 'sisaDetail' => $total- $totalBayar->total, 'kode_transaksi' => $kas->kode_kas,'kode_supplier' => $kas->kode_supplier])
-                        <h5 class='text-right mt-3 pr-5'>Sisa Saldo Detail: <span id='total' class="text-orange">{{number_format($total- $totalBayar->total,0,',','.')}}</span></h5>
                     <?php } else{?>
-                        <h1>Piutang</h1>
+                        @include('penjualan.customer.list-piutang',['piutang' => $piutang, 'sisaDetail' => $total- $totalBayar->total, 'kode_transaksi' => $kas->kode_kas,'kode_customer' => $kas->kode_customer])
                     <?php }  ?>
-
+                        <h5 class='text-right mt-3 pr-5'>Sisa Saldo Detail: <span id='total' class="text-orange">{{number_format($total- $totalBayar->total,0,',','.')}}</span></h5>
                 </div>
                 <?php } ?>
             </div>
