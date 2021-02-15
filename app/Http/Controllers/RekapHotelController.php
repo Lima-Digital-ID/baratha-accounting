@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use \App\Models\Rekap_hotel;
+use \App\Models\Jurnal;
 
 class RekapHotelController extends Controller
 {
@@ -38,6 +39,37 @@ class RekapHotelController extends Controller
             $rekapHotel->total = $json['total'];
             $rekapHotel->total_ppn = $json['total_ppn'];
             $rekapHotel->save();
+
+            // save jurnal penjualan
+            // semua penjualan hotel langsung masuk ke kas
+            $newJurnal = new Jurnal;
+            $newJurnal->tanggal = $_GET['tanggal'];
+            $newJurnal->jenis_transaksi = 'Penjualan Hotel';
+            $newJurnal->kode_transaksi = 'Penjualan Hotel';
+            $newJurnal->keterangan = 'Penjualan Hotel';
+            $newJurnal->kode = '1111.0001';
+            $newJurnal->lawan = '4110.0001';
+            $newJurnal->tipe = 'Debet';
+            $newJurnal->nominal = $json['total'];
+            $newJurnal->id_detail = '';
+            $newJurnal->save();
+
+            
+            // save jurnal ppn penjualan
+            // ppn penjualan hotel belum fix
+
+            // $newJurnalPpn = new Jurnal;
+            // $newJurnalPpn->tanggal = $_GET['tanggal'];
+            // $newJurnalPpn->jenis_transaksi = 'Penjualan Resto';
+            // $newJurnalPpn->kode_transaksi = 'Penjualan Resto';
+            // $newJurnalPpn->keterangan = 'PPN Penjualan Resto';
+            // $newJurnalPpn->kode = '1120.0001';
+            // $newJurnalPpn->lawan = '2116.0001';
+            // $newJurnalPpn->tipe = 'Debet';
+            // $newJurnalPpn->nominal = $totalPpn;
+            // $newJurnalPpn->id_detail = '';
+            // $newJurnalPpn->save();
+
             return redirect()->back()->withStatus('Penarikan Data Berhasil');
 
         } catch (\Exception $e) {

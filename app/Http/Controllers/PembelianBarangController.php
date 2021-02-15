@@ -9,6 +9,7 @@ use \App\Models\Supplier;
 use \App\Models\Barang;
 use \App\Models\KartuHutang;
 use \App\Models\KartuStock;
+use \App\Models\Jurnal;
 
 class PembelianBarangController extends Controller
 {
@@ -134,6 +135,34 @@ class PembelianBarangController extends Controller
             $newPembelian->terbayar = 0;
 
             $newPembelian->save();
+
+            // save jurnal pembelian
+            $newJurnal = new Jurnal;
+            $newJurnal->tanggal = $request->get('tanggal');
+            $newJurnal->jenis_transaksi = 'Pembelian';
+            $newJurnal->kode_transaksi = $request->get('kode_pembelian');
+            $newJurnal->keterangan = 'Pembelian Barang';
+            $newJurnal->kode = '1130.0001';
+            $newJurnal->lawan = '2113.0001';
+            $newJurnal->tipe = 'Debet';
+            $newJurnal->nominal = $total;
+            $newJurnal->id_detail = '';
+            $newJurnal->save();
+
+            if ($request->get('status_ppn') != 'Tanpa') {
+                // save jurnal ppn pembelian
+                $newJurnal = new Jurnal;
+                $newJurnal->tanggal = $request->get('tanggal');
+                $newJurnal->jenis_transaksi = 'Pembelian';
+                $newJurnal->kode_transaksi = $request->get('kode_pembelian');
+                $newJurnal->keterangan = 'PPN Pembelian';
+                $newJurnal->kode = '1161.0001';
+                $newJurnal->lawan = '2113.0001';
+                $newJurnal->tipe = 'Debet';
+                $newJurnal->nominal = $totalPpn;
+                $newJurnal->id_detail = '';
+                $newJurnal->save();
+            }
             //update hutang supplier
             Supplier::where('kode_supplier', $request->get('kode_supplier'))
                             ->update([
@@ -446,6 +475,23 @@ class PembelianBarangController extends Controller
                     'kode_supplier' => $_POST['kode_supplier'],
                     'nominal' => $newGrandtotal,
                 ]);
+            
+            //update jurnal pembelian
+            Jurnal::where('kode_transaksi', $_POST['kode_pembelian'])->where('keterangan', 'Pembelian Barang')
+                ->update([
+                    'tanggal' => $_POST['tanggal'],
+                    'nominal' => $newTotal,
+                ]);
+            
+            if ($statusPpn != 'Tanpa') {
+                //update jurnal ppn pembelian
+                Jurnal::where('kode_transaksi', $_POST['kode_pembelian'])->where('keterangan', 'PPN Pembelian')
+                    ->update([
+                        'tanggal' => $_POST['tanggal'],
+                        'nominal' => $newTotalPpn,
+                    ]);
+
+            }
             
             return redirect()->route('pembelian-barang.index')->withStatus('Data berhasil diperbarui.');
         } catch (\Exception $e) {

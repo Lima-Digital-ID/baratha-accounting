@@ -282,7 +282,7 @@ class KasController extends Controller
                             'subtotal' => $_POST['subtotal'][$key],
                         ]);
                     
-                    // update kartu stock
+                    // insert kartu stock
                     Jurnal::insert([
                             'tanggal' => $_POST['tanggal'],
                             'jenis_transaksi' => 'Kas',

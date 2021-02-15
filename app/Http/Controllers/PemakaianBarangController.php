@@ -9,7 +9,7 @@ use \App\Models\Supplier;
 use \App\Models\Barang;
 use \App\Models\KartuStock;
 use App\Models\KodeBiaya;
-use \App\Models\KartuHutang;
+use \App\Models\Jurnal;
 
 class PemakaianBarangController extends Controller
 {
@@ -169,6 +169,21 @@ class PemakaianBarangController extends Controller
                 $kartuStock->nominal = $subtotal;
                 $kartuStock->tipe = 'Keluar';
                 $kartuStock->save();
+
+                // save jurnal pemakaian
+                $getKodeBiaya = KodeBiaya::select('nama','kode_rekening')->where('kode_biaya', $_POST['kode_biaya'][$key])->get()[0];
+
+                $newJurnal = new Jurnal;
+                $newJurnal->tanggal = $request->get('tanggal');
+                $newJurnal->jenis_transaksi = 'Pemakaian';
+                $newJurnal->kode_transaksi = $request->get('kode_pemakaian');
+                $newJurnal->keterangan = 'Pemakaian Barang ' . $getKodeBiaya->nama;
+                $newJurnal->kode = '1130.0001';
+                $newJurnal->lawan = $getKodeBiaya->kode_rekening;
+                $newJurnal->tipe = 'Kredit';
+                $newJurnal->nominal = $subtotal;
+                $newJurnal->id_detail = $newDetail->id;
+                $newJurnal->save();
             }
 
             return redirect()->route('pemakaian-barang.index')->withStatus('Data berhasil ditambahkan.');
@@ -329,7 +344,17 @@ class PemakaianBarangController extends Controller
                                     'nominal' => $subtotal,
                                 ]);
                         }
+
+                        //update jurnal pemakaian
+                        $getKodeBiaya = KodeBiaya::select('nama','kode_rekening')->where('kode_biaya', $_POST['kode_biaya'][$key])->get()[0];
                         
+                        Jurnal::where('kode_transaksi', $kode)->where('id_detail', $_POST['id_detail'][$key])
+                        ->update([
+                            'tanggal' => $_POST['tanggal'],
+                            'keterangan' => 'Pemakaian Barang ' . $getKodeBiaya->nama,
+                            'lawan' => $getKodeBiaya->kode_rekening,
+                            'nominal' => $subtotal,
+                        ]);
                     }
                     else{ //hanya update tanggal di kartu stock apabila tidak ada perubahan pada detail
                         KartuStock::where('id_detail', $_POST['id_detail'][$key])
@@ -337,6 +362,12 @@ class PemakaianBarangController extends Controller
                                 ->update([
                                     'tanggal' => $_POST['tanggal'],
                                 ]);
+
+                        //update jurnal pemakaian
+                        Jurnal::where('kode_transaksi', $kode)->where('id_detail', $_POST['id_detail'][$key])
+                        ->update([
+                            'tanggal' => $_POST['tanggal'],
+                        ]);
                     }
                     
                 } 
@@ -369,6 +400,21 @@ class PemakaianBarangController extends Controller
                             'nominal' => $subtotal,
                             'tipe' => 'Keluar',
                         ]);
+
+                    // save jurnal pemakaian
+                    $getKodeBiaya = KodeBiaya::select('nama','kode_rekening')->where('kode_biaya', $_POST['kode_biaya'][$key])->get()[0];
+
+                    $newJurnal = new Jurnal;
+                    $newJurnal->tanggal = $_POST['tanggal'];
+                    $newJurnal->jenis_transaksi = 'Pemakaian';
+                    $newJurnal->kode_transaksi = $kode;
+                    $newJurnal->keterangan = 'Pemakaian Barang ' . $getKodeBiaya->nama;
+                    $newJurnal->kode = '1130.0001';
+                    $newJurnal->lawan = $getKodeBiaya->kode_rekening;
+                    $newJurnal->tipe = 'Kredit';
+                    $newJurnal->nominal = $subtotal;
+                    $newJurnal->id_detail = $newDetail->id;
+                    $newJurnal->save();
                 }
                 $newTotalQty = $newTotalQty + $_POST['qty'][$key];
                 $newTotalPemakaian = $newTotalPemakaian + $subtotal;
@@ -390,6 +436,8 @@ class PemakaianBarangController extends Controller
 
                     //delete kartu stock
                     KartuStock::where('id_detail', $value)->where('tipe', 'Keluar')->delete();
+                    // delete jurnal
+                    Jurnal::where('kode_transaksi', $kode)->where('id_detail', $value)->delete();
                 }
             }
 

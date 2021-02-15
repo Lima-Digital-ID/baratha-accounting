@@ -39,6 +39,7 @@
       @endif
 
       <br>
+      <br>
 
       <label>Kode Rekening</label>
       <input type="text" id="kode_rekening" class="form-control {{ $errors->has('kode_rekening') ? ' is-invalid' : '' }}" value="{{ old('kode_rekening') }}" autofocus name="kode_rekening" placeholder="Kode Rekening">

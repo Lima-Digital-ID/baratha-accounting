@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use \App\Models\PenjualanCatering;
 use \App\Models\Customer;
 use \App\Models\KartuPiutang;
+use \App\Models\Jurnal;
 
 class PenjualanCateringController extends Controller
 {
@@ -111,6 +112,35 @@ class PenjualanCateringController extends Controller
             $newPenjualan->terbayar = 0;
 
             $newPenjualan->save();
+
+            // save jurnal penjualan
+            $newJurnal = new Jurnal;
+            $newJurnal->tanggal = $request->get('tanggal');
+            $newJurnal->jenis_transaksi = 'Penjualan Catering';
+            $newJurnal->kode_transaksi = $request->get('kode_penjualan');
+            $newJurnal->keterangan = 'Penjualan Catering';
+            $newJurnal->kode = '1120.0001';
+            $newJurnal->lawan = '4110.0001';
+            $newJurnal->tipe = 'Debet';
+            $newJurnal->nominal = $total;
+            $newJurnal->id_detail = '';
+            $newJurnal->save();
+
+            if ($request->get('status_ppn') != 'Tanpa') {
+                // save jurnal ppn penjualan
+                $newJurnal = new Jurnal;
+                $newJurnal->tanggal = $request->get('tanggal');
+                $newJurnal->jenis_transaksi = 'Penjualan Catering';
+                $newJurnal->kode_transaksi = $request->get('kode_penjualan');
+                $newJurnal->keterangan = 'PPN Penjualan Catering';
+                $newJurnal->kode = '1120.0001';
+                $newJurnal->lawan = '2116.0001';
+                $newJurnal->tipe = 'Debet';
+                $newJurnal->nominal = $totalPpn;
+                $newJurnal->id_detail = '';
+                $newJurnal->save();
+            }
+
             //update piutang supplier
             Customer::where('kode_customer', $request->get('kode_customer'))
                             ->update([
@@ -203,6 +233,23 @@ class PenjualanCateringController extends Controller
                     'total_ppn' => $newTotalPpn,
                     'grandtotal' => $newGrandtotal,
                 ]);
+
+            //update jurnal penjualan
+            Jurnal::where('kode_transaksi', $kode)->where('keterangan', 'Penjualan Catering')
+            ->update([
+                'tanggal' => $request->get('tanggal'),
+                'nominal' => $newTotal,
+            ]);
+            
+            if ($statusPpn != 'Tanpa') {
+                //update jurnal ppn penjualan
+                Jurnal::where('kode_transaksi', $kode)->where('keterangan', 'PPN Penjualan Catering')
+                    ->update([
+                        'tanggal' => $request->get('tanggal'),
+                        'nominal' => $newTotalPpn,
+                    ]);
+
+            }
 
             Customer::where('kode_customer', $kodeCustomer)
                         ->update([
