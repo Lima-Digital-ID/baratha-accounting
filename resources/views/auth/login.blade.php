@@ -28,12 +28,12 @@
                             <form id="FormLogin" method="post" class="" action="{{ route('login') }}">
                                 @csrf
         
-                                    <label for="">Email</label>
+                                    <label for="">Username</label>
                                     <div class="form-underline">
-                                        <input type="email" name="email" placeholder="Masukkan Email" class="@error('email') is-invalid @enderror" value="{{ old('email') }}" required autocomplete="email" autofocus>
+                                        <input type="text" name="username" placeholder="Masukkan Username" class="@error('username') is-invalid @enderror" value="{{ old('username') }}" required autocomplete="username" autofocus>
                                         <span class="fa fa-user"></span>
                                     </div>
-                                    @error('email')
+                                    @error('username')
                                         <span class="invalid-feedback" role="alert">
                                             <strong>{{ $message }}</strong>
                                         </span>

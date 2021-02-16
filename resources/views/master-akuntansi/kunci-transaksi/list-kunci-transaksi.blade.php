@@ -34,7 +34,7 @@
                         <td>#</td>
                         <td>Jenis Transaksi</td>
                         <td>Tanggal Kunci</td>
-                        <td>Opsi</td>
+                        <td>Aksi</td>
                     </tr>
                 </thead>
                 <tbody>
@@ -48,15 +48,15 @@
                             <td>{{$value->jenis_transaksi}}</td>
                             <td>{{$value->tanggal_kunci}}</td>
                             <td>
-                                <div class="dropdown dropdown-link">
+                                {{-- <div class="dropdown dropdown-link">
                                     <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
                                         Opsi
                                     </button>
                                     <div class="dropdown-menu">
                                         <a href="{{ route('kunci-transaksi.edit', $value) }}" class="dropdown-item">{{ __('Edit') }}</a>
                                     </div>
-                                </div>
-
+                                </div> --}}
+                                <a href="{{ route('kode-transaksi.edit', $value) }}" class="btn btn-success mr-2"> <span class="fa fa-pen"></span> </a>
                             </td>
                         </tr>
                         @php
