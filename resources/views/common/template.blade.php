@@ -331,6 +331,32 @@
               </div>
             </div>
           </li>
+
+          <li class="nav-item {{Request::segment(1) == 'general-ledger' ? 'active' : ''}}">
+            <a
+              class="nav-link collapsed"
+              href="#"
+              data-toggle="collapse"
+              data-target="#general-ledger"
+              aria-expanded="true"
+              aria-controls="general-ledger"
+            >
+            <i class="fas fa-fw fa-balance-scale"></i>
+              <span>General Ledger</span>
+            </a>
+            <div
+              id="general-ledger"
+              class="collapse"
+              aria-labelledby="headingTwo"
+              data-parent="#accordionSidebar"
+            >
+              <div class="py-2 collapse-inner rounded">
+                <a class="nav-link" href="{{url('general-ledger/buku-besar')}}">
+                  <span>Buku Besar</span>
+                </a>
+              </div>
+            </div>
+          </li>
           
           <!-- Sidebar Toggler (Sidebar) -->
           <div class="text-center d-none d-md-inline">

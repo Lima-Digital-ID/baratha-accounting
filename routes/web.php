@@ -117,4 +117,8 @@ Route::group(['middleware' => ['auth:sanctum', 'verified']], function () {
             Route::get('print', 'MemorialController@printReport')->name('print-memorial');
         });
     });
+
+    Route::group(['prefix' => 'general-ledger'], function () {
+        Route::get('buku-besar', 'BukuBesarController@index');
+    });
 });
