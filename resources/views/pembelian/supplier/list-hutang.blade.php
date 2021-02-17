@@ -7,7 +7,7 @@
                 <td>Tanggal Transaksi</td>
                 <td>Jumlah Hutang</td>
                 <td>Sisa</td>
-                <td>Opsi</td>
+                <td>Aksi</td>
             </tr>
         </thead>
         <tbody>

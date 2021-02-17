@@ -132,14 +132,14 @@ class CustomerController extends Controller
             $customer = Customer::findOrFail($kode_customer);
             $customer->delete();
 
-            return redirect()->route('penjualan.customer.index')->withStatus('Data berhasil dihapus.');
+            return redirect()->route('customer.index')->withStatus('Data berhasil dihapus.');
         }
         catch(\Exception $e){
             return $e->getMessage();
-            return redirect()->route('penjualan.customer.index')->withError('Terjadi kesalahan : '. $e->getMessage());
+            return redirect()->route('customer.index')->withError('Terjadi kesalahan : '. $e->getMessage());
         }
         catch(\Illuminate\Database\QueryException $e){
-            return redirect()->route('penjualan.customer.index')->withError('Terjadi kesalahan pada database : '. $e->getMessage());
+            return redirect()->route('customer.index')->withError('Terjadi kesalahan pada database : '. $e->getMessage());
         }
     }
     public function pembayaranPiutang(Request $request)

@@ -34,8 +34,18 @@
 
       <br>
 
+      <label>Username</label>
+      <input type="text" class="form-control {{ $errors->has('username') ? ' is-invalid' : '' }}" value="{{ old('username', $user->username) }}" autofocus name="username" placeholder="ex : Anthony Davis" readonly>
+      @if ($errors->has('username'))
+          <span class="invalid-feedback" role="alert">
+              <strong>{{ $errors->first('username') }}</strong>
+          </span>
+      @endif
+
+      <br>
+
       <label>Email</label>
-      <input type="email" class="form-control {{ $errors->has('email') ? ' is-invalid' : '' }}" value="{{ old('email', $user->email) }}" name="email" placeholder="ex : anthonydavis@mail.test">
+      <input type="email" class="form-control {{ $errors->has('email') ? ' is-invalid' : '' }}" value="{{ old('email', $user->email) }}" name="email" placeholder="ex : anthonydavis@mail.test" readonly>
       @if ($errors->has('email'))
           <span class="invalid-feedback" role="alert">
               <strong>{{ $errors->first('email') }}</strong>
@@ -53,7 +63,7 @@
         <option value="Super Admin" {{old('akses', $user->akses) == 'Super Admin' ? 'selected' : ''}} >Super Admin</option>
       </select>
 
-      <br>
+      <br><br>
 
       <button type="reset" class="btn btn-default"> <span class="fa fa-times"></span> Cancel</button>
 

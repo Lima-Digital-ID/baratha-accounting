@@ -47,23 +47,25 @@ class UserController extends Controller
     {
         $validatedData = $request->validate([
             'name' => 'required',
+            'username' => 'required',
             'email' => 'required|email|unique:users',
             'akses' => 'required',
             'password' => 'required',
             'konfirmasi_password' => 'required|same:password',
         ]);
         try{
-    
             $newUser = new User;
     
             $newUser->name = $request->get('name');
+            $newUser->username = $request->get('username');
             $newUser->email = $request->get('email');
             $newUser->password = \Hash::make($request->get('password'));
             $newUser->akses = $request->get('akses');
-    
+
             $newUser->save();
-    
-            return redirect()->back()->withStatus('Data berhasil ditambahkan.');
+
+            return redirect()->route('user.index')->withStatus('Data berhasil ditambahkan.');
+            
         }
         catch(\Exception $e){
             return redirect()->back()->withStatus('Terjadi kesalahan. : '. $e->getMessage());
@@ -95,20 +97,20 @@ class UserController extends Controller
     {
         $user = User::find($id);
 
-        $isUnique = $user->email == $request->email ? '' : '|unique:users';
+        // $isUnique = $user->email == $request->email ? '' : '|unique:users,email';
 
         $validatedData = $request->validate([
             'name' => 'required',
-            'email' => 'required|email'.$isUnique,
+            // 'email' => 'required|email'.$isUnique,
         ]);
         try{
 
             $user->name = $request->get('name');
-            $user->email = $request->get('email');
+            // $user->email = $request->get('email');
             $user->akses = $request->get('akses');
             $user->save();
 
-            return redirect()->back()->withStatus('Data berhasil diperbarui.');
+            return redirect()->route('user.index')->withStatus('Data berhasil diperbarui.');
         }
         catch(\Exception $e){
             return redirect()->back()->withError('Terjadi kesalahan : '. $e->getMessage());

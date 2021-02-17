@@ -37,7 +37,7 @@
                         <td>Tipe</td>
                         <td>Saldo Awal</td>
                         <td>Kode Induk</td>
-                        <td>Opsi</td>
+                        <td>Aksi</td>
                     </tr>
                 </thead>
                 <tbody>
@@ -54,22 +54,22 @@
                             <td>{{number_format($value->saldo_awal, 2, ',', '.')}}</td>
                             <td>{{$value->kode_induk}}</td>
                             <td>
-                                <div class="dropdown dropdown-link">
+                                {{-- <div class="dropdown dropdown-link">
                                     <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
                                         Opsi
                                     </button>
                                     <div class="dropdown-menu">
                                         <a href="{{ route('kode-rekening.edit', $value) }}" class="dropdown-item">{{ __('Edit') }}</a>
-                                        {{-- <form action="{{ route('kode-rekening.destroy', $value) }}" method="post">
+                                        <form action="{{ route('kode-rekening.destroy', $value) }}" method="post">
                                             @csrf
                                             @method('delete')
                                             <button type="button" class="mr-1 dropdown-item" onclick="confirm('{{ __("Apakah anda yakin ingin menghapus?") }}') ? this.parentElement.submit() : ''">
                                                 {{ __('Hapus') }}
                                             </button>
-                                        </form>   --}}
+                                        </form>  
                                     </div>
-                                </div>
-
+                                </div> --}}
+                                <a href="{{ route('kode-rekening.edit', $value) }}" class="btn btn-success mr-2"> <span class="fa fa-pen"></span> </a>
                             </td>
                         </tr>
                         @php

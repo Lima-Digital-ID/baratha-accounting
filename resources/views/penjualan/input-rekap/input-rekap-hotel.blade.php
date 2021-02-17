@@ -36,7 +36,7 @@
                         <td>Tanggal</td>
                         <td>Total</td>
                         <td>Total PPN</td>
-                        <td>Opsi</td>
+                        <td>Aksi</td>
                     </tr>
                 </thead>
                 <tbody>

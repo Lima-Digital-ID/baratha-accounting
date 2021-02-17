@@ -39,7 +39,7 @@
                         <td>Supplier</td>
                         <td>Customer</td>
                         <td>Total</td>
-                        <td>Opsi</td>
+                        <td>Aksi</td>
                     </tr>
                 </thead>
                 <tbody>
@@ -58,7 +58,7 @@
                             <td>{{$value->kode_customer}}</td>
                             <td>Rp. {{number_format($value->total, 2, ',','.')}}</td>
                             <td>
-                                <div class="dropdown dropdown-link">
+                                {{-- <div class="dropdown dropdown-link">
                                     <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
                                         Opsi
                                     </button>
@@ -72,8 +72,17 @@
                                             </button>
                                         </form>  
                                     </div>
+                                </div> --}}
+                                <div class="form-inline">
+                                    <a href="{{ route('memorial.edit', $value) }}" class="btn btn-success mr-2"> <span class="fa fa-pen"></span> </a>
+                                    <form action="{{ route('memorial.destroy', $value) }}" method="post">
+                                        @csrf
+                                        @method('delete')
+                                        <button type="button" class="btn btn-danger" onclick="confirm('{{ __("Apakah anda yakin ingin menghapus?") }}') ? this.parentElement.submit() : ''">
+                                            <span class="fa fa-minus-circle"></span>
+                                        </button>
+                                    </form>
                                 </div>
-
                             </td>
                         </tr>
                         @php

@@ -16,6 +16,7 @@ class SuperAdminSeeder extends Seeder
         $superAdmin = new \App\Models\User;
 
         $superAdmin->name = 'Super Admin';
+        $superAdmin->username = 'superadmin';
         $superAdmin->email = 'superadmin@baratha.com';
         $superAdmin->password = \Hash::make('superadmin');
         $superAdmin->akses = 'Super Admin';

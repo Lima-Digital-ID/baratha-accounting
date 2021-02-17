@@ -37,7 +37,7 @@
                         <td>Alamat</td>
                         <td>No. Hp</td>
                         <td>Piutang</td>
-                        <td>Opsi</td>
+                        <td>Aksi</td>
                     </tr>
                 </thead>
                 <tbody>
@@ -54,22 +54,31 @@
                             <td>{{$value->no_hp}}</td>
                             <td class="text-right">Rp. {{number_format($value->piutang, 2, ',','.')}}</td>
                             <td>
-                                <div class="dropdown dropdown-link">
+                                {{-- <div class="dropdown dropdown-link">
                                     <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
                                         Opsi
                                     </button>
                                     <div class="dropdown-menu">
                                         <a href="{{ route('customer.edit', $value->kode_customer) }}" class="dropdown-item">{{ __('Edit') }}</a>
-                                        {{-- <form action="{{ route('Customer.destroy', $value->kode_customer) }}" method="post">
+                                        <form action="{{ route('Customer.destroy', $value->kode_customer) }}" method="post">
                                             @csrf
                                             @method('delete')
                                             <button type="button" class="ml-1 dropdown-item" onclick="confirm('{{ __("Apakah anda yakin ingin menghapus?") }}') ? this.parentElement.submit() : ''">
                                                 {{ __('Hapus') }}
                                             </button>
-                                        </form>   --}}
+                                        </form>  
                                     </div>
+                                </div> --}}
+                                <div class="form-inline">
+                                    <a href="{{ route('customer.edit', $value) }}" class="btn btn-success mr-2"> <span class="fa fa-pen"></span> </a>
+                                    <form action="{{ route('customer.destroy', $value) }}" method="post">
+                                        @csrf
+                                        @method('delete')
+                                        <button type="button" class="btn btn-danger" onclick="confirm('{{ __("Apakah anda yakin ingin menghapus?") }}') ? this.parentElement.submit() : ''">
+                                            <span class="fa fa-minus-circle"></span>
+                                        </button>
+                                    </form>
                                 </div>
-
                             </td>
                         </tr>
                         @php

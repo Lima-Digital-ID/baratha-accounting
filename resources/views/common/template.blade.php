@@ -50,7 +50,7 @@
           <!-- Sidebar - Brand -->
           <a
             class="sidebar-brand d-flex align-items-center justify-content-center"
-            href="index.html"
+            href="{{ url('/dashboard') }}"
           >
             <div class="sidebar-brand-icon">
               <i class="fa fa-calculator"></i>
@@ -381,10 +381,10 @@
 
           <!-- Topbar Navbar -->
           <ul class="navbar-nav ml-auto">
-
+            
             <div class="topbar-divider d-none d-sm-block"></div>
-
             <!-- Nav Item - User Information -->
+            <span class="my-auto">{{ Auth::user()->name }}</span>
             <li class="nav-item dropdown no-arrow">
               <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                 <span class="mr-2 d-none d-lg-inline text-gray-600 small">{{\Auth::user()->nama}}</span>
@@ -396,7 +396,7 @@
                   <i class="fas fa-cogs fa-sm fa-fw mr-2 text-gray-400"></i>
                   Ganti Password
                 </a> --}}
-                <div class="dropdown-divider"></div>
+                {{-- <div class="dropdown-divider"></div> --}}
                 <a class="dropdown-item" href="#" data-toggle="modal" data-target="#logoutModal">
                   <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
                   Logout

@@ -33,7 +33,7 @@
                     <tr>
                         <td>#</td>
                         <td>Nama Kategori</td>
-                        <td>Opsi</td>
+                        <td>Aksi</td>
                     </tr>
                 </thead>
                 <tbody>
@@ -46,22 +46,31 @@
                             <td>{{$no}}</td>
                             <td>{{$value->nama}}</td>
                             <td>
-                                <div class="dropdown dropdown-link">
+                                {{-- <div class="dropdown dropdown-link">
                                     <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
                                         Opsi
                                     </button>
                                     <div class="dropdown-menu">
                                         <a href="{{ route('kategori-barang.edit', $value) }}" class="dropdown-item">{{ __('Edit') }}</a>
-                                        {{-- <form action="{{ route('kategori-barang.destroy', $value) }}" method="post">
+                                        <form action="{{ route('kategori-barang.destroy', $value) }}" method="post">
                                             @csrf
                                             @method('delete')
                                             <button type="button" class="mr-1 dropdown-item" onclick="confirm('{{ __("Apakah anda yakin ingin menghapus?") }}') ? this.parentElement.submit() : ''">
                                                 {{ __('Hapus') }}
                                             </button>
-                                        </form>   --}}
+                                        </form>  
                                     </div>
+                                </div> --}}
+                                <div class="form-inline">
+                                    <a href="{{ route('kategori-barang.edit', $value) }}" class="btn btn-success mr-2"> <span class="fa fa-pen"></span> </a>
+                                    <form action="{{ route('kategori-barang.destroy', $value) }}" method="post">
+                                        @csrf
+                                        @method('delete')
+                                        <button type="button" class="btn btn-danger" onclick="confirm('{{ __("Apakah anda yakin ingin menghapus?") }}') ? this.parentElement.submit() : ''">
+                                            <span class="fa fa-minus-circle"></span>
+                                        </button>
+                                    </form>
                                 </div>
-
                             </td>
                         </tr>
                         @php

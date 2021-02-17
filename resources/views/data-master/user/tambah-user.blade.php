@@ -33,6 +33,16 @@
 
       <br>
 
+      <label>Username</label>
+      <input type="text" class="form-control {{ $errors->has('username') ? ' is-invalid' : '' }}" value="{{ old('username') }}" autofocus name="username" placeholder="ex : Anthony Davis">
+      @if ($errors->has('username'))
+          <span class="invalid-feedback" role="alert">
+              <strong>{{ $errors->first('username') }}</strong>
+          </span>
+      @endif
+
+      <br>
+
       <label>Email</label>
       <input type="email" class="form-control {{ $errors->has('email') ? ' is-invalid' : '' }}" value="{{ old('email') }}" name="email" placeholder="ex : anthonydavis@mail.test">
       @if ($errors->has('email'))

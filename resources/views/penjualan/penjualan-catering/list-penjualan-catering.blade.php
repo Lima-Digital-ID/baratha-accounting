@@ -40,7 +40,7 @@
                         <td>Total PPN</td>
                         <td>Grandtotal</td>
                         <td>Terbayar</td>
-                        <td>Opsi</td>
+                        <td>Aksi</td>
                     </tr>
                 </thead>
                 <tbody>
@@ -60,7 +60,7 @@
                             <td class="text-right">Rp. {{number_format($value->grandtotal, 2, ',','.')}}</td>
                             <td class="text-right">Rp. {{number_format($value->terbayar, 2, ',','.')}}</td>
                             <td>
-                                <div class="dropdown dropdown-link">
+                                {{-- <div class="dropdown dropdown-link">
                                     <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
                                         Opsi
                                     </button>
@@ -74,8 +74,17 @@
                                             </button>
                                         </form>  
                                     </div>
+                                </div> --}}
+                                <div class="form-inline">
+                                    <a href="{{ route('penjualan-catering.edit', $value) }}" class="btn btn-success mr-2"> <span class="fa fa-pen"></span> </a>
+                                    <form action="{{ route('penjualan-catering.destroy', $value) }}" method="post">
+                                        @csrf
+                                        @method('delete')
+                                        <button type="button" class="btn btn-danger" onclick="confirm('{{ __("Apakah anda yakin ingin menghapus?") }}') ? this.parentElement.submit() : ''">
+                                            <span class="fa fa-minus-circle"></span>
+                                        </button>
+                                    </form>
                                 </div>
-
                             </td>
                         </tr>
                         @php

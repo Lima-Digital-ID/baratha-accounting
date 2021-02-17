@@ -133,14 +133,14 @@ class SupplierController extends Controller
             $supplier = Supplier::findOrFail($kode_supplier);
             $supplier->delete();
 
-            return redirect()->route('pembelian.supplier.index')->withStatus('Data berhasil dihapus.');
+            return redirect()->route('supplier.index')->withStatus('Data berhasil dihapus.');
         }
         catch(\Exception $e){
             return $e->getMessage();
-            return redirect()->route('pembelian.supplier.index')->withError('Terjadi kesalahan : '. $e->getMessage());
+            return redirect()->route('supplier.index')->withError('Terjadi kesalahan : '. $e->getMessage());
         }
         catch(\Illuminate\Database\QueryException $e){
-            return redirect()->route('pembelian.supplier.index')->withError('Terjadi kesalahan pada database : '. $e->getMessage());
+            return redirect()->route('supplier.index')->withError('Terjadi kesalahan pada database : '. $e->getMessage());
         }
     }
     public function pembayaranHutang(Request $request)
