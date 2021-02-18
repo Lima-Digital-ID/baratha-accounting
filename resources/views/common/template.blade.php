@@ -354,6 +354,9 @@
                 <a class="nav-link" href="{{url('general-ledger/buku-besar')}}">
                   <span>Buku Besar</span>
                 </a>
+                <a class="nav-link" href="{{url('general-ledger/neraca')}}">
+                  <span>Neraca</span>
+                </a>
               </div>
             </div>
           </li>

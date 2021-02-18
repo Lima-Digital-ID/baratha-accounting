@@ -274,13 +274,14 @@
                           @endif
                         </tr>
                     @endforeach
-                    <tfoot>
+                    <thead>
                       <tr>
                         <th colspan="4" style="text-align: center">Total</th>
                         <th>{{number_format($totalDebet, 2, ',', '.')}}</th>
                         <th>{{number_format($totalKredit, 2, ',', '.')}}</th>
+                        <th></th>
                       </tr>
-                    </tfoot>
+                    </thead>
                   </tbody>
                 </table>
               </div>
