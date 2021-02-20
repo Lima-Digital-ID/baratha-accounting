@@ -22,13 +22,12 @@
 <body>
     <br>
     <center>
-        <h4 class="heading-small text-muted mb-3">Laporan Pemakaian Barang</h4>
+        <h5 class="heading-small text-muted mb-3">Laporan Pemakaian Barang</h5>
     </center>
     <center>
-        <h3 class="heading-small text-dark mb-3">Periode {{ \Request::get('start') }} s/d {{ \Request::get('end') }}</h3>
+        <h6 class="heading-small text-dark mb-3">Periode : {{ date('d-m-Y', strtotime(\Request::get('start'))) }} s/d {{ date('d-m-Y', strtotime(\Request::get('end'))) }}</h6>
     </center>
     <br>
-    <div class="table-responsive">
         <table class="table table-custom">
             <thead style="background: #e2e3f7; font-weight: 500; letter-spacing: 0.5px; color: #3c4099;">
                 <tr>
@@ -57,7 +56,6 @@
                 @endforeach
             </tbody>
        </table>
-    </div>
 </body>
 </html>
 @if (isset($_GET['xls']))

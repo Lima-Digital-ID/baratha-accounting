@@ -55,6 +55,20 @@
         </div>
         @if ( !is_null(Request::get('kodeRekeningDari')) && !is_null(Request::get('tanggalDari')) && !is_null(Request::get('kodeRekeningSampai')) && !is_null(Request::get('tanggalSampai')) )
             <hr>
+            <div class="row d-flex justify-content-between">
+                <div class="col">
+                    <h6 class="heading-small text-muted mb-3">Neraca</h6>
+                    <h6 class="heading-small text-dark mb-3">Periode : {{date('d-m-Y', strtotime(Request::get('tanggalDari')))}} s/d {{date('d-m-Y', strtotime(Request::get('tanggalSampai')))}}</h6>
+                </div>
+                <div class="form-group mr-3">
+                    <a href="{{ url('general-ledger/neraca/print')."?tanggalDari=$_GET[tanggalDari]&tanggalSampai=$_GET[tanggalSampai]&kodeRekeningDari=$_GET[kodeRekeningDari]&kodeRekeningSampai=$_GET[kodeRekeningSampai]" }}" class="btn btn-primary btn-sm" target="_blank">
+                        <i class="fa fa-print" aria-hidden="true"></i> Cetak
+                    </a>
+                    <a href="{{ url('general-ledger/neraca/print')."?tanggalDari=$_GET[tanggalDari]&tanggalSampai=$_GET[tanggalSampai]&kodeRekeningDari=$_GET[kodeRekeningDari]&kodeRekeningSampai=$_GET[kodeRekeningSampai]&xls=true" }}" class="btn btn-success btn-sm" target="_blank">
+                        <i class="fa fa-download"></i> Download xls
+                    </a>
+                </div>
+            </div>
             <div class="table-responsive">
                 <table class="table table-bordered table-custom">
                     <thead>

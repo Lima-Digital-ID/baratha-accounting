@@ -31,4 +31,24 @@ class NeracaController extends Controller
 
         return \view('general-ledger.neraca.neraca', $this->param);
     }
+
+    public function print(Request $request)
+    {
+        try {
+            $this->param['allRekening'] = KodeRekening::orderBy('kode_rekening', 'ASC')->get();
+
+            $kodeRekeningDari = $request->get('kodeRekeningDari');
+            $kodeRekeningSampai = $request->get('kodeRekeningSampai');
+            $tanggalDari = $request->get('tanggalDari');
+            $tanggalSampai = $request->get('tanggalSampai');
+
+            if (!is_null($kodeRekeningDari) && !is_null($kodeRekeningSampai) && !is_null($tanggalDari) && !is_null($tanggalSampai) ) {
+                $this->param['kodeRekening'] = KodeRekening::select('kode_rekening', 'nama', 'saldo_awal', 'tipe')->whereBetween('kode_rekening', [$kodeRekeningDari, $kodeRekeningSampai])->orderBy('kode_rekening', 'ASC')->get();
+            }
+        } catch (\Illuminate\Database\QueryException $e) {
+            return redirect()->back()->withStatus($e->getMessage());
+        }
+
+        return \view('general-ledger.neraca.print-neraca', $this->param);
+    }
 }

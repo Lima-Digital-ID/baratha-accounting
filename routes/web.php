@@ -120,6 +120,8 @@ Route::group(['middleware' => ['auth:sanctum', 'verified']], function () {
 
     Route::group(['prefix' => 'general-ledger'], function () {
         Route::get('buku-besar', 'BukuBesarController@index');
+        Route::get('buku-besar/print', 'BukuBesarController@print');
         Route::get('neraca', 'NeracaController@index');
+        Route::get('neraca/print', 'NeracaController@print');
     });
 });

@@ -60,6 +60,16 @@
         @endphp
             <br>
             <hr>
+            <div class="row d-flex mb-3 justify-content-between">
+                <div class="form-group ml-auto">
+                    <a href="{{ url('general-ledger/buku-besar/print')."?tanggalDari=$_GET[tanggalDari]&tanggalSampai=$_GET[tanggalSampai]&kodeRekeningDari=$_GET[kodeRekeningDari]&kodeRekeningSampai=$_GET[kodeRekeningSampai]" }}" class="btn btn-primary btn-sm" target="_blank">
+                        <i class="fa fa-print" aria-hidden="true"></i> Cetak
+                    </a>
+                    <a href="{{ url('general-ledger/buku-besar/print')."?tanggalDari=$_GET[tanggalDari]&tanggalSampai=$_GET[tanggalSampai]&kodeRekeningDari=$_GET[kodeRekeningDari]&kodeRekeningSampai=$_GET[kodeRekeningSampai]&xls=true" }}" class="btn btn-success btn-sm" target="_blank">
+                        <i class="fa fa-download"></i> Download xls
+                    </a>
+                </div>
+            </div>
             @foreach ($kodeRekening as $item)
             @php
                 $totalDebet = 0;

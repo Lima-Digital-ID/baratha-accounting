@@ -110,14 +110,15 @@
 
                     <br>
                 </div>
-
-                <div class="d-flex flex-wrap col-md-4 align-content-center justify-content-end">
+                <div class="col-md-4"></div>
+                <div class="d-flex pl-3 flex-wrap align-content-center justify-content-end">
+                    <button type="submit" class="btn btn-primary"> <span class="fa fa-filter"></span> Filter</button>
                     <button type="reset" class="btn btn-default mx-2"> <span class="fa fa-times"></span> Cancel</button>
-                    <button type="submit" class="btn btn-primary"> <span class="fa fa-save"></span> Save</button>
                 </div>
             </div>
 
             @if ($report != null)
+            <br>
             <hr class="my-2">
 
             <div class="row d-flex justify-content-between">
