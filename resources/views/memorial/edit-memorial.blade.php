@@ -101,64 +101,92 @@
 
             </div>
 
-            <hr class="my-2">
-            <h6 class="heading-small text-muted mb-3">Detail Memorial</h6>
+            <ul class="nav nav-tabs mt-4">
+                <li class="nav-item">
+                    <a class="nav-link <?= empty($_GET['page']) ? "active" : ""   ?>" href="edit">Detail Transaksi Memorial</a>
+                </li>
+                <?php 
+                    if($memorial->kode_supplier!='' || $memorial->kode_customer!=''){
+                ?>
+                <li class="nav-item">
+                    <a class="nav-link <?= isset($_GET['page']) ? "active" : ""   ?>" href="edit?page=hutang-piutang">Pembayaran Hutang / Piutang</a>
+                </li>
+                <?php } ?>
+            </ul>
+            <div class="tab-content mb-4">
+                <div class="tab-pane <?= empty($_GET['page']) ? "active" : ""   ?>">
+                    <div class="body-tab-content">
+                        <div class="px-4" id='urlAddDetail' data-url="{{url('memorial/memorial/addEditDetailMemorial')}}">
+                            @if(!is_null(old('lawan')))
+                                @php
+                                $loop = array();
+                                foreach(old('lawan') as $i => $val){
+                                    $loop[] = array(
+                                    'kode' => old('kode.'.$i),
+                                    'lawan' => old('lawan.'.$i),
+                                    'subtotal' => (float)old('subtotal.'.$i),
+                                    'keterangan' => old('keterangan.'.$i),
+                                    );
+                                }
+                                @endphp
+                            @else
+                                @php
+                                    $loop = $detailMemorial;
+                                @endphp
+                            @endif
 
-            <div class="pl-lg-4" id='urlAddDetail' data-url="{{url('memorial/memorial/addEditDetailMemorial')}}">
-                @if(!is_null(old('lawan')))
-                    @php
-                    $loop = array();
-                    foreach(old('lawan') as $i => $val){
-                        $loop[] = array(
-                        'kode' => old('kode.'.$i),
-                        'lawan' => old('lawan.'.$i),
-                        'subtotal' => (float)old('subtotal.'.$i),
-                        'keterangan' => old('keterangan.'.$i),
-                        );
-                    }
-                    @endphp
-                @else
-                    @php
-                        $loop = $detailMemorial;
-                    @endphp
-                @endif
-
-                @php $no = 0; $total = 0; @endphp
-                @foreach($loop as $n => $edit)
-                    @php 
-                    $no++;
-                    $linkHapus = $no==1 ? false : true; 
-                    $harga = 0;
-                    $fields = array(
-                        'kode' => 'kode.'.$n,
-                        'lawan' => 'lawan.'.$n,
-                        'subtotal' => 'subtotal.'.$n,
-                        'keterangan' => 'keterangan.'.$n,
-                    );
-                    
-                    if(!is_null(old('lawan'))){
-                        $total = $total + $edit['subtotal'];
-                        $idDetail = old('id_detail.'.$n);
-                    }
-                    else{
-                        $total = $total + $edit['subtotal'];
-                        $idDetail = $edit['id'];
-                    }
-                    @endphp
-                    @include('memorial.edit-detail-memorial',['hapus' => $linkHapus, 'no' => $no, 'kodeRekening' => $kodeRekening])
-                @endforeach
-                @php
-                    // $total = $total;
-                @endphp
+                            @php $no = 0; $total = 0; @endphp
+                            @foreach($loop as $n => $edit)
+                                @php 
+                                $no++;
+                                $linkHapus = $no==1 ? false : true; 
+                                $harga = 0;
+                                $fields = array(
+                                    'kode' => 'kode.'.$n,
+                                    'lawan' => 'lawan.'.$n,
+                                    'subtotal' => 'subtotal.'.$n,
+                                    'keterangan' => 'keterangan.'.$n,
+                                );
+                                
+                                if(!is_null(old('lawan'))){
+                                    $total = $total + $edit['subtotal'];
+                                    $idDetail = old('id_detail.'.$n);
+                                }
+                                else{
+                                    $total = $total + $edit['subtotal'];
+                                    $idDetail = $edit['id'];
+                                }
+                                @endphp
+                                @include('memorial.edit-detail-memorial',['hapus' => $linkHapus, 'no' => $no, 'kodeRekening' => $kodeRekening])
+                            @endforeach
+                            @php
+                                // $total = $total;
+                            @endphp
+                        </div>
+                        <h5 class='text-right mt-1 pr-5'>Total : {{number_format($total,0,',','.')}}<span id='total' class="text-orange">0</span></h5>
+                    </div>
+                    <div class="mt-4">
+                    <button type="reset" class="btn btn-default"> <span class="fa fa-times"></span> Cancel</button>
+                        &nbsp;
+                        <button type="submit" class="btn btn-primary"> <span class="fa fa-save"></span> Save</button>
+                    </div>
+                    </form>
+                </div>
+                <?php 
+                    if(isset($_GET['page'])){
+                ?>
+                <div class="tab-pane active">
+                    <?php
+                        if($memorial->kode_supplier!=''){    
+                    ?>
+                        @include('pembelian.supplier.list-hutang',['hutang' => $hutang, 'sisaDetail' => $total- $totalBayar->total, 'kode_transaksi' => $memorial->kode_memorial,'kode_supplier' => $memorial->kode_supplier])
+                    <?php } else{?>
+                        @include('penjualan.customer.list-piutang',['piutang' => $piutang, 'sisaDetail' => $total- $totalBayar->total, 'kode_transaksi' => $memorial->kode_memorial,'kode_customer' => $memorial->kode_customer])
+                    <?php }  ?>
+                        <h5 class='text-right mt-3 pr-5'>Sisa Saldo Detail: <span id='total' class="text-orange">{{number_format($total- $totalBayar->total,0,',','.')}}</span></h5>
+                </div>
+                <?php } ?>
             </div>
-            
-            <h5 class='text-right mt-1 pr-5'>Total : {{number_format($total,0,',','.')}}<span id='total' class="text-orange">0</span></h5>
-            <div class="mt-4">
-
-            <button type="reset" class="btn btn-default"> <span class="fa fa-times"></span> Cancel</button>
-            &nbsp;
-            <button type="submit" class="btn btn-primary"> <span class="fa fa-save"></span> Save</button>
-        </form>
     </div>
 </div>
 @endsection

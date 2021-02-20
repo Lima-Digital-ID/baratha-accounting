@@ -340,6 +340,9 @@ class BankController extends Controller
             // delete bank
             Bank::where('kode_bank', $kode)->delete();
 
+            //reset hutang/piutang
+            //update hutang/piutang pada customer/supplier
+
             return redirect()->route('transaksi-bank.index')->withStatus('Data berhasil dihapus.');
         } catch (\Exception $e) {
             return redirect()->back()->withStatus('Terjadi kesalahan. : ' . $e->getMessage());

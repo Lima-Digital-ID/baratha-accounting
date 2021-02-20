@@ -9,6 +9,11 @@ use \App\Models\DetailMemorial;
 use \App\Models\KodeRekening;
 use \App\Models\Supplier;
 use \App\Models\Customer;
+use \App\Models\KartuHutang;
+use \App\Models\KartuPiutang;
+use \App\Models\PembelianBarang;
+use \App\Models\PenjualanLain;
+use Illuminate\Support\Facades\DB;
 
 class MemorialController extends Controller
 {
@@ -174,7 +179,16 @@ class MemorialController extends Controller
 
             $this->param['memorial'] = Memorial::find($kode);
             $this->param['detailMemorial'] = DetailMemorial::where('kode_memorial', $kode)->get();
-
+            if(isset($_GET['page'])){
+                if($this->param['memorial']->kode_supplier!=''){
+                    $this->param['totalBayar'] = KartuHutang::select(DB::raw('sum(nominal) as total'))->where('kode_transaksi', $kode)->get()[0];
+                    $this->param['hutang'] = PembelianBarang::select('kode_pembelian','grandtotal','terbayar','tanggal','jatuh_tempo')->where("kode_supplier",$this->param['memorial']->kode_supplier)->whereRaw('terbayar != grandtotal')->get();
+                }
+                else{
+                    $this->param['totalBayar'] = KartuPiutang::select(DB::raw('sum(nominal) as total'))->where('kode_transaksi', $kode)->get()[0];
+                    $this->param['piutang'] = PenjualanLain::select('kode_penjualan','grandtotal','terbayar','tanggal','jatuh_tempo')->where("kode_customer",$this->param['memorial']->kode_customer)->whereRaw('terbayar != grandtotal')->orWhere()->get();
+                }
+            }
             return \view('memorial.edit-memorial', $this->param);
         } catch (\Exception $e) {
             return redirect()->back()->withStatus('Terjadi kesalahan : ' . $e->getMessage());

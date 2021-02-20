@@ -159,6 +159,12 @@ class CustomerController extends Controller
             ->update([
                 'terbayar' => \DB::raw('terbayar+' . $request->get('nominal_bayar')),
             ]);
+
+            //update piutang customer
+            Customer::where('kode_customer', $request->get('kode_customer'))
+            ->update([
+                'piutang' => \DB::raw('piutang-' . $request->get('nominal_bayar')),
+            ]);
             return redirect()->back()->withStatus('Pembayaran Piutang Berhasil.');
         } catch (\Exception $e) {
             return redirect()->back()->withStatus('Terjadi kesalahan. : ' . $e->getMessage());

@@ -10,7 +10,7 @@ class RekapHotelController extends Controller
 {
     public function getRekap($tanggal)
     {
-        $url = "http://127.0.0.1:8001/api/rekap-hotel/".$_GET['tanggal'];
+        $url = urlApiHotel()."rekap-hotel/".$_GET['tanggal'];
         $json = json_decode(file_get_contents($url), true);
         return $json;
     }
