@@ -269,6 +269,28 @@ $(document).ready(function() {
 			}
 		);
 	});
+	$("#submitConfirm").submit(function(e) {
+        e.preventDefault();
+		var id = $(this).attr("id");
+        $(".loading").removeClass("show");
+        var info = $(this).data('info')
+		swal(
+			{
+				title: "Apakah Anda Yakin?",
+				text: info,
+				type: "warning",
+				showCancelButton: true,
+				confirmButtonColor: "#DD6B55",
+				confirmButtonText: "Yakin",
+				closeOnConfirm: false
+			},
+			function() {
+				$("#"+id).unbind("submit").submit();
+                $(".loading").addClass("show");
+			}
+		);
+	});
+
 
     function getTotalKas() {
         var total = 0;
@@ -302,5 +324,13 @@ $(document).ready(function() {
         $("#kode-hutangpiutang").val(param[0])
         $("#jml-hutangpiutang").val(param[1])
         $("#sisa").val(param[2])
+    })
+    $(".sendParamToModal").click(function() {
+        var data = $(this).data('param')
+        $.each(data, function(i,d) {
+            if(i%2==0){
+                $(data[i+1]).val(d)
+            }
+        })
     })
 });

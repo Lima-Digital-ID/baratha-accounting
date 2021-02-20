@@ -10,7 +10,7 @@ class RekapRestoController extends Controller
 {
     public function getRekap($tanggal)
     {
-        $url = "http://127.0.0.1:8002/api/rekap-resto/".$_GET['tanggal'];
+        $url = urlApiResto()."rekap-resto/".$_GET['tanggal'];
         $json = json_decode(file_get_contents($url), true);
         return $json;
     }

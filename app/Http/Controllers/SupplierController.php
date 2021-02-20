@@ -160,6 +160,12 @@ class SupplierController extends Controller
             ->update([
                 'terbayar' => \DB::raw('terbayar+' . $request->get('nominal_bayar')),
             ]);
+            //update hutang Supplier
+            Supplier::where('kode_supplier', $request->get('kode_supplier'))
+            ->update([
+                'hutang' => \DB::raw('hutang-' . $request->get('nominal_bayar')),
+            ]);
+
             return redirect()->back()->withStatus('Pembayaran Hutang Berhasil.');
         } catch (\Exception $e) {
             return redirect()->back()->withStatus('Terjadi kesalahan. : ' . $e->getMessage());

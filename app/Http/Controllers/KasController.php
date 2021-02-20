@@ -340,6 +340,9 @@ class KasController extends Controller
             // delete kas
             Kas::where('kode_kas', $kode)->delete();
 
+            //reset hutang/piutang
+            //update hutang/piutang pada customer/supplier
+
             return redirect()->route('transaksi-kas.index')->withStatus('Data berhasil dihapus.');
         } catch (\Exception $e) {
             return redirect()->back()->withStatus('Terjadi kesalahan. : ' . $e->getMessage());
