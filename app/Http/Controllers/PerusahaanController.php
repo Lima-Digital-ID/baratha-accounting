@@ -41,7 +41,10 @@ class PerusahaanController extends Controller
             'provinsi' => 'required',
             'telepon' => 'required',
             'email' => 'required|email',
-            ]);
+        ], [
+            'required' => ':attribute tidak boleh kosong.',
+            'email' => 'Masukan email yang valid.'
+        ]);
 
         try{
                 
