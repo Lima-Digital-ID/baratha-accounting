@@ -28,6 +28,10 @@
         <h6 class="heading-small text-dark mb-3">Periode : {{ date('d-m-Y', strtotime(\Request::get('start'))) }} s/d {{ date('d-m-Y', strtotime(\Request::get('end'))) }}</h6>
     </center>
     <br>
+    @php
+        $total_qty = 0;
+        $grandtotal = 0;
+    @endphp
         <table class="table table-custom">
             <thead style="background: #e2e3f7; font-weight: 500; letter-spacing: 0.5px; color: #3c4099;">
                 <tr>
@@ -43,6 +47,10 @@
             </thead>
             <tbody>
                 @foreach ($report as $item)
+                @php
+                    $total_qty += $item->qty;
+                    $grandtotal += $item->subtotal;
+                @endphp
                 <tr>
                     <td>{{ $item->tanggal }}</td>
                     <td>{{ $item->kode_pemakaian }}</td>
@@ -55,6 +63,17 @@
                </tr>
                 @endforeach
             </tbody>
+            <thead>
+                <tr>
+                    <td colspan="4" class="text-center">
+                        Total
+                    </td>
+                    <td>{{ number_format($total_qty, 2, ',', '.') }}</td>
+                    <td></td>
+                    <td>{{ number_format($grandtotal, 2, ',', '.') }}</td>
+                    <td></td>
+                </tr>
+            </thead>
        </table>
 </body>
 </html>

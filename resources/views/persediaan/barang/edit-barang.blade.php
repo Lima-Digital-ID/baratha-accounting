@@ -128,7 +128,7 @@
           </span>
       @endif
 
-      <br>
+      <br><br>
 
       <button type="reset" class="btn btn-default"> <span class="fa fa-times"></span> Cancel</button>
       &nbsp;

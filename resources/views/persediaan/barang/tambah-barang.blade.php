@@ -55,7 +55,7 @@
       <br>
 
       <label>Stock Awal</label>
-      <input type="numer" step=".01" class="form-control {{ $errors->has('stock_awal') ? ' is-invalid' : '' }}" value="{{ old('stock_awal') }}" name="stock_awal" placeholder="Stock Awal">
+      <input type="number" step=".01" class="form-control {{ $errors->has('stock_awal') ? ' is-invalid' : '' }}" value="{{ old('stock_awal') }}" name="stock_awal" placeholder="Stock Awal">
       @if ($errors->has('stock_awal'))
           <span class="invalid-feedback" role="alert">
               <strong>{{ $errors->first('stock_awal') }}</strong>
@@ -65,7 +65,7 @@
       <br>
       
       <label>Saldo Awal</label>
-      <input type="numer" step=".01" class="form-control {{ $errors->has('saldo_awal') ? ' is-invalid' : '' }}" value="{{ old('saldo_awal') }}" name="saldo_awal" placeholder="Saldo Awal">
+      <input type="number" step=".01" class="form-control {{ $errors->has('saldo_awal') ? ' is-invalid' : '' }}" value="{{ old('saldo_awal') }}" name="saldo_awal" placeholder="Saldo Awal">
       @if ($errors->has('saldo_awal'))
           <span class="invalid-feedback" role="alert">
               <strong>{{ $errors->first('saldo_awal') }}</strong>
@@ -95,7 +95,7 @@
       <br>
 
       <label>Tempat Penyimpanan</label>
-      <input type="text" class="form-control {{ $errors->has('tempat_penyimpanan') ? ' is-invalid' : '' }}" value="{{ old('tempat_penyimpanan') }}" name="tempat_penyimpanan" placeholder="Nama Barang">
+      <input type="text" class="form-control {{ $errors->has('tempat_penyimpanan') ? ' is-invalid' : '' }}" value="{{ old('tempat_penyimpanan') }}" name="tempat_penyimpanan" placeholder="Tempat Penyimpanan">
       @if ($errors->has('tempat_penyimpanan'))
           <span class="invalid-feedback" role="alert">
               <strong>{{ $errors->first('tempat_penyimpanan') }}</strong>
@@ -116,9 +116,9 @@
 
       <label>Kategori</label>
       <select name="id_kategori" id="id_kategori" class="form-control select2 {{ $errors->has('id_kategori') ? ' is-invalid' : '' }}">
-        <option value="">--Pilih Kategori--</option>
+        <option value="">-- Pilih Kategori --</option>
         @foreach ($kategoriBarang as $item)
-            <option value="{{$item->id}}" {{old('id_kategori') == $item->id ? 'selected' : ''}} >{{$item->id . ' -- '. $item->nama}}</option>
+            <option value="{{$item->id}}" {{old('id_kategori') == $item->id ? 'selected' : ''}} >{{ $item->nama }}</option>
             
         @endforeach
       </select>
@@ -128,7 +128,7 @@
           </span>
       @endif
 
-      <br>
+      <br><br>
 
       <button type="reset" class="btn btn-default"> <span class="fa fa-times"></span> Cancel</button>
       &nbsp;

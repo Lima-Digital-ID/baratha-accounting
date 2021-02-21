@@ -62,6 +62,11 @@
         <option value="Pembelian" {{old('akses', $user->akses) == 'Pembelian' ? 'selected' : ''}} >Pembelian</option>
         <option value="Super Admin" {{old('akses', $user->akses) == 'Super Admin' ? 'selected' : ''}} >Super Admin</option>
       </select>
+      @if ($errors->has('akses'))
+          <span class="invalid-feedback" role="alert">
+              <strong>{{ $errors->first('akses') }}</strong>
+          </span>
+      @endif
 
       <br><br>
 

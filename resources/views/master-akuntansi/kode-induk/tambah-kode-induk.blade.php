@@ -24,7 +24,7 @@
     <form action="{{ route('kode-induk.store') }}" method="POST">
       @csrf
       <label>Kode Induk</label>
-      <input type="text" class="form-control {{ $errors->has('kode_induk') ? ' is-invalid' : '' }}" value="{{ old('kode_induk') }}" autofocus name="kode_induk" placeholder="Msaukan Kode Induk">
+      <input type="number" class="form-control {{ $errors->has('kode_induk') ? ' is-invalid' : '' }}" value="{{ old('kode_induk') }}" autofocus name="kode_induk" placeholder="Masukkan Kode Induk">
       @if ($errors->has('kode_induk'))
           <span class="invalid-feedback" role="alert">
               <strong>{{ $errors->first('kode_induk') }}</strong>

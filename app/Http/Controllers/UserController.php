@@ -47,11 +47,25 @@ class UserController extends Controller
     {
         $validatedData = $request->validate([
             'name' => 'required',
-            'username' => 'required',
+            'username' => 'required|unique:users,username',
             'email' => 'required|email|unique:users',
-            'akses' => 'required',
+            'akses' => 'required|not_in:',
             'password' => 'required',
             'konfirmasi_password' => 'required|same:password',
+        ],
+        [
+            'required' => ':attribute tidak boleh kosong.',
+            'akses.required' => ':attribute harus dipilih.',
+            'email' => 'Masukan email yang valid.',
+            'same' => 'Password & konfirmasi password harus sama',
+            'unique' => ':attribute telah terdaftar'
+        ],
+        [
+            'name' => 'Nama',
+            'username' => 'Username',
+            'email' => 'Alamat email',
+            'akses' => 'Akses',
+            'password' => 'Password'
         ]);
         try{
             $newUser = new User;
@@ -65,7 +79,6 @@ class UserController extends Controller
             $newUser->save();
 
             return redirect()->route('user.index')->withStatus('Data berhasil ditambahkan.');
-            
         }
         catch(\Exception $e){
             return redirect()->back()->withStatus('Terjadi kesalahan. : '. $e->getMessage());
@@ -98,10 +111,18 @@ class UserController extends Controller
         $user = User::find($id);
 
         // $isUnique = $user->email == $request->email ? '' : '|unique:users,email';
-
         $validatedData = $request->validate([
             'name' => 'required',
+            'akses' => 'required:not_in:'
             // 'email' => 'required|email'.$isUnique,
+        ],
+        [
+            'name.required' => ':attribute tidak boleh kosong.',
+            'akses.required' => ':attribute harus dipilih.'
+        ],
+        [
+           'name' => 'Nama',
+           'akses' => 'Akses' 
         ]);
         try{
 

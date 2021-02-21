@@ -46,7 +46,7 @@
 
       <label>Kode Rekening</label>
       <select name="kode_rekening" id="kode_rekening" class="form-control select2 {{ $errors->has('kode_rekening') ? ' is-invalid' : '' }}">
-        <option value="">--Pilih Kode Rekening--</option>
+        <option value="">-- Pilih Kode Rekening --</option>
         @foreach ($kodeRekening as $item)
             <option value="{{$item->kode_rekening}}" {{old('kode_rekening') == $item->kode_rekening ? 'selected' : ''}} >{{$item->kode_rekening . ' -- '. $item->nama}}</option>
             
@@ -58,7 +58,7 @@
           </span>
       @endif
 
-      <br>
+      <br><br>
 
       <button type="reset" class="btn btn-default"> <span class="fa fa-times"></span> Cancel</button>
       &nbsp;

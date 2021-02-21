@@ -46,9 +46,15 @@ class KategoriBarangController extends Controller
     {
         $validatedData = $request->validate([
             'nama' => 'required|unique:kategori_barang',
-        ]);
-        try{
-    
+        ],
+        [
+            'required' => ':attribute harus diisi.',
+            'unique' => ':attribute telah terpakai.'
+         ],
+         [
+            'nama' => 'Nama'
+         ]);
+        try{    
             $newKategoriBarang = new KategoriBarang;
     
             $newKategoriBarang->nama = $request->get('nama');
@@ -91,9 +97,15 @@ class KategoriBarangController extends Controller
 
         $validatedData = $request->validate([
             'nama' => 'required'.$isUniqueNama,
-        ]);
+        ],
+        [
+            'required' => ':attribute harus diisi.',
+            'unique' => ':attribute telah terpakai.'
+         ],
+         [
+            'nama' => 'Nama'
+         ]);
         try{
-
             // $kategoriBarang->kategori_barang = $request->get('kategori_barang');
             $kategoriBarang->nama = $request->get('nama');
             

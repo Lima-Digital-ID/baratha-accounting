@@ -48,6 +48,14 @@ class KodeIndukController extends Controller
         $validatedData = $request->validate([
             'kode_induk' => 'required|unique:kode_induk',
             'nama' => 'required|unique:kode_induk',
+        ],
+        [
+            'required' => ':attribute harus diisi.',
+            'unique' => ':attribute telah terpakai.'
+        ],
+        [
+            'kode_induk' => 'Kode Induk',
+            'nama' => 'Nama'
         ]);
         try{
     
@@ -96,6 +104,14 @@ class KodeIndukController extends Controller
         $validatedData = $request->validate([
             'kode_induk' => 'required'.$isUnique,
             'nama' => 'required'.$isUniqueNama,
+        ],
+        [
+            'required' => ':attribute harus diisi.',
+            'unique' => ':attribute telah terpakai.'
+        ],
+        [
+            'kode_induk' => 'Kode Induk',
+            'nama' => 'Nama'
         ]);
         try{
 

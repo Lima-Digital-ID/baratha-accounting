@@ -57,6 +57,16 @@ class KodeRekeningController extends Controller
             'kode_rekening' => 'required|unique:kode_rekening',
             'nama' => 'required|unique:kode_rekening',
             'tipe' => 'required',
+        ],
+        [
+            'required' => ':attribute harus diisi.',
+            'unique' => ':attribute telah terpakai.'
+        ],
+        [
+            'kode_induk' => 'Kode Induk',
+            'kode_rekening' => 'Kode Rekening',
+            'nama' => 'Nama',
+            'tipe' => 'Tipe'
         ]);
         try{
     
@@ -110,6 +120,16 @@ class KodeRekeningController extends Controller
             'kode_rekening' => 'required'.$isUnique,
             'nama' => 'required'.$isUniqueNama,
             'tipe' => 'required',
+        ],
+        [
+            'required' => ':attribute harus diisi.',
+            'unique' => ':attribute telah terpakai.'
+        ],
+        [
+            'kode_induk' => 'Kode Induk',
+            'kode_rekening' => 'Kode Rekening',
+            'nama' => 'Nama',
+            'tipe' => 'Tipe'
         ]);
         try{
 

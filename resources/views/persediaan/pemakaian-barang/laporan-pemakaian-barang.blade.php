@@ -50,7 +50,7 @@
                 <div class="col-md-4">
                     <label>Kode Stok</label>
                     <select name="kode_stok" class="form-control select2 {{ $errors->has('kode_stok') ? ' is-invalid' : '' }}">
-                        <option value="">--Pilih Kode Stok--</option>
+                        <option value="">-- Semua Kode Stok --</option>
                         @foreach ($barang as $item)
                             @if (isset($_GET['kode_stok']))
                             <option value="{{$item->kode_barang}}" {{ old('kode_stok', $_GET['kode_stok'] == $item->kode_barang ? 'selected' : '') }} >{{$item->kode_barang . ' -- '. $item->nama}}</option>
@@ -71,7 +71,7 @@
                 <div class="col-md-4">
                     <label>Kode Biaya</label>
                     <select name="kode_biaya" id="kode_biaya" class="form-control {{ $errors->has('kode_biaya') ? ' is-invalid' : '' }}">
-                        <option value="">--Pilih Kode Biaya--</option>
+                        <option value="">-- Semua Kode Biaya --</option>
                         @foreach ($kode_biaya as $item)
                             @if (isset($_GET['kode_biaya']))
                             <option value="{{$item->kode_biaya}}" {{ old('kode_biaya', $_GET['kode_biaya'] == $item->kode_biaya ? 'selected' : '') }} >{{$item->kode_biaya . ' -- '. $item->nama}}</option>
@@ -136,6 +136,11 @@
                 </div>
             </div>
 
+            @php
+                $total_qty = 0;
+                $grandtotal = 0;
+            @endphp
+
             <div class="table-responsive">
                 <table class="table table-custom">
                     <thead>
@@ -152,18 +157,33 @@
                     </thead>
                     <tbody>
                         @foreach ($report as $item)
+                        @php
+                            $total_qty += $item->qty;
+                            $grandtotal += $item->subtotal;
+                        @endphp
                         <tr>
                             <td>{{ $item->tanggal }}</td>
                             <td>{{ $item->kode_pemakaian }}</td>
                             <td>{{ $item->kode_barang }}</td>
                             <td>{{ $item->keterangan != null ? $item->keterangan : '-' }}</td>
-                            <td>{{ $item->qty }}</td>
+                            <td>{{ number_format($item->qty, 2, ',', '.') }}</td>
                             <td>{{ $item->satuan }}</td>
                             <td>{{ number_format($item->subtotal, 2, ',', '.') }}</td>
                             <td>{{ $item->kode_biaya }}</td>
                        </tr>
                         @endforeach
                     </tbody>
+                    <thead>
+                        <tr>
+                            <td colspan="4" class="text-center">
+                                Total
+                            </td>
+                            <td>{{ number_format($total_qty, 2, ',', '.') }}</td>
+                            <td></td>
+                            <td>{{ number_format($grandtotal, 2, ',', '.') }}</td>
+                            <td></td>
+                        </tr>
+                    </thead>
                </table>
             </div>
             @endif

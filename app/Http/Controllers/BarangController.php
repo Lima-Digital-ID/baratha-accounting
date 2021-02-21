@@ -62,10 +62,23 @@ class BarangController extends Controller
             'kode_barang' => 'required|unique:barang',
             'nama' => 'required',
             'satuan' => 'required',
-            'id_kategori' => 'required'
+            'id_kategori' => 'required|not_in:',
+            'exp_date' => 'after:'.date('Y-m-d')
+        ],
+        [
+           'required' => ':attribute harus diisi.',
+           'unique' => ':attribute telah terpakai.',
+           'after' => ':attribute tidak boleh tanggal sebelum hari ini.' 
+        ],
+        [
+            'kode_barang' => 'Kode Barang',
+            'nama' => 'Nama',
+            'satuan' => 'Satuan',
+            'id_kategori' => 'Kategori',
+            'exp_date' => 'Expired Date'
         ]);
+
         try{
-    
             $newBarang = new Barang;
     
             $newBarang->kode_barang = $request->get('kode_barang');
@@ -114,12 +127,22 @@ class BarangController extends Controller
 
     public function update(Request $request, $id)
     {
-        
         $validatedData = $request->validate([
             'nama' => 'required',
             'satuan' => 'required',
-            'id_kategori' => 'required'
-        ]);
+            'id_kategori' => 'required',
+            'exp_date' => 'after:yesterday'
+        ],
+        [
+            'required' => ':attribute harus diisi.',
+            'after' => ':attribute tidak boleh tanggal sebelum hari ini.' 
+         ],
+         [
+             'nama' => 'Nama',
+             'satuan' => 'Satuan',
+             'id_kategori' => 'Kategori',
+             'exp_date' => 'Expired Date'
+         ]);
         
         try{
                 

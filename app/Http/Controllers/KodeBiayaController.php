@@ -55,7 +55,16 @@ class KodeBiayaController extends Controller
         $validatedData = $request->validate([
             'kode_biaya' => 'required|unique:kode_biaya',
             'nama' => 'required',
-            'kode_rekening' => 'required',
+            'kode_rekening' => 'required|not_in:',
+        ],
+        [
+           'required' => ':attribute harus diisi.',
+           'unique' => ':attribute telah terpakai.'
+        ],
+        [
+           'kode_biaya' => 'Kode biaya',
+           'nama' => 'Nama',
+           'kode_rekening' => 'Kode Rekening' 
         ]);
         try{
     
@@ -102,7 +111,16 @@ class KodeBiayaController extends Controller
             'kode_biaya' => 'required',
             'nama' => 'required',
             'kode_rekening' => 'required',
-        ]);
+        ],
+        [
+            'required' => ':attribute harus diisi.',
+            'unique' => ':attribute telah terpakai.'
+         ],
+         [
+            'kode_biaya' => 'Kode biaya',
+            'nama' => 'Nama',
+            'kode_rekening' => 'Kode Rekening' 
+         ]);
         try{
             $kodeBiaya = KodeBiaya::find($id);
             // $kodeBiaya->kode_biaya = $request->get('kode_biaya');

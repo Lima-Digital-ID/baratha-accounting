@@ -528,5 +528,20 @@
     <script src="{{ asset('vendor/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js') }}"></script>
     <script src="{{asset('vendor/sweetalert-master/dist/sweetalert-dev.js')}}"></script>
     <script src="{{ asset('js/custom.js') }}"></script>
+    <script>
+      const tel = document.getElementById('kode_rekening');
+
+      tel.addEventListener('input', function() {
+        let start = this.selectionStart;
+        let end = this.selectionEnd;
+        
+        const current = this.value
+        const corrected = current.replace(/([^+0-9.]+)/gi, '');
+        this.value = corrected;
+        
+        if (corrected.length < current.length) --end;
+        this.setSelectionRange(start, end);
+      });
+    </script>
   </body>
 </html>

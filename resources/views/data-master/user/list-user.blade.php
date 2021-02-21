@@ -33,6 +33,7 @@
                     <tr>
                         <td>#</td>
                         <td>Nama</td>
+                        <td>Username</td>
                         <td>Email</td>
                         <td>Akses</td>
                         <td>Aksi</td>
@@ -47,6 +48,7 @@
                         <tr>
                             <td>{{$no}}</td>
                             <td>{{$value->name}}</td>
+                            <td>{{$value->username}}</td>
                             <td>{{$value->email}}</td>
                             <td>{{$value->akses}}</td>
                             <td>

@@ -81,6 +81,11 @@
         <option value="Pembelian" {{old('akses') == 'Pembelian' ? 'selected' : ''}} >Pembelian</option>
         <option value="Super Admin" {{old('akses') == 'Super Admin' ? 'selected' : ''}} >Super Admin</option>
       </select>
+      @if ($errors->has('akses'))
+          <span class="invalid-feedback" role="alert">
+              <strong>{{ $errors->first('akses') }}</strong>
+          </span>
+      @endif
 
         <div class="mt-4">
             <button type="reset" class="btn btn-default"> <span class="fa fa-times"></span> Cancel</button>
