@@ -520,8 +520,8 @@ class PembelianBarangController extends Controller
                 // delete kartu stock
                 KartuStock::where('id_detail', $value->id)->where('tipe', 'Masuk')->delete();
             }
-
             KartuHutang::where('kode_transaksi', $kode)->delete();
+            
 
             Supplier::where('kode_supplier', $pembelianBarang->kode_supplier)
                         ->update([
@@ -529,6 +529,9 @@ class PembelianBarangController extends Controller
                         ]);
 
             $pembelianBarang->delete();
+
+            // hapus jurnal pembelian
+            Jurnal::where('kode_transaksi', $kode)->delete();
 
             return redirect()->route('pembelian-barang.index')->withStatus('Data berhasil dihapus.');
         } catch (\Exception $e) {

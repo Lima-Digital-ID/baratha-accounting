@@ -475,9 +475,13 @@ class PemakaianBarangController extends Controller
 
                 // delete kartu stock
                 KartuStock::where('id_detail', $value->id)->where('tipe', 'Keluar')->delete();
+
+                // delete jurnal pemakaian
             }
 
             $pemakaianBarang->delete();
+
+            Jurnal::where('kode_transaksi', $kode)->delete();
 
             return redirect()->route('pemakaian-barang.index')->withStatus('Data berhasil dihapus.');
         } catch (\Exception $e) {

@@ -293,6 +293,10 @@ class PenjualanCateringController extends Controller
 
             $penjualan->delete();
 
+            // delete jurnal
+
+            Jurnal::where('kode_transaksi', $kode)->delete();
+
             return redirect()->route('penjualan-catering.index')->withStatus('Data berhasil dihapus.');
         } catch (\Exception $e) {
             return redirect()->back()->withStatus('Terjadi kesalahan. : ' . $e->getMessage());
