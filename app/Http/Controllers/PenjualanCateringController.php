@@ -20,9 +20,9 @@ class PenjualanCateringController extends Controller
         try {
             $keyword = $request->get('keyword');
             if ($keyword) {
-                $penjualanCatering = PenjualanLain::with('customer')->where('kode_penjualan', 'LIKE', "%$keyword%")->orWhere('kode_customer', 'LIKE', "%$keyword%")->paginate(10);
+                $penjualanCatering = PenjualanLain::with('customer')->where('tipe_penjualan','catering')->where('kode_penjualan', 'LIKE', "%$keyword%")->orWhere('kode_customer', 'LIKE', "%$keyword%")->paginate(10);
             } else {
-                $penjualanCatering = PenjualanLain::with('customer')->paginate(10);
+                $penjualanCatering = PenjualanLain::with('customer')->where('tipe_penjualan','catering')->paginate(10);
             }
         } catch (\Illuminate\Database\QueryException $e) {
             return redirect()->back()->withStatus('Terjadi Kesalahan');
@@ -110,6 +110,7 @@ class PenjualanCateringController extends Controller
             $newPenjualan->total_ppn = $totalPpn;
             $newPenjualan->grandtotal = $grandtotal;
             $newPenjualan->terbayar = 0;
+            $newPenjualan->tipe_penjualan = 'catering';
 
             $newPenjualan->save();
 

@@ -64,6 +64,8 @@ class PiutangRestoController extends Controller
             $newPenjualan->total_ppn = $totalPpn;
             $newPenjualan->grandtotal = $grandtotal;
             $newPenjualan->terbayar = 0;
+            $newPenjualan->tipe_penjualan = 'resto';
+
 
             $newPenjualan->save();
 

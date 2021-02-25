@@ -165,6 +165,17 @@ class CustomerController extends Controller
             ->update([
                 'piutang' => \DB::raw('piutang-' . $request->get('nominal_bayar')),
             ]);
+
+            $url = urlApiResto()."bayar-piutang";
+            $data = array("kode_transaksi" => $request->get('kode_penjualan'));
+            $options = array(
+                        "http"=> array(
+                            "method"=>"POST",
+                            "header"=>"Content-Type: application/x-www-form-urlencoded",
+                            "content"=>http_build_query($data)
+                        )
+            );
+            file_get_contents($url,false,stream_context_create($options));
             return redirect()->back()->withStatus('Pembayaran Piutang Berhasil.');
         } catch (\Exception $e) {
             return redirect()->back()->withStatus('Terjadi kesalahan. : ' . $e->getMessage());
