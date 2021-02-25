@@ -10,6 +10,8 @@ use \App\Models\Barang;
 use \App\Models\KartuStock;
 use App\Models\KodeBiaya;
 use \App\Models\Jurnal;
+use \App\Models\LogActivity;
+use Illuminate\Support\Facades\Auth;
 
 class PemakaianBarangController extends Controller
 {
@@ -133,6 +135,7 @@ class PemakaianBarangController extends Controller
             $newPemakaian->tanggal = $request->get('tanggal');
             $newPemakaian->total_qty = $ttlQty;
             $newPemakaian->total_pemakaian = $totalPemakaian;
+            $newPemakaian->created_by = Auth::user()->id;
 
             $newPemakaian->save();
 
@@ -447,6 +450,7 @@ class PemakaianBarangController extends Controller
                     'tanggal' => $_POST['tanggal'],
                     'total_qty' => $newTotalQty,
                     'total_pemakaian' => $newTotalPemakaian,
+                    'updated_by' => Auth::user()->id,
                 ]);
 
             return redirect()->route('pemakaian-barang.index')->withStatus('Data berhasil diperbarui.');
@@ -478,6 +482,13 @@ class PemakaianBarangController extends Controller
 
                 // delete jurnal pemakaian
             }
+            // insert log activity delete
+            $newActivity = new LogActivity;
+            $newActivity->id_user = Auth::user()->id;
+            $newActivity->jenis_transaksi = 'Pemakaian';
+            $newActivity->tipe = 'Delete';
+            $newActivity->keterangan = 'Hapus Pemakaian Barang dengan kode '. $kode .' dengan total quantity '. $pemakaianBarang->total_qty;
+            $newActivity->save();
 
             $pemakaianBarang->delete();
 
