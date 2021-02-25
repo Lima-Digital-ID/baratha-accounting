@@ -40,7 +40,6 @@ class PemakaianBarangController extends Controller
                 $pemakaianBarang = PemakaianBarang::paginate(10);
             }
         } catch (\Illuminate\Database\QueryException $e) {
-            return $e;
             return redirect()->back()->withErrors('Terjadi Kesalahan');
             // return redirect()->back()->withStatus('Terjadi Kesalahan');
         }
