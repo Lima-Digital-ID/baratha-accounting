@@ -142,7 +142,7 @@ body {
 	background : rgba(156, 157, 183, 0.1);
 }
 
-.solid-color {
+.solid-color,a {
 	color: #3c4099;
 }
 .select2-container--default{
