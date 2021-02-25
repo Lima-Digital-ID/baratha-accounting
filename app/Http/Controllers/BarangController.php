@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use \App\Models\Barang;
 use \App\Models\KategoriBarang;
+use Illuminate\Support\Facades\Date;
 
 class BarangController extends Controller
 {
@@ -196,5 +197,33 @@ class BarangController extends Controller
             return redirect()->route('barang.index')->withError('Terjadi kesalahan pada database : '. $e->getMessage());
         }
         
+    }
+
+    public function barangMinim()
+    {
+        $this->param['pageInfo'] = 'Barang / List Barang Minimum Stok';
+
+        try {
+            $this->param['barang'] = Barang::where('minimum_stock', '!=', NULL)->whereRaw('stock <= minimum_stock')->paginate(10);
+        } catch (\Illuminate\Database\QueryException $e) {
+            return $e;
+            return redirect()->back()->withErrors('Terjadi Kesalahan');
+        }
+
+        return \view('persediaan.barang.barang-minim-stock', $this->param);
+    }
+
+    public function barangExpired()
+    {
+        $this->param['pageInfo'] = 'Barang / List Barang Expired';
+
+        try {
+            $this->param['barang'] = Barang::where('exp_date', '<', Date('Y-m-d'))->paginate(10);
+        } catch (\Illuminate\Database\QueryException $e) {
+            return $e;
+            return redirect()->back()->withErrors('Terjadi Kesalahan');
+        }
+
+        return \view('persediaan.barang.barang-minim-stock', $this->param);
     }
 }

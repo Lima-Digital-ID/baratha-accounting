@@ -46,6 +46,8 @@ Route::group(['middleware' => ['auth:sanctum', 'verified']], function () {
             Route::get('result', 'PemakaianBarangController@getReport')->name('laporan-pemakaian');
             Route::get('print', 'PemakaianBarangController@printReport')->name('print-pemakaian');
         });
+        Route::get('barang-minim', 'BarangController@barangMinim');
+        Route::get('barang-expired', 'BarangController@barangExpired');
 
         Route::get('kartu-stock', 'KartuStockController@index');
         Route::get('posisi-stock', 'KartuStockController@posisiStock');

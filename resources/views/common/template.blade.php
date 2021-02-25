@@ -157,6 +157,12 @@
                 <a class="nav-link" href="{{url('persediaan/barang')}}">
                   <span>Barang</span>
                 </a>
+                <a class="nav-link" href="{{url('persediaan/barang-minim')}}">
+                  <span>Barang Minim Stok</span>
+                </a>
+                <a class="nav-link" href="{{url('persediaan/barang-expired')}}">
+                  <span>Barang Expired</span>
+                </a>
                 <a class="nav-link" href="{{url('persediaan/pemakaian-barang')}}">
                   <span>Pemakaian Barang</span>
                 </a>
