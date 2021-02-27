@@ -655,4 +655,31 @@ class PembelianBarangController extends Controller
             return redirect()->back()->withError('Terjadi kesalahan pada database. : ' . $e->getMessage());
         }
     }
+
+    public function pembelianJatuhTempo()
+    {
+        $this->param['pageInfo'] = 'Pembelian Barang / List Pembelian Barang Jatuh Tempo';
+
+        try {
+            $this->param['pembelianBarang'] = PembelianBarang::where('tanggal', '<=', Date('Y-m-d'))->paginate(10);
+        } catch (\Illuminate\Database\QueryException $e) {
+            return redirect()->back()->withErrors('Terjadi Kesalahan');
+        }
+
+        return \view('pembelian.pembelian-barang.pembelian-jatuh-tempo', $this->param);
+    }
+
+    public function detailPembelianJatuhTempo($kode)
+    {
+        $this->param['pageInfo'] = 'Pembelian Barang / Detail Pembelian Barang Jatuh Tempo';
+        $this->param['btnRight']['text'] = 'Lihat Data';
+        $this->param['btnRight']['link'] = url('pembelian/pembelian-jatuh-tempo');
+        try {
+            $this->param['pembelianBarang'] = DetailPembelianBarang::where('kode_pembelian', $kode)->paginate(10);
+        } catch (\Illuminate\Database\QueryException $e) {
+            return redirect()->back()->withErrors('Terjadi Kesalahan');
+        }
+
+        return \view('pembelian.pembelian-barang.detail-pembelian-jatuh-tempo', $this->param);
+    }
 }

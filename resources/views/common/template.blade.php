@@ -205,6 +205,9 @@
                 <a class="nav-link" href="{{url('pembelian/pembelian-barang')}}">
                   <span>Pembelian Barang</span>
                 </a>
+                <a class="nav-link" href="{{url('pembelian/pembelian-jatuh-tempo')}}">
+                  <span>Pembelian Barang Jatuh Tempo</span>
+                </a>
                 <div class="dropdown-divider"></div>
                 <a class="nav-link" href="{{url('pembelian/laporan-pembelian-barang')}}">
                   <span>Laporan Pembelian Barang</span>
@@ -246,6 +249,9 @@
                 </a>
                 <a class="nav-link" href="{{url('penjualan/piutang-resto')}}">
                   <span>Piutang Resto</span>
+                </a>
+                <a class="nav-link" href="{{url('penjualan/penjualan-jatuh-tempo')}}">
+                  <span>Penjualan Barang Jatuh Tempo</span>
                 </a>
               </div>
             </div>

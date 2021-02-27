@@ -330,4 +330,17 @@ class PenjualanCateringController extends Controller
             return redirect()->back()->withStatus('Terjadi kesalahan pada database : ' . $e->getMessage());
         }
     }
+
+    public function penjualanJatuhTempo()
+    {
+        $this->param['pageInfo'] = 'Penjualan Barang / List Penjualan Barang Jatuh Tempo';
+
+        try {
+            $this->param['penjualanBarang'] = PenjualanLain::where('tanggal', '<=', Date('Y-m-d'))->orWhere('jatuh_tempo', Date('Y-m-d'))->paginate(10);
+        } catch (\Illuminate\Database\QueryException $e) {
+            return redirect()->back()->withErrors('Terjadi Kesalahan');
+        }
+
+        return \view('penjualan.penjualan-jatuh-tempo', $this->param);
+    }
 }
