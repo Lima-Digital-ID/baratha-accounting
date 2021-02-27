@@ -136,6 +136,8 @@ Route::group(['middleware' => ['auth:sanctum', 'verified']], function () {
         Route::get('neraca', 'NeracaController@index');
         Route::get('neraca/print', 'NeracaController@print');
     });
-
-    Route::resource('log-activity', 'LogActivityController');
+    
+    Route::group(['prefix' => 'log'], function () {
+        Route::resource('log-activity', 'LogActivityController');
+    });
 });

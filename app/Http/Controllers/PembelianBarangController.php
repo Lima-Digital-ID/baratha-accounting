@@ -694,5 +694,5 @@ class PembelianBarangController extends Controller
 
         return \view('pembelian.pembelian-barang.detail-pembelian-jatuh-tempo', $this->param);
     }
-    }
+    
 }
