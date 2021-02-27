@@ -70,6 +70,8 @@ Route::group(['middleware' => ['auth:sanctum', 'verified']], function () {
             Route::get('print', 'PembelianBarangController@printReport')->name('print-pembelian');
         });
         Route::resource('pembelian-barang', 'PembelianBarangController');
+        Route::get('pembelian-jatuh-tempo', 'PembelianBarangController@pembelianJatuhTempo');
+        Route::get('pembelian-jatuh-tempo/detail/{kode}', 'PembelianBarangController@detailPembelianJatuhTempo');
     });
     
     Route::group(['prefix' => 'penjualan'], function(){
@@ -85,6 +87,7 @@ Route::group(['middleware' => ['auth:sanctum', 'verified']], function () {
         Route::resource('customer', 'CustomerController');
         Route::get('penjualan-catering/getKode', 'PenjualanCateringController@getKode');
         Route::resource('penjualan-catering', 'PenjualanCateringController');
+        Route::get('penjualan-jatuh-tempo', 'PenjualanCateringController@penjualanJatuhTempo');
     });
 
     Route::group(['prefix' => 'kas'], function () {
