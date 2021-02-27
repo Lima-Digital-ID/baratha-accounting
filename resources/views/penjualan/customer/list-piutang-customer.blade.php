@@ -23,8 +23,8 @@
             @foreach($piutang as $data)
                 @php 
                     $no++;
-                    $total .= $data->grandtotal;
-                    $terbayar .= $data->terbayar;
+                    $total += $data->grandtotal;
+                    $terbayar += $data->terbayar;
                 @endphp
                 <tr>
                     <td>{{$no}}</td>
