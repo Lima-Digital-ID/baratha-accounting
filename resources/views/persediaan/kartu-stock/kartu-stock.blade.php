@@ -16,7 +16,7 @@
                     <div class="row">
 
                         <div class="col-md-6 mb-4">
-                            <label for="">Barang</label>
+                            <label for="">Barang</label><span style="color:red;">*</span>
                             <select name="kodeBarangDari" id="kodeBarangDari" class="form-control select2" required>
                                 <option value="">--Pilih Barang--</option>
                                 @foreach ($barang as $item)
@@ -26,7 +26,7 @@
                         </div>
 
                         <div class="col-md-6 mb-4">
-                            <label for="">Sampai Barang</label>
+                            <label for="">Sampai Barang</label><span style="color:red;">*</span>
                             <select name="kodeBarangSampai" class="form-control select2" required >
                                 <option value="">--Pilih Barang--</option>
                                 @foreach ($barang as $item)
@@ -36,12 +36,12 @@
                         </div>
 
                         <div class="col-md-6 mb-4">
-                            <label for="">Tanggal Dari</label>
+                            <label for="">Tanggal Dari</label><span style="color:red;">*</span>
                             <input type="text" name="tanggalDari" autocomplete="off" class="form-control datepicker" value="{{!is_null(Request::get('tanggalDari')) ? Request::get('tanggalDari') : '' }}" required>
                         </div>
                         
                         <div class="col-md-6 mb-4">
-                            <label for="">Tanggal Sampai</label>
+                            <label for="">Tanggal Sampai</label><span style="color:red;">*</span>
                             <input type="text" name="tanggalSampai" autocomplete="off" class="form-control datepicker" value="{{!is_null(Request::get('tanggalSampai')) ? Request::get('tanggalSampai') : ''}}" required>
                         </div>
 

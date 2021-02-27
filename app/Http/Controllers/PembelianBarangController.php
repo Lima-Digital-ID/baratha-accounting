@@ -682,4 +682,17 @@ class PembelianBarangController extends Controller
 
         return \view('pembelian.pembelian-barang.detail-pembelian-jatuh-tempo', $this->param);
     }
+
+    public function kartuHutang()
+    {
+        $this->param['pageInfo'] = 'Pembelian Barang / Detail Pembelian Barang Jatuh Tempo';
+        try {
+            $this->param['supplier'] = Supplier::all();
+        } catch (\Illuminate\Database\QueryException $e) {
+            return redirect()->back()->withErrors('Terjadi Kesalahan');
+        }
+
+        return \view('pembelian.pembelian-barang.detail-pembelian-jatuh-tempo', $this->param);
+    }
+    }
 }

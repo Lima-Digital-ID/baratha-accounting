@@ -209,6 +209,9 @@
                   <span>Pembelian Barang Jatuh Tempo</span>
                 </a>
                 <div class="dropdown-divider"></div>
+                <a class="nav-link" href="{{url('pembelian/kartu-hutang')}}">
+                  <span>Kartu Hutang</span>
+                </a>
                 <a class="nav-link" href="{{url('pembelian/laporan-pembelian-barang')}}">
                   <span>Laporan Pembelian Barang</span>
                 </a>
@@ -252,6 +255,10 @@
                 </a>
                 <a class="nav-link" href="{{url('penjualan/penjualan-jatuh-tempo')}}">
                   <span>Penjualan Barang Jatuh Tempo</span>
+                </a>
+                <div class="dropdown-divider"></div>
+                <a class="nav-link" href="{{url('pembelian/kartu-piutang')}}">
+                  <span>Kartu Piutang</span>
                 </a>
               </div>
             </div>
@@ -374,6 +381,13 @@
                 </a>
               </div>
             </div>
+          </li>
+
+          <li class="nav-item {{Request::segment(1) == 'log-activity' ? 'active' : ''}}">
+            <a class="nav-link" href="{{url('log-activity')}}">
+              <i class="fas fa-fw fa-history"></i>
+              <span>Log Activity</span></a
+            >
           </li>
           
           <!-- Sidebar Toggler (Sidebar) -->

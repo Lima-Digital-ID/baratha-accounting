@@ -72,6 +72,8 @@ Route::group(['middleware' => ['auth:sanctum', 'verified']], function () {
         Route::resource('pembelian-barang', 'PembelianBarangController');
         Route::get('pembelian-jatuh-tempo', 'PembelianBarangController@pembelianJatuhTempo');
         Route::get('pembelian-jatuh-tempo/detail/{kode}', 'PembelianBarangController@detailPembelianJatuhTempo');
+        Route::get('kartu-hutang', 'PembelianBarangController@kartuHutang');
+        Route::get('kartu-hutang/get', 'PembelianBarangController@getKartuHutang');
     });
     
     Route::group(['prefix' => 'penjualan'], function(){
@@ -88,6 +90,8 @@ Route::group(['middleware' => ['auth:sanctum', 'verified']], function () {
         Route::get('penjualan-catering/getKode', 'PenjualanCateringController@getKode');
         Route::resource('penjualan-catering', 'PenjualanCateringController');
         Route::get('penjualan-jatuh-tempo', 'PenjualanCateringController@penjualanJatuhTempo');
+        Route::get('kartu-piutang', 'PenjualanBarangController@kartuPiutang');
+        Route::get('kartu-piutang/get', 'PenjualanBarangController@getKartuPiutang');
     });
 
     Route::group(['prefix' => 'kas'], function () {
@@ -132,4 +136,6 @@ Route::group(['middleware' => ['auth:sanctum', 'verified']], function () {
         Route::get('neraca', 'NeracaController@index');
         Route::get('neraca/print', 'NeracaController@print');
     });
+
+    Route::resource('log-activity', 'LogActivityController');
 });
