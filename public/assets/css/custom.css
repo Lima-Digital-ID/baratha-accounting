@@ -111,7 +111,7 @@ body {
 .table td, .table th{
 	vertical-align: baseline;
 }
-.table-custom thead {
+.table-custom thead, .table-custom tfoot {
 	background: #e2e3f7;
 	font-weight: 500;
 	letter-spacing: 0.5px;
@@ -531,4 +531,10 @@ a:hover {
 	border-top:0px;
 	padding-top : 1.5rem;	
 	padding-bottom : 1.5rem;	
+}
+.tooltip-inner{
+    color:#3c4099;
+	background: #e3e6f0;
+    text-align:center;
+    border: 1px solid #3c4099;
 }

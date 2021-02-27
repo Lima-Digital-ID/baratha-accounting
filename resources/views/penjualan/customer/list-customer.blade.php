@@ -1,5 +1,5 @@
-@extends('common.template')
-@section('container')
+    @extends('common.template')
+    @section('container')
         {{-- <div class="col-12"> --}}
         @if (session('status'))
             <div class="alert alert-success alert-dismissible fade show" role="alert">
@@ -70,11 +70,12 @@
                                     </div>
                                 </div> --}}
                                 <div class="form-inline">
-                                    <a href="{{ route('customer.edit', $value) }}" class="btn btn-success mr-2"> <span class="fa fa-pen"></span> </a>
+                                    <a href="{{ route('piutang-customer', $value->kode_customer) }}" class="btn btn-warning mr-2" data-toggle="tooltip" title="Detail Piutang"> <span class="fa fa-money-bill-wave"></span> </a>
+                                    <a data-toggle="tooltip" title="Edit Customer" href="{{ route('customer.edit', $value) }}" class="btn btn-success mr-2"> <span class="fa fa-pen"></span> </a>
                                     <form action="{{ route('customer.destroy', $value) }}" method="post">
                                         @csrf
                                         @method('delete')
-                                        <button type="button" class="btn btn-danger" onclick="confirm('{{ __("Apakah anda yakin ingin menghapus?") }}') ? this.parentElement.submit() : ''">
+                                        <button type="button" data-toggle="tooltip" title="Hapus Customer" class="btn btn-danger" onclick="confirm('{{ __("Apakah anda yakin ingin menghapus?") }}') ? this.parentElement.submit() : ''">
                                             <span class="fa fa-minus-circle"></span>
                                         </button>
                                     </form>

@@ -173,4 +173,17 @@ class SupplierController extends Controller
             return redirect()->back()->withStatus('Terjadi kesalahan pada database : ' . $e->getMessage());
         }    
     }
+
+    public function hutang($kodeSupplier)
+    {
+        $this->param['pageInfo'] = "Daftar Hutang / $kodeSupplier";
+        $this->param['onlyhutang'] = true;
+        try {
+            $this->param['hutang'] = PembelianBarang::where('kode_supplier',$kodeSupplier)->whereRaw('terbayar != grandtotal')->get();
+        } catch (\Illuminate\Database\QueryException $e) {
+            return redirect()->back()->withStatus('Terjadi Kesalahan');
+        }
+        return \view('pembelian.supplier.list-hutang-supplier',$this->param);
+    }
+
 }

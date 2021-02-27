@@ -55,6 +55,8 @@ Route::group(['middleware' => ['auth:sanctum', 'verified']], function () {
 
     Route::group(['prefix' => 'pembelian'], function(){
         Route::get('supplier/hutang', 'SupplierController@getHutang');
+        Route::get('supplier/hutang/{kodeSupplier}', 'SupplierController@hutang')->name('hutang-supplier');
+
         Route::post('pembayaran-hutang', 'SupplierController@pembayaranHutang');
 
         Route::resource('supplier', 'SupplierController');
@@ -79,6 +81,7 @@ Route::group(['middleware' => ['auth:sanctum', 'verified']], function () {
         Route::get('rekap-resto/save', 'RekapRestoController@save');
         Route::post('pembayaran-piutang', 'CustomerController@pembayaranPiutang');
         Route::resource('rekap-resto', 'RekapRestoController');
+        Route::get('customer/piutang/{kodeCustomer}', 'CustomerController@piutang')->name('piutang-customer');
         Route::resource('customer', 'CustomerController');
         Route::get('penjualan-catering/getKode', 'PenjualanCateringController@getKode');
         Route::resource('penjualan-catering', 'PenjualanCateringController');

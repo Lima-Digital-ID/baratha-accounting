@@ -184,4 +184,16 @@ class CustomerController extends Controller
         }    
     }
 
+    public function piutang($kodeCustomer)
+    {
+        $this->param['pageInfo'] = "Daftar Piutang / $kodeCustomer";
+        $this->param['onlyPiutang'] = true;
+        try {
+            $this->param['piutang'] = PenjualanLain::where('kode_customer',$kodeCustomer)->whereRaw('terbayar != grandtotal')->get();
+        } catch (\Illuminate\Database\QueryException $e) {
+            return redirect()->back()->withStatus('Terjadi Kesalahan');
+        }
+        return \view('penjualan.customer.list-piutang-customer',$this->param);
+    }
+
 }

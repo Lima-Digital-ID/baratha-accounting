@@ -70,6 +70,7 @@
                                     </div>
                                 </div> --}}
                                 <div class="form-inline">
+                                    <a href="{{ route('hutang-supplier', $value->kode_supplier) }}" class="btn btn-warning mr-2" data-toggle="tooltip" title="Detail Hutang"> <span class="fa fa-money-bill-wave"></span> </a>
                                     <a href="{{ route('supplier.edit', $value) }}" class="btn btn-success mr-2"> <span class="fa fa-pen"></span> </a>
                                     <form action="{{ route('supplier.destroy', $value) }}" method="post">
                                         @csrf
