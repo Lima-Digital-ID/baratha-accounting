@@ -6,6 +6,9 @@ use Illuminate\Http\Request;
 use App\Models\Customer;
 use App\Models\PenjualanLain;
 use App\Models\KartuPiutang;
+use App\Models\LogActivity;
+use App\Models\Jurnal;
+use Illuminate\Support\Facades\Auth;
 
 class PiutangRestoController extends Controller
 {
@@ -65,6 +68,15 @@ class PiutangRestoController extends Controller
             $newPenjualan->grandtotal = $grandtotal;
             $newPenjualan->terbayar = 0;
             $newPenjualan->tipe_penjualan = 'resto';
+            $newPenjualan->created_by = Auth::user()->id;
+
+            // insert log activity update
+            $newActivity = new LogActivity;
+            $newActivity->id_user = Auth::user()->id;
+            $newActivity->jenis_transaksi = 'Piutang Resto';
+            $newActivity->tipe = 'Insert';
+            $newActivity->keterangan = 'Input Piutang Resto dengan kode '. $request->get('kode_penjualan') .' dengan grandtotal '. $grandtotal;
+            $newActivity->save();
 
 
             $newPenjualan->save();

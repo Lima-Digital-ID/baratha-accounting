@@ -8,6 +8,8 @@ use \App\Models\PenjualanLain;
 use \App\Models\Customer;
 use \App\Models\KartuPiutang;
 use \App\Models\Jurnal;
+use \App\Models\LogActivity;
+use Illuminate\Support\Facades\Auth;
 
 class PenjualanCateringController extends Controller
 {
@@ -111,8 +113,17 @@ class PenjualanCateringController extends Controller
             $newPenjualan->grandtotal = $grandtotal;
             $newPenjualan->terbayar = 0;
             $newPenjualan->tipe_penjualan = 'catering';
+            $newPenjualan->created_by = Auth::user()->id;
 
             $newPenjualan->save();
+
+            // insert log activity insert
+            $newActivity = new LogActivity;
+            $newActivity->id_user = Auth::user()->id;
+            $newActivity->jenis_transaksi = 'Penjualan Catering';
+            $newActivity->tipe = 'Insert';
+            $newActivity->keterangan = 'Input Penjualan Catering dengan kode '. $request->get('kode_penjualan') .' dengan grandtotal '. $grandtotal;
+            $newActivity->save();
 
             // save jurnal penjualan
             $newJurnal = new Jurnal;
@@ -237,6 +248,14 @@ class PenjualanCateringController extends Controller
                     'grandtotal' => $newGrandtotal,
                 ]);
 
+            // insert log activity update
+            $newActivity = new LogActivity;
+            $newActivity->id_user = Auth::user()->id;
+            $newActivity->jenis_transaksi = 'Penjualan Catering';
+            $newActivity->tipe = 'Update';
+            $newActivity->keterangan = 'Update Penjualan Catering dengan kode '. $kode .' dengan grandtotal awal '. $grandtotal . ' menjadi ' . $newGrandtotal;
+            $newActivity->save();
+
             //update jurnal penjualan
             Jurnal::where('kode_transaksi', $kode)->where('keterangan', 'Penjualan Catering')
             ->update([
@@ -291,7 +310,13 @@ class PenjualanCateringController extends Controller
                         ->update([
                             'piutang' => \DB::raw('piutang-' . $penjualan->grandtotal),
                         ]);
-
+            // insert log activity delete
+            $newActivity = new LogActivity;
+            $newActivity->id_user = Auth::user()->id;
+            $newActivity->jenis_transaksi = 'Penjualan Catering';
+            $newActivity->tipe = 'Delete';
+            $newActivity->keterangan = 'Hapus Penjualan Catering dengan kode '. $kode .' dengan grandtotal '. $penjualan->grandtotal;
+            $newActivity->save();
             $penjualan->delete();
 
             // delete jurnal

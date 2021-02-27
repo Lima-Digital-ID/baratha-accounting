@@ -14,6 +14,8 @@ use \App\Models\KartuPiutang;
 use \App\Models\PembelianBarang;
 use \App\Models\PenjualanLain;
 use Illuminate\Support\Facades\DB;
+use \App\Models\LogActivity;
+use Illuminate\Support\Facades\Auth;
 
 class MemorialController extends Controller
 {
@@ -130,6 +132,7 @@ class MemorialController extends Controller
             $newMemorial->kode_supplier = $request->get('kode_supplier');
             $newMemorial->kode_customer = $request->get('kode_customer');
             $newMemorial->total = $total;
+            $newMemorial->created_by = Auth::user()->id;
             $newMemorial->save();
 
             foreach ($_POST['subtotal'] as $key => $value) {
@@ -321,6 +324,7 @@ class MemorialController extends Controller
                     'kode_supplier' => $request->get('kode_supplier'),
                     'kode_customer' => $request->get('kode_customer'),
                     'total' => $newTotal,
+                    'updated_by' => Auth::user()->id,
                 ]);
             return redirect()->back()->withStatus('Data berhasil diperbarui.');
         } catch (\Exception $e) {
@@ -333,13 +337,25 @@ class MemorialController extends Controller
     public function destroy($kode)
     {
         try {
+            $memorial = Memorial::findOrFail($kode);
             // delete detail
             DetailMemorial::where('kode_memorial', $kode)->delete();
             
             // delete jurnal
             Jurnal::where('kode_transaksi', $kode)->delete();
-            // delete bank
-            Memorial::where('kode_memorial', $kode)->delete();
+
+            // insert log activity delete
+            $newActivity = new LogActivity;
+            $newActivity->id_user = Auth::user()->id;
+            $newActivity->jenis_transaksi = 'Memorial';
+            $newActivity->tipe = 'Delete';
+            $newActivity->keterangan = 'Hapus Memorial dengan kode '. $kode .' dengan total '. $memorial->total;
+            $newActivity->save();
+
+
+            // delete memorial
+            $memorial->delete();
+            
 
             return redirect()->route('memorial.index')->withStatus('Data berhasil dihapus.');
         } catch (\Exception $e) {

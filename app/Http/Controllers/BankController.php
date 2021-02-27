@@ -14,6 +14,8 @@ use \App\Models\PembelianBarang;
 use \App\Models\KartuPiutang;
 use \App\Models\PenjualanLain;
 use Illuminate\Support\Facades\DB;
+use \App\Models\LogActivity;
+use Illuminate\Support\Facades\Auth;
 
 class BankController extends Controller
 {
@@ -130,6 +132,7 @@ class BankController extends Controller
             $newBank->kode_supplier = $request->get('kode_supplier');
             $newBank->kode_customer = $request->get('kode_customer');
             $newBank->total = $total;
+            $newBank->created_by = Auth::user()->id;
             $newBank->save();
 
             foreach ($_POST['subtotal'] as $key => $value) {
@@ -320,6 +323,7 @@ class BankController extends Controller
                     'kode_supplier' => $_POST['kode_supplier'],
                     'kode_customer' => $_POST['kode_customer'],
                     'total' => $newTotal,
+                    'updated_by' => Auth::user()->id,
                 ]);
             return redirect()->back()->withStatus('Data berhasil diperbarui.');
         } catch (\Exception $e) {
@@ -332,14 +336,23 @@ class BankController extends Controller
     public function destroy($kode)
     {
         try {
+            $bank = Bank::findOrFail($kode);
             // delete detail
             DetailBank::where('kode_bank', $kode)->delete();
             
             // delete jurnal
             Jurnal::where('kode_transaksi', $kode)->delete();
             // delete bank
-            Bank::where('kode_bank', $kode)->delete();
+            // insert log activity delete
+            $newActivity = new LogActivity;
+            $newActivity->id_user = Auth::user()->id;
+            $newActivity->jenis_transaksi = 'Bank';
+            $newActivity->tipe = 'Delete';
+            $newActivity->keterangan = 'Hapus Bank dengan kode '. $kode .' dengan total '. $bank->total;
+            $newActivity->save();
 
+
+            $bank->delete();
             //reset hutang/piutang
             //update hutang/piutang pada customer/supplier
 

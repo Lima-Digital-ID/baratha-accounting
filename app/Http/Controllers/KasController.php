@@ -14,6 +14,8 @@ use \App\Models\KartuPiutang;
 use \App\Models\PembelianBarang;
 use \App\Models\PenjualanLain;
 use Illuminate\Support\Facades\DB;
+use \App\Models\LogActivity;
+use Illuminate\Support\Facades\Auth;
 
 class KasController extends Controller
 {
@@ -130,6 +132,7 @@ class KasController extends Controller
             $newKas->kode_supplier = $request->get('kode_supplier');
             $newKas->kode_customer = $request->get('kode_customer');
             $newKas->total = $total;
+            $newKas->created_by = Auth::user()->id;
             $newKas->save();
 
             foreach ($_POST['subtotal'] as $key => $value) {
@@ -320,6 +323,7 @@ class KasController extends Controller
                     'kode_supplier' => $_POST['kode_supplier'],
                     'kode_customer' => $_POST['kode_customer'],
                     'total' => $newTotal,
+                    'updated_by' => Auth::user()->id,
                 ]);
             return redirect()->back()->withStatus('Data berhasil diperbarui.');
         } catch (\Exception $e) {
@@ -332,14 +336,22 @@ class KasController extends Controller
     public function destroy($kode)
     {
         try {
+            $kas = Kas::findOrFail($kode);
             // delete detail
             DetailKas::where('kode_kas', $kode)->delete();
             
             // delete jurnal
             Jurnal::where('kode_transaksi', $kode)->delete();
             // delete kas
-            Kas::where('kode_kas', $kode)->delete();
+            // insert log activity delete
+            $newActivity = new LogActivity;
+            $newActivity->id_user = Auth::user()->id;
+            $newActivity->jenis_transaksi = 'Kas';
+            $newActivity->tipe = 'Delete';
+            $newActivity->keterangan = 'Hapus Kas dengan kode '. $kode .' dengan total '. $kas->total;
+            $newActivity->save();
 
+            $kas->delete();
             //reset hutang/piutang
             //update hutang/piutang pada customer/supplier
 

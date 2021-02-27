@@ -10,6 +10,8 @@ use \App\Models\Barang;
 use \App\Models\KartuHutang;
 use \App\Models\KartuStock;
 use \App\Models\Jurnal;
+use \App\Models\LogActivity;
+use Illuminate\Support\Facades\Auth;
 
 class PembelianBarangController extends Controller
 {
@@ -133,6 +135,7 @@ class PembelianBarangController extends Controller
             $newPembelian->total_ppn = $totalPpn;
             $newPembelian->grandtotal = $grandtotal;
             $newPembelian->terbayar = 0;
+            $newPembelian->created_by = Auth::user()->id;
 
             $newPembelian->save();
 
@@ -456,6 +459,7 @@ class PembelianBarangController extends Controller
                     'total_ppn' => $newTotalPpn,
                     'grandtotal' => $newGrandtotal,
                     'kode_supplier' => $_POST['kode_supplier'],
+                    'updated_by' => Auth::user()->id
                 ]);
 
             Supplier::where('kode_supplier', $kodeSupplier)
@@ -528,10 +532,20 @@ class PembelianBarangController extends Controller
                             'hutang' => \DB::raw('hutang-' . $pembelianBarang->grandtotal),
                         ]);
 
-            $pembelianBarang->delete();
+            
 
             // hapus jurnal pembelian
             Jurnal::where('kode_transaksi', $kode)->delete();
+            
+            // insert log activity delete
+            $newActivity = new LogActivity;
+            $newActivity->id_user = Auth::user()->id;
+            $newActivity->jenis_transaksi = 'Pembelian';
+            $newActivity->tipe = 'Delete';
+            $newActivity->keterangan = 'Hapus Pembelian Barang dengan kode '. $kode .' dengan grandtotal '. $pembelianBarang->grandtotal;
+            $newActivity->save();
+
+            $pembelianBarang->delete();
 
             return redirect()->route('pembelian-barang.index')->withStatus('Data berhasil dihapus.');
         } catch (\Exception $e) {
