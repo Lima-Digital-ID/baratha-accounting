@@ -343,4 +343,26 @@ class PenjualanCateringController extends Controller
 
         return \view('penjualan.penjualan-jatuh-tempo', $this->param);
     }
+
+    public function kartuPiutang()
+    {
+        try {
+            $this->param['customer'] = Customer::orderBy('kode_customer', 'ASC')->get();
+        } catch (\Illuminate\Database\QueryException $e) {
+            return redirect()->back()->withErrors('Terjadi Kesalahan');
+        }
+
+        return \view('penjualan.kartu-piutang', $this->param);
+    }
+
+    public function getKartuPiutang(Request $request)
+    {
+        try{
+            $this->param['customer'] = Customer::orderBy('kode_customer', 'ASC')->get();
+            $this->param['selectedCustomer'] = Customer::whereBetween('kode_customer', [$request->get('kodeCustomerDari'), $request->get('kodeCustomerSampai')])->orderBy('kode_customer', 'ASC')->get();
+        } catch (\Illuminate\Database\QueryException $e) {
+            return redirect()->back()->withErrors('Terjadi Kesalahan');
+        }
+        return \view('penjualan.kartu-piutang', $this->param);
+    }
 }

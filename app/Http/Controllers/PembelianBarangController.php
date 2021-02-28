@@ -685,14 +685,25 @@ class PembelianBarangController extends Controller
 
     public function kartuHutang()
     {
-        $this->param['pageInfo'] = 'Pembelian Barang / Detail Pembelian Barang Jatuh Tempo';
+        // $this->param['pageInfo'] = 'Pembelian Barang / Detail Pembelian Barang Jatuh Tempo';
         try {
-            $this->param['supplier'] = Supplier::all();
+            $this->param['supplier'] = Supplier::orderBy('kode_supplier', 'ASC')->get();
         } catch (\Illuminate\Database\QueryException $e) {
             return redirect()->back()->withErrors('Terjadi Kesalahan');
         }
 
-        return \view('pembelian.pembelian-barang.detail-pembelian-jatuh-tempo', $this->param);
+        return \view('pembelian.pembelian-barang.kartu-hutang', $this->param);
     }
+
+    public function getKartuHutang(Request $request)
+    {
+        // $this->param['pageInfo'] = 'Pembelian Barang / Detail Pembelian Barang Jatuh Tempo';
+        try{
+            $this->param['supplier'] = Supplier::orderBy('kode_supplier', 'ASC')->get();
+            $this->param['selectedSupplier'] = Supplier::whereBetween('kode_supplier', [$request->get('kodeSupplierDari'), $request->get('kodeSupplierSampai')])->orderBy('kode_supplier', 'ASC')->get();
+        } catch (\Illuminate\Database\QueryException $e) {
+            return redirect()->back()->withErrors('Terjadi Kesalahan');
+        }
+        return \view('pembelian.pembelian-barang.kartu-hutang', $this->param);
     }
 }

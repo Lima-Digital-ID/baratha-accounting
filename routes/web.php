@@ -90,8 +90,8 @@ Route::group(['middleware' => ['auth:sanctum', 'verified']], function () {
         Route::get('penjualan-catering/getKode', 'PenjualanCateringController@getKode');
         Route::resource('penjualan-catering', 'PenjualanCateringController');
         Route::get('penjualan-jatuh-tempo', 'PenjualanCateringController@penjualanJatuhTempo');
-        Route::get('kartu-piutang', 'PenjualanBarangController@kartuPiutang');
-        Route::get('kartu-piutang/get', 'PenjualanBarangController@getKartuPiutang');
+        Route::get('kartu-piutang', 'PenjualanCateringController@kartuPiutang');
+        Route::get('kartu-piutang/get', 'PenjualanCateringController@getKartuPiutang');
     });
 
     Route::group(['prefix' => 'kas'], function () {

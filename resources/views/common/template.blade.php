@@ -257,7 +257,7 @@
                   <span>Penjualan Barang Jatuh Tempo</span>
                 </a>
                 <div class="dropdown-divider"></div>
-                <a class="nav-link" href="{{url('pembelian/kartu-piutang')}}">
+                <a class="nav-link" href="{{url('penjualan/kartu-piutang')}}">
                   <span>Kartu Piutang</span>
                 </a>
               </div>
