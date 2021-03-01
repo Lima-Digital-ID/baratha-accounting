@@ -56,8 +56,10 @@
         @if (!is_null(Request::get('kodeSupplierDari')) && !is_null(Request::get('kodeSupplierSampai')))
         @foreach ($selectedSupplier as $item)
         @php
-            $data = \DB::table('kartu_hutang')->where('kode_supplier', $item->kode_supplier)->whereBetween('tanggal', [Request::get('tanggalDari'), Request::get('tanggalSampai')])->get();
-            $total = 0;
+            $data = \DB::table('kartu_hutang')->where('kartu_hutang.kode_supplier', $item->kode_supplier)->whereBetween('kartu_hutang.tanggal', [Request::get('tanggalDari'), Request::get('tanggalSampai')])->get();
+            $total_masuk = 0;
+            $total_keluar = 0;
+            $saldo_akhir = 0;
         @endphp
         @if (count($data) > 0)
         <center>
@@ -70,20 +72,12 @@
             <table class="table table-custom">
                 <thead>
                     <tr>
-                        <th colspan="2"></th>
-                        <th colspan="2">Masuk</th>
-                        <th colspan="2">Keluar</th>
-                        <th colspan="3">Saldo Akhir</th>
-                    </tr>
-                </thead>
-                <thead>
-                    <tr>
                         <td>#</td>
                         <td>Tanggal</td>
-                        <td>Kode Supplier</td>
                         <td>Kode Transaksi</td>
-                        <td>Nominal</td>
-                        <td>Tipe</td>
+                        <td class="text-center">Pembelian</td>
+                        <td class="text-center">Pembayaran</td>
+                        <td class="text-center">Saldo Akhir</td>
                     </tr>
                 </thead>
                 <tbody>
@@ -92,16 +86,33 @@
                         $no = !$page || $page == 1 ? 1 : ($page - 1) * 10 + 1;
                     @endphp
                     @foreach ($data as $value)
-                        @php
-                            $total += $value->nominal;
-                        @endphp
                         <tr>
                             <td>{{$no}}</td>
                             <td>{{$value->tanggal}}</td>
-                            <td>{{$value->kode_supplier}}</td>
                             <td>{{$value->kode_transaksi}}</td>
-                            <td class="text-right">Rp. {{number_format($value->nominal, 2, ',','.')}}</td>
-                            <td>{{$value->tipe}}</td>
+                            <td class="text-center">
+                                @if (!is_null($value->nominal) && $value->tipe == 'Pembelian')
+                                Rp. {{number_format($value->nominal, 2, ',','.')}}
+                                @php
+                                    $total_masuk += $value->nominal;
+                                    $saldo_akhir += $value->nominal;
+                                @endphp
+                                @else
+                                -
+                                @endif
+                            </td>
+                            <td class="text-center">
+                                @if (!is_null($value->nominal) && $value->tipe == 'Pembayaran')
+                                Rp. {{number_format($value->nominal, 2, ',','.')}}
+                                @php
+                                    $total_keluar += $value->nominal;
+                                    $saldo_akhir -= $value->nominal;
+                                @endphp
+                                @else
+                                -
+                                @endif
+                            </td>
+                            <td class="text-center">Rp. {{ number_format($saldo_akhir, 2, ',', '.') }}</td>
                         </tr>
                         @php
                             $no++
@@ -110,12 +121,14 @@
                 </tbody>
                 <thead>
                     <tr>
-                        <td colspan="4" class="text-right">Total</td>
-                        <td class="text-right">Rp. {{ number_format($total, 2, ',', '.') }}</td>
+                        <td colspan="3" class="text-right">Total</td>
+                        <td class="text-center">Rp. {{ number_format($total_masuk, 2, ',', '.') }}</td>
+                        <td class="text-center">Rp. {{ number_format($total_keluar, 2, ',', '.') }}</td>
                         <td></td>
                     </tr>
                 </thead>
             </table>
+            <br>
             @endif
         </div>
         @endforeach

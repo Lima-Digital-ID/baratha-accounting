@@ -66,7 +66,7 @@
                     </div>
                     <div class="col-md-6 mb-3">
                         <label for="">Nominal Bayar</label>
-                        <input type="number" class="form-control" name='nominal_bayar' min="1" max="{{$sisaDetail}}">
+                        <input type="text" class="form-control" name='nominal_bayar' min="1" max="{{$sisaDetail}}">
                     </div>
                     <div class="col-md-6 mb-3">
                         <button type="reset" class="btn btn-default"> <span class="fa fa-times"></span> Cancel</button>

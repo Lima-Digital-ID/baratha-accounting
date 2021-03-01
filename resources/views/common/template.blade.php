@@ -383,8 +383,8 @@
             </div>
           </li>
 
-          <li class="nav-item {{Request::segment(1) == 'log-activity' ? 'active' : ''}}">
-            <a class="nav-link" href="{{url('log-activity')}}">
+          <li class="nav-item {{Request::segment(1) == 'log/log-activity' ? 'active' : ''}}">
+            <a class="nav-link" href="{{url('log/log-activity')}}">
               <i class="fas fa-fw fa-history"></i>
               <span>Log Activity</span></a
             >

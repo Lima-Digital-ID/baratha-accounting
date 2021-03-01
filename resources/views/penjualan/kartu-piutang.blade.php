@@ -56,8 +56,10 @@
         @if (!is_null(Request::get('kodeCustomerDari')) && !is_null(Request::get('kodeCustomerSampai')))
         @foreach ($selectedCustomer as $item)
         @php
-            $data = \DB::table('kartu_piutang')->where('kode_customer', $item->kode_customer)->get();
-            $total = 0;
+            $data = \DB::table('kartu_piutang')->where('kode_customer', $item->kode_customer)->whereBetween('kartu_piutang.tanggal', [Request::get('tanggalDari'), Request::get('tanggalSampai')])->get();
+            $total_penjualan = 0;
+            $total_pelunasan = 0;
+            $saldo_akhir = 0;
         @endphp
         @if (count($data) > 0)
         <center>
@@ -72,10 +74,10 @@
                     <tr>
                         <td>#</td>
                         <td>Tanggal</td>
-                        <td>Kode Customer</td>
                         <td>Kode Transaksi</td>
-                        <td>Nominal</td>
-                        <td>Tipe</td>
+                        <td class="text-center">Penjualan</td>
+                        <td class="text-center">Pelunasan</td>
+                        <td class="text-center">Saldo Akhir</td>
                     </tr>
                 </thead>
                 <tbody>
@@ -84,16 +86,33 @@
                         $no = !$page || $page == 1 ? 1 : ($page - 1) * 10 + 1;
                     @endphp
                     @foreach ($data as $value)
-                        @php
-                            $total += $value->nominal;
-                        @endphp
                         <tr>
                             <td>{{$no}}</td>
                             <td>{{$value->tanggal}}</td>
-                            <td>{{$value->kode_customer}}</td>
                             <td>{{$value->kode_transaksi}}</td>
-                            <td class="text-right">Rp. {{number_format($value->nominal, 2, ',','.')}}</td>
-                            <td>{{$value->tipe}}</td>
+                            <td class="text-center">
+                                @if (!is_null($value->nominal) && $value->tipe == 'Penjualan')
+                                Rp. {{number_format($value->nominal, 2, ',','.')}}
+                                @php
+                                    $total_penjualan += $value->nominal;
+                                    $saldo_akhir += $value->nominal;
+                                @endphp
+                                @else
+                                -
+                                @endif
+                            </td>
+                            <td class="text-center">
+                                @if (!is_null($value->nominal) && $value->tipe == 'Pelunasan')
+                                Rp. {{number_format($value->nominal, 2, ',','.')}}
+                                @php
+                                    $total_pelunasan += $value->nominal;
+                                    $saldo_akhir -= $value->nominal;
+                                @endphp
+                                @else
+                                -
+                                @endif
+                            </td>
+                            <td class="text-center">Rp. {{ number_format($saldo_akhir, 2, ',', '.') }}</td>
                         </tr>
                         @php
                             $no++
@@ -102,12 +121,14 @@
                 </tbody>
                 <thead>
                     <tr>
-                        <td colspan="4" class="text-right">Total</td>
-                        <td class="text-right">Rp. {{ number_format($total, 2, ',', '.') }}</td>
+                        <td colspan="3" class="text-right">Total</td>
+                        <td class="text-center">Rp. {{ number_format($total_penjualan, 2, ',', '.') }}</td>
+                        <td class="text-center">Rp. {{ number_format($total_pelunasan, 2, ',', '.') }}</td>
                         <td></td>
                     </tr>
                 </thead>
             </table>
+            <br>
             @endif
         </div>
         @endforeach
