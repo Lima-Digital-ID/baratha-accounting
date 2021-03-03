@@ -6,6 +6,7 @@ use App\Models\Supplier;
 use Illuminate\Http\Request;
 use \App\Models\KartuHutang;
 use \App\Models\PembelianBarang;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
 class SupplierController extends Controller
@@ -159,6 +160,7 @@ class SupplierController extends Controller
             PembelianBarang::where('kode_pembelian', $request->get('kode_pembelian'))
             ->update([
                 'terbayar' => \DB::raw('terbayar+' . $request->get('nominal_bayar')),
+                'updated_by' => Auth::user()->id
             ]);
             //update hutang Supplier
             Supplier::where('kode_supplier', $request->get('kode_supplier'))

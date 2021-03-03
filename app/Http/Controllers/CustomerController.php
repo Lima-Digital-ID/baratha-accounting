@@ -6,6 +6,7 @@ use App\Models\Customer;
 use App\Models\KartuPiutang;
 use App\Models\PenjualanLain;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class CustomerController extends Controller
 {
@@ -158,6 +159,7 @@ class CustomerController extends Controller
             PenjualanLain::where('kode_penjualan', $request->get('kode_penjualan'))
             ->update([
                 'terbayar' => \DB::raw('terbayar+' . $request->get('nominal_bayar')),
+                'updated_by' => Auth::user()->id
             ]);
 
             //update piutang customer
