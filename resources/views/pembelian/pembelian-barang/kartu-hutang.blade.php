@@ -57,18 +57,17 @@
         @foreach ($selectedSupplier as $item)
         @php
             $data = \DB::table('kartu_hutang')->where('kartu_hutang.kode_supplier', $item->kode_supplier)->whereBetween('kartu_hutang.tanggal', [Request::get('tanggalDari'), Request::get('tanggalSampai')])->get();
+            $saldo_awal = \DB::table('kartu_hutang')->select(\DB::raw('SUM(kartu_hutang.nominal) AS saldo'))->where('kartu_hutang.kode_supplier', $item->kode_supplier)->where('kartu_hutang.tanggal', '<', Request::get('tanggalDari'))->get();
+            $saldo_awal = $saldo_awal[0]->saldo;
             $total_masuk = 0;
             $total_keluar = 0;
             $saldo_akhir = 0;
         @endphp
-        @if (count($data) > 0)
         <center>
             <h6>Kode Supplier : {{$item->kode_supplier}}</h6>
             <h6>Nama Supplier : {{$item->nama}}</h6>
         </center>
-        @endif
         <div class="table-responsive">
-            @if (count($data) > 0)
             <table class="table table-custom">
                 <thead>
                     <tr>
@@ -81,6 +80,14 @@
                     </tr>
                 </thead>
                 <tbody>
+                    <tr>
+                        <td>#</td>
+                        <td>-</td>
+                        <td>Saldo Awal</td>
+                        <td class="text-center">-</td>
+                        <td class="text-center">-</td>
+                        <td class="text-center">Rp. {{ number_format($saldo_awal, 2, ',', '.') }}</td>
+                    </tr>
                     @php
                         $page = Request::get('page');
                         $no = !$page || $page == 1 ? 1 : ($page - 1) * 10 + 1;
@@ -129,7 +136,6 @@
                 </thead>
             </table>
             <br>
-            @endif
         </div>
         @endforeach
         @endif
