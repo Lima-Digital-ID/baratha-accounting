@@ -92,6 +92,7 @@ Route::group(['middleware' => ['auth:sanctum', 'verified']], function () {
         Route::get('penjualan-jatuh-tempo', 'PenjualanCateringController@penjualanJatuhTempo');
         Route::get('kartu-piutang', 'PenjualanCateringController@kartuPiutang');
         Route::get('kartu-piutang/get', 'PenjualanCateringController@getKartuPiutang');
+        Route::resource('hpp', 'HppController');
     });
 
     Route::group(['prefix' => 'kas'], function () {

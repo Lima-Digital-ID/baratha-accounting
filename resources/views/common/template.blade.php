@@ -253,8 +253,11 @@
                 <a class="nav-link" href="{{url('penjualan/piutang-resto')}}">
                   <span>Piutang Resto</span>
                 </a>
+                <a class="nav-link" href="{{url('penjualan/hpp')}}">
+                  <span>Input HPP</span>
+                </a>
                 <a class="nav-link" href="{{url('penjualan/penjualan-jatuh-tempo')}}">
-                  <span>Penjualan Barang Jatuh Tempo</span>
+                  <span>Penjualan Jatuh Tempo</span>
                 </a>
                 <div class="dropdown-divider"></div>
                 <a class="nav-link" href="{{url('penjualan/kartu-piutang')}}">
