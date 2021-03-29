@@ -180,7 +180,7 @@ class PemakaianBarangController extends Controller
                 $newJurnal->jenis_transaksi = 'Pemakaian';
                 $newJurnal->kode_transaksi = $request->get('kode_pemakaian');
                 $newJurnal->keterangan = 'Pemakaian Barang ' . $getKodeBiaya->nama;
-                $newJurnal->kode = '1130.0001';
+                $newJurnal->kode = '1102';
                 $newJurnal->lawan = $getKodeBiaya->kode_rekening;
                 $newJurnal->tipe = 'Kredit';
                 $newJurnal->nominal = $subtotal;
@@ -411,7 +411,7 @@ class PemakaianBarangController extends Controller
                     $newJurnal->jenis_transaksi = 'Pemakaian';
                     $newJurnal->kode_transaksi = $kode;
                     $newJurnal->keterangan = 'Pemakaian Barang ' . $getKodeBiaya->nama;
-                    $newJurnal->kode = '1130.0001';
+                    $newJurnal->kode = '1102';
                     $newJurnal->lawan = $getKodeBiaya->kode_rekening;
                     $newJurnal->tipe = 'Kredit';
                     $newJurnal->nominal = $subtotal;

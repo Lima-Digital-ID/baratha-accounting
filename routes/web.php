@@ -136,6 +136,10 @@ Route::group(['middleware' => ['auth:sanctum', 'verified']], function () {
         Route::get('buku-besar/print', 'BukuBesarController@print');
         Route::get('neraca', 'NeracaController@index');
         Route::get('neraca/print', 'NeracaController@print');
+        Route::get('laba-rugi', 'LabaRugiController@index');
+        Route::get('laba-rugi/print', 'LabaRugiController@print');
+        Route::get('ekuitas', 'EkuitasController@index');
+        Route::get('ekuitas/print', 'EkuitasController@print');
     });
     
     Route::group(['prefix' => 'log'], function () {

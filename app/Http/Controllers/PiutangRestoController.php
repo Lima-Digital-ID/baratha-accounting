@@ -81,32 +81,33 @@ class PiutangRestoController extends Controller
 
             $newPenjualan->save();
 
-/*             // save jurnal penjualan
+             // save jurnal penjualan
             $newJurnal = new Jurnal;
             $newJurnal->tanggal = $piutang['tanggal'];
             $newJurnal->jenis_transaksi = 'Penjualan Catering';
             $newJurnal->kode_transaksi = $request->get('kode_penjualan');
             $newJurnal->keterangan = 'Penjualan Catering';
-            $newJurnal->kode = '1120.0001';
-            $newJurnal->lawan = '4110.0001';
+            $newJurnal->kode = '1101';
+            $newJurnal->lawan = '4101';
             $newJurnal->tipe = 'Debet';
             $newJurnal->nominal = $total;
             $newJurnal->id_detail = '';
             $newJurnal->save();
 
             // save jurnal ppn penjualan
-            $newJurnal = new Jurnal;
-            $newJurnal->tanggal = $piutang['tanggal'];
-            $newJurnal->jenis_transaksi = 'Penjualan Catering';
-            $newJurnal->kode_transaksi = $request->get('kode_penjualan');
-            $newJurnal->keterangan = 'PPN Penjualan Catering';
-            $newJurnal->kode = '1120.0001';
-            $newJurnal->lawan = '2116.0001';
-            $newJurnal->tipe = 'Debet';
-            $newJurnal->nominal = $totalPpn;
-            $newJurnal->id_detail = '';
-            $newJurnal->save();
- */
+            // jurnal ppn belum ada kode rekeningnya
+            // $newJurnal = new Jurnal;
+            // $newJurnal->tanggal = $piutang['tanggal'];
+            // $newJurnal->jenis_transaksi = 'Penjualan Catering';
+            // $newJurnal->kode_transaksi = $request->get('kode_penjualan');
+            // $newJurnal->keterangan = 'PPN Penjualan Catering';
+            // $newJurnal->kode = '1120.0001';
+            // $newJurnal->lawan = '2116.0001';
+            // $newJurnal->tipe = 'Debet';
+            // $newJurnal->nominal = $totalPpn;
+            // $newJurnal->id_detail = '';
+            // $newJurnal->save();
+ 
             //update piutang customer
             Customer::where('kode_customer', $request->get('kode_customer'))
                             ->update([

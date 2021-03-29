@@ -171,7 +171,7 @@
                         <tr>
                           <td>{{date('d-m-Y', strtotime($val->tanggal))}}</td>
                           <td>{{$val->kode_transaksi}}</td>
-                          <td>{{$val->tipe}}</td>
+                          <td>{{$val->keterangan}}</td>
                           <td>{{$val->$fieldLawan . ' ~ ' . \App\Models\KodeRekening::select('nama')->where('kode_rekening', $val->$fieldLawan)->get()[0]->nama}}</td>
                           {{-- jika lawan terdapat di field lawan --}}
                           @if ($fieldLawan == 'lawan')

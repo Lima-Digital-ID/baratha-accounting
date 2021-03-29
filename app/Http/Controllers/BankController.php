@@ -51,9 +51,9 @@ class BankController extends Controller
             $this->param['pageInfo'] = 'Transaksi Bank / Tambah Transaksi Bank';
             $this->param['btnRight']['text'] = 'Lihat Data';
             $this->param['btnRight']['link'] = route('transaksi-bank.index');
-            $this->param['kodeRekeningBank'] = KodeRekening::select('kode_rekening', 'kode_rekening.nama')->join('kode_induk', 'kode_induk.kode_induk', '=', 'kode_rekening.kode_induk')->where('kode_induk.nama', 'Bank')->get();
+            $this->param['kodeRekeningBank'] = KodeRekening::select('kode_rekening', 'kode_rekening.nama')->join('kode_induk', 'kode_induk.kode_induk', '=', 'kode_rekening.kode_induk')->where('kode_rekening.nama', 'Bank')->get();
 
-            $this->param['lawan'] = KodeRekening::select('kode_rekening', 'kode_rekening.nama')->join('kode_induk', 'kode_induk.kode_induk', '=', 'kode_rekening.kode_induk')->where('kode_induk.nama', '!=','Kas')->where('kode_induk.nama', '!=','Bank')->get();
+            $this->param['lawan'] = KodeRekening::select('kode_rekening', 'kode_rekening.nama')->join('kode_induk', 'kode_induk.kode_induk', '=', 'kode_rekening.kode_induk')->where('kode_rekening.nama', '!=','Kas')->where('kode_rekening.nama', '!=','Bank')->get();
 
             $this->param['supplier'] = Supplier::get();
             $this->param['customer'] = Customer::get();
@@ -100,7 +100,7 @@ class BankController extends Controller
     public function addDetailTransaksiBank()
     {
         $next = $_GET['biggestNo'] + 1;
-        $lawan = KodeRekening::select('kode_rekening', 'kode_rekening.nama')->join('kode_induk', 'kode_induk.kode_induk', '=', 'kode_rekening.kode_induk')->where('kode_induk.nama', '!=','Kas')->where('kode_induk.nama', '!=','Bank')->get();
+        $lawan = KodeRekening::select('kode_rekening', 'kode_rekening.nama')->join('kode_induk', 'kode_induk.kode_induk', '=', 'kode_rekening.kode_induk')->where('kode_rekening.nama', '!=','Kas')->where('kode_rekening.nama', '!=','Bank')->get();
         return view('bank.tambah-detail-transaksi-bank', ['hapus' => true, 'no' => $next, 'lawan' => $lawan]);
     }
 
@@ -173,9 +173,9 @@ class BankController extends Controller
             $this->param['pageInfo'] = 'Transaksi Bank / Edit Data';
             $this->param['btnRight']['text'] = 'Lihat Data';
             $this->param['btnRight']['link'] = route('transaksi-bank.index');
-            $this->param['kodeRekeningBank'] = KodeRekening::select('kode_rekening', 'kode_rekening.nama')->join('kode_induk', 'kode_induk.kode_induk', '=', 'kode_rekening.kode_induk')->where('kode_induk.nama', 'Bank')->get();
+            $this->param['kodeRekeningBank'] = KodeRekening::select('kode_rekening', 'kode_rekening.nama')->join('kode_induk', 'kode_induk.kode_induk', '=', 'kode_rekening.kode_induk')->where('kode_rekening.nama', 'Bank')->get();
 
-            $this->param['lawan'] = KodeRekening::select('kode_rekening', 'kode_rekening.nama')->join('kode_induk', 'kode_induk.kode_induk', '=', 'kode_rekening.kode_induk')->where('kode_induk.nama', '!=','Kas')->where('kode_induk.nama', '!=','Bank')->get();
+            $this->param['lawan'] = KodeRekening::select('kode_rekening', 'kode_rekening.nama')->join('kode_induk', 'kode_induk.kode_induk', '=', 'kode_rekening.kode_induk')->where('kode_rekening.nama', '!=','Kas')->where('kode_rekening.nama', '!=','Bank')->get();
 
             $this->param['supplier'] = Supplier::get();
             $this->param['customer'] = Customer::get();
@@ -208,7 +208,7 @@ class BankController extends Controller
             'keterangan' => 'keterangan',
         );
         $next = $_GET['biggestNo'] + 1;
-        $lawan = KodeRekening::select('kode_rekening', 'kode_rekening.nama')->join('kode_induk', 'kode_induk.kode_induk', '=', 'kode_rekening.kode_induk')->where('kode_induk.nama', '!=','Kas')->where('kode_induk.nama', '!=','Bank')->get();
+        $lawan = KodeRekening::select('kode_rekening', 'kode_rekening.nama')->join('kode_induk', 'kode_induk.kode_induk', '=', 'kode_rekening.kode_induk')->where('kode_rekening.nama', '!=','Kas')->where('kode_rekening.nama', '!=','Bank')->get();
         return view('bank.edit-detail-transaksi-bank', ['hapus' => true, 'no' => $next, 'lawan' => $lawan, 'fields' => $fields, 'idDetail' => '0']);
     }
 
@@ -367,7 +367,7 @@ class BankController extends Controller
     public function reportBank()
     {
         try{
-            $this->param['kodeRekeningBank'] = KodeRekening::select('kode_rekening', 'kode_rekening.nama')->join('kode_induk', 'kode_induk.kode_induk', '=', 'kode_rekening.kode_induk')->where('kode_induk.nama', 'Bank')->get();
+            $this->param['kodeRekeningBank'] = KodeRekening::select('kode_rekening', 'kode_rekening.nama')->join('kode_induk', 'kode_induk.kode_induk', '=', 'kode_rekening.kode_induk')->where('kode_rekening.nama', 'Bank')->get();
             $this->param['report'] = null;
 
             return view('bank.laporan-bank', $this->param);
@@ -388,7 +388,7 @@ class BankController extends Controller
             'end' => 'required'
         ]);
         try{
-            $this->param['kodeRekeningBank'] = KodeRekening::select('kode_rekening', 'kode_rekening.nama')->join('kode_induk', 'kode_induk.kode_induk', '=', 'kode_rekening.kode_induk')->where('kode_induk.nama', 'Bank')->get();
+            $this->param['kodeRekeningBank'] = KodeRekening::select('kode_rekening', 'kode_rekening.nama')->join('kode_induk', 'kode_induk.kode_induk', '=', 'kode_rekening.kode_induk')->where('kode_rekening.nama', 'Bank')->get();
             $this->param['report'] = Bank::select(
                                         'bank.kode_bank',
                                         'bank.tanggal',
@@ -421,7 +421,7 @@ class BankController extends Controller
             'end' => 'required'
         ]);
         try{
-            $this->param['kodeRekeningBank'] = KodeRekening::select('kode_rekening', 'kode_rekening.nama')->join('kode_induk', 'kode_induk.kode_induk', '=', 'kode_rekening.kode_induk')->where('kode_induk.nama', 'Bank')->get();
+            $this->param['kodeRekeningBank'] = KodeRekening::select('kode_rekening', 'kode_rekening.nama')->join('kode_induk', 'kode_induk.kode_induk', '=', 'kode_rekening.kode_induk')->where('kode_rekening.nama', 'Bank')->get();
             $this->param['report'] = Bank::select(
                                         'bank.kode_bank',
                                         'bank.tanggal',

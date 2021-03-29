@@ -382,6 +382,12 @@
                 <a class="nav-link" href="{{url('general-ledger/neraca')}}">
                   <span>Neraca</span>
                 </a>
+                <a class="nav-link" href="{{url('general-ledger/laba-rugi')}}">
+                  <span>Laba Rugi</span>
+                </a>
+                <a class="nav-link" href="{{url('general-ledger/ekuitas')}}">
+                  <span>Perubahan Ekuitas</span>
+                </a>
               </div>
             </div>
           </li>

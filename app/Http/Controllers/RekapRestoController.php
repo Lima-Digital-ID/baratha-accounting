@@ -43,8 +43,8 @@ class RekapRestoController extends Controller
             $newJurnal->jenis_transaksi = 'Penjualan Resto';
             $newJurnal->kode_transaksi = 'Penjualan Resto';
             $newJurnal->keterangan = 'Penjualan Resto';
-            $newJurnal->kode = '1111.0001';
-            $newJurnal->lawan = '4110.0001';
+            $newJurnal->kode = '1101';
+            $newJurnal->lawan = '4101';
             $newJurnal->tipe = 'Debet';
             $newJurnal->nominal = $json['total'];
             $newJurnal->id_detail = '';

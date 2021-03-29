@@ -27,11 +27,6 @@ $(document).ready(function() {
         return rupiah;
     }
 
-    // get kode induk di tambah kode rekening
-    $('#kode_induk').change(function (e) {
-        $('#kode_rekening').val(`${$(this).val()}.`);
-    });
-
     $(".getKode").change(function() {
         var tanggal = $(this).val();
         var url = $(this).data("url");
