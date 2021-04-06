@@ -71,9 +71,15 @@ class EkuitasController extends Controller
 
             if (!is_null($month) && !is_null($year)) {
 
-                $this->param['labaRugiBersihAwal'] = \DB::table('support_ekuitas')->where('bulan', '<', $month)->where('tahun', '<=', $year)->sum('laba_rugi_bersih');
+                // $this->param['labaRugiBersihAwal'] = \DB::table('support_ekuitas')->where('bulan', '<', $month)->where('tahun', '<=', $year)->sum('laba_rugi_bersih');
+                $this->param['labaRugiBersihTahunBerjalan'] = \DB::table('support_ekuitas')->where('bulan', '<', $month)->where('tahun', $year)->sum('laba_rugi_bersih');
                 
                 $this->param['labaRugiBersih'] = \DB::table('support_ekuitas')->where('bulan', $month)->where('tahun', $year)->sum('laba_rugi_bersih');
+
+
+                if ($this->param['labaRugiBersih'] == 0) {
+                    return redirect('/general-ledger/ekuitas')->withStatus('Laba Rugi Bulan Tersebut Belum Diproses.');
+                }
 
                 $this->param['rekeningModal'] = KodeRekening::select('kode_rekening', 'nama', 'saldo_awal', 'tipe')->where('kode_rekening', '3100')->orderBy('kode_rekening', 'ASC')->get()[0];
                 

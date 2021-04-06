@@ -60,20 +60,20 @@
               </div>
           </div>
           @php
-              
-              // echo "<pre>";
-              // print_r ($rekeningModal->kode_rekening);
-              // echo "</pre>";
               $mutasiAwalDebetModal = 0;
               $mutasiAwalKreditModal = 0;
 
+              $mutasiDebetModal = 0;
+              $mutasiKreditModal = 0;
+
               // cek apakah ada jurnal awal di field kode untuk rekening modal
-              $cekTransaksiAwalDiKode = \App\Models\Jurnal::whereMonth('tanggal', '<', $month)->whereYear('tanggal', '<=', $year)->where('kode', $rekeningModal->kode_rekening)->count();
+              
+              $cekTransaksiAwalDiKode = \DB::table('view_ekuitas')->where('bulan', '<', $month)->where('tahun', $year)->where('kode', $rekeningModal->kode_rekening)->count();
 
               if ($cekTransaksiAwalDiKode > 0) {
-                  $sumMutasiAwalDebetDiKode = \DB::table('jurnal')->where('kode', $rekeningModal->kode_rekening)->whereMonth('tanggal', '<', $month)->whereYear('tanggal', '<=', $year)->where('tipe', 'Debet')->sum('jurnal.nominal');
+                  $sumMutasiAwalDebetDiKode = \DB::table('view_ekuitas')->where('kode', $rekeningModal->kode_rekening)->where('bulan', '<', $month)->where('tahun', $year)->where('tipe', 'Debet')->sum('nominal');
                   
-                  $sumMutasiAwalKreditDiKode = \DB::table('jurnal')->where('kode', $rekeningModal->kode_rekening)->whereMonth('tanggal', '<', $month)->whereYear('tanggal', '<=', $year)->where('tipe', 'Kredit')->sum('jurnal.nominal');
+                  $sumMutasiAwalKreditDiKode = \DB::table('view_ekuitas')->where('kode', $rekeningModal->kode_rekening)->where('bulan', '<', $month)->where('tahun', $year)->where('tipe', 'Kredit')->sum('nominal');
 
                   if ($rekeningModal->tipe == 'Debet') {
                       $mutasiAwalDebetModal += $sumMutasiAwalDebetDiKode + $rekeningModal->saldo_awal;
@@ -85,22 +85,22 @@
                   }
 
                   // cek apakah transaksi sebelumnya juga terdapat di field lawan
-                  $cekTransaksiAwalDiLawan = \App\Models\Jurnal::whereMonth('tanggal', '<', $month)->whereYear('tanggal', '<=', $year)->where('lawan', $rekeningModal->kode_rekening)->count();
+                  $cekTransaksiAwalDiLawan = \DB::table('view_ekuitas')->where('bulan', '<', $month)->where('tahun', $year)->where('lawan', $rekeningModal->kode_rekening)->count();
                   if ($cekTransaksiAwalDiLawan > 0) {
-                      $sumMutasiAwalDebetDiLawan = \DB::table('jurnal')->where('lawan', $rekeningModal->kode_rekening)->whereMonth('tanggal', '<', $month)->whereYear('tanggal', '<=', $year)->where('tipe', 'Kredit')->sum('jurnal.nominal');
+                      $sumMutasiAwalDebetDiLawan = \DB::table('view_ekuitas')->where('lawan', $rekeningModal->kode_rekening)->where('bulan', '<', $month)->where('tahun', $year)->where('tipe', 'Kredit')->sum('nominal');
                   
-                      $sumMutasiAwalKreditDiLawan = \DB::table('jurnal')->where('lawan', $rekeningModal->kode_rekening)->whereMonth('tanggal', '<', $month)->whereYear('tanggal', '<=', $year)->where('tipe', 'Debet')->sum('jurnal.nominal');
+                      $sumMutasiAwalKreditDiLawan = \DB::table('view_ekuitas')->where('lawan', $rekeningModal->kode_rekening)->where('bulan', '<', $month)->where('tahun', $year)->where('tipe', 'Debet')->sum('nominal');
 
                       $mutasiAwalDebetModal += $sumMutasiAwalDebetDiLawan;
                       $mutasiAwalKreditModal += $sumMutasiAwalKreditDiLawan;
                   }
               }
               else{ // cek apakah ada jurnal awal di field lawan
-                  $cekTransaksiAwalDiLawan = \App\Models\Jurnal::whereMonth('tanggal', '<', $month)->whereYear('tanggal', '<=', $year)->where('lawan', $rekeningModal->kode_rekening)->count();
+                  $cekTransaksiAwalDiLawan = \DB::table('view_ekuitas')->where('bulan', '<', $month)->where('tahun', $year)->where('lawan', $rekeningModal->kode_rekening)->count();
                   if ($cekTransaksiAwalDiLawan > 0) {
-                      $sumMutasiAwalDebetDiLawan = \DB::table('jurnal')->where('lawan', $rekeningModal->kode_rekening)->whereMonth('tanggal', '<', $month)->whereYear('tanggal', '<=', $year)->where('tipe', 'Kredit')->sum('jurnal.nominal');
+                      $sumMutasiAwalDebetDiLawan = \DB::table('view_ekuitas')->where('lawan', $rekeningModal->kode_rekening)->where('bulan', '<', $month)->where('tahun', $year)->where('tipe', 'Kredit')->sum('nominal');
                   
-                      $sumMutasiAwalKreditDiLawan = \DB::table('jurnal')->where('lawan', $rekeningModal->kode_rekening)->whereMonth('tanggal', '<', $month)->whereYear('tanggal', '<=', $year)->where('tipe', 'Debet')->sum('jurnal.nominal');
+                      $sumMutasiAwalKreditDiLawan = \DB::table('view_ekuitas')->where('lawan', $rekeningModal->kode_rekening)->where('bulan', '<', $month)->where('tahun', $year)->where('tipe', 'Debet')->sum('nominal');
 
                       if ($rekeningModal->tipe == 'Debet') {
                           $mutasiAwalDebetModal += $sumMutasiAwalDebetDiLawan + $rekeningModal->saldo_awal;
@@ -124,28 +124,126 @@
                   $saldoAwalModal = $mutasiAwalKreditModal - $mutasiAwalDebetModal;
               }
 
+              // cek transaksi modal di field kode
+              $cekTransaksiDiKode = \DB::table('view_ekuitas')->where('bulan', $month)->where('tahun',$year)->where('kode', $rekeningModal->kode_rekening)->count();
+
+              if ($cekTransaksiDiKode > 0) {
+                  $sumMutasiDebetDiKode = \DB::table('view_ekuitas')->where('kode', $rekeningModal->kode_rekening)->where('bulan', $month)->where('tahun',$year)->where('tipe', 'Debet')->sum('view_ekuitas.nominal');
+                  
+                  $sumMutasiKreditDiKode = \DB::table('view_ekuitas')->where('kode', $rekeningModal->kode_rekening)->where('bulan', $month)->where('tahun',$year)->where('tipe', 'Kredit')->sum('view_ekuitas.nominal');
+
+                  $mutasiDebetModal += $sumMutasiDebetDiKode;
+                  $mutasiKreditModal += $sumMutasiKreditDiKode;
+
+                  // cek transaksi di field lawan
+                  $cekTransaksiDiLawan = \DB::table('view_ekuitas')->where('bulan', $month)->where('tahun',$year)->where('lawan', $rekeningModal->kode_rekening)->count();
+
+                  if ($cekTransaksiDiLawan > 0) {
+                      $sumMutasiDebetDiLawan = \DB::table('view_ekuitas')->where('lawan', $rekeningModal->kode_rekening)->where('bulan', $month)->where('tahun',$year)->where('tipe', 'Kredit')->sum('view_ekuitas.nominal');
+                      
+                      $sumMutasiKreditDiLawan = \DB::table('view_ekuitas')->where('lawan', $rekeningModal->kode_rekening)->where('bulan', $month)->where('tahun',$year)->where('tipe', 'Debet')->sum('view_ekuitas.nominal');
+
+                      $mutasiDebetModal += $sumMutasiDebetDiLawan;
+                      $mutasiKreditModal += $sumMutasiKreditDiLawan;
+                  }
+              }
+              else{ // cek transaksi di field lawan
+                  // cek transaksi di field lawan
+                  $cekTransaksiDiLawan = \DB::table('view_ekuitas')->where('bulan', $month)->where('tahun',$year)->where('lawan', $rekeningModal->kode_rekening)->count();
+                  if ($cekTransaksiDiLawan > 0) {
+                      $sumMutasiDebetDiLawan = \DB::table(  'view_ekuitas')->where('lawan', $rekeningModal->kode_rekening)->where('bulan', $month)->where('tahun',$year)->where('tipe', 'Kredit')->sum('view_ekuitas.nominal');
+                      
+                      $sumMutasiKreditDiLawan = \DB::table('view_ekuitas')->where('lawan', $rekeningModal->kode_rekening)->where('bulan', $month)->where('tahun',$year)->where('tipe', 'Debet')->sum('view_ekuitas.nominal');
+
+                      $mutasiDebetModal += $sumMutasiDebetDiLawan;
+                      $mutasiKreditModal += $sumMutasiKreditDiLawan;
+                  }
+              }
+
+              $modal = $mutasiKreditModal - $mutasiDebetModal;
+
               // prive
+              $mutasiAwalDebetPrive = 0;
+              $mutasiAwalKreditPrive = 0;
+
+              // cek apakah ada jurnal awal di field kode untuk rekening prive
+              
+              $cekTransaksiAwalDiKode = \DB::table('view_ekuitas')->where('bulan', '<', $month)->where('tahun', $year)->where('kode', $rekeningPrive->kode_rekening)->count();
+
+              if ($cekTransaksiAwalDiKode > 0) {
+                  $sumMutasiAwalDebetDiKode = \DB::table('view_ekuitas')->where('kode', $rekeningPrive->kode_rekening)->where('bulan', '<', $month)->where('tahun', $year)->where('tipe', 'Debet')->sum('nominal');
+                  
+                  $sumMutasiAwalKreditDiKode = \DB::table('view_ekuitas')->where('kode', $rekeningPrive->kode_rekening)->where('bulan', '<', $month)->where('tahun', $year)->where('tipe', 'Kredit')->sum('nominal');
+
+                  if ($rekeningPrive->tipe == 'Debet') {
+                      $mutasiAwalDebetPrive += $sumMutasiAwalDebetDiKode + $rekeningPrive->saldo_awal;
+                      $mutasiAwalKreditPrive += $sumMutasiAwalKreditDiKode;
+                  }
+                  else{
+                      $mutasiAwalDebetPrive += $sumMutasiAwalDebetDiKode;
+                      $mutasiAwalKreditPrive += $sumMutasiAwalKreditDiKode + $rekeningPrive->saldo_awal;
+                  }
+
+                  // cek apakah transaksi sebelumnya juga terdapat di field lawan
+                  $cekTransaksiAwalDiLawan = \DB::table('view_ekuitas')->where('bulan', '<', $month)->where('tahun', $year)->where('lawan', $rekeningPrive->kode_rekening)->count();
+                  if ($cekTransaksiAwalDiLawan > 0) {
+                      $sumMutasiAwalDebetDiLawan = \DB::table('view_ekuitas')->where('lawan', $rekeningPrive->kode_rekening)->where('bulan', '<', $month)->where('tahun', $year)->where('tipe', 'Kredit')->sum('nominal');
+                  
+                      $sumMutasiAwalKreditDiLawan = \DB::table('view_ekuitas')->where('lawan', $rekeningPrive->kode_rekening)->where('bulan', '<', $month)->where('tahun', $year)->where('tipe', 'Debet')->sum('nominal');
+
+                      $mutasiAwalDebetPrive += $sumMutasiAwalDebetDiLawan;
+                      $mutasiAwalKreditPrive += $sumMutasiAwalKreditDiLawan;
+                  }
+              }
+              else{ // cek apakah ada jurnal awal di field lawan
+                  $cekTransaksiAwalDiLawan = \DB::table('view_ekuitas')->where('bulan', '<', $month)->where('tahun', $year)->where('lawan', $rekeningPrive->kode_rekening)->count();
+                  if ($cekTransaksiAwalDiLawan > 0) {
+                      $sumMutasiAwalDebetDiLawan = \DB::table('view_ekuitas')->where('lawan', $rekeningPrive->kode_rekening)->where('bulan', '<', $month)->where('tahun', $year)->where('tipe', 'Kredit')->sum('nominal');
+                  
+                      $sumMutasiAwalKreditDiLawan = \DB::table('view_ekuitas')->where('lawan', $rekeningPrive->kode_rekening)->where('bulan', '<', $month)->where('tahun', $year)->where('tipe', 'Debet')->sum('nominal');
+
+                      if ($rekeningPrive->tipe == 'Debet') {
+                          $mutasiAwalDebetPrive += $sumMutasiAwalDebetDiLawan + $rekeningPrive->saldo_awal;
+
+                          $mutasiAwalKreditPrive += $sumMutasiAwalKreditDiLawan;
+                      }
+                      else{
+                          $mutasiAwalDebetPrive += $sumMutasiAwalDebetDiLawan;
+                          $mutasiAwalKreditPrive += $sumMutasiAwalKreditDiLawan + $rekeningPrive->saldo_awal;
+                      }
+                  }
+                  else{ //tidak ada jurnal awal di field kode maupun lawan
+                      if ($rekeningPrive->tipe == 'Debet') {
+                          $mutasiAwalDebetPrive += $rekeningPrive->saldo_awal;
+                      }
+                      else{
+                          $mutasiAwalKreditPrive += $rekeningPrive->saldo_awal;
+                      }
+                  }
+
+                  $saldoAwalPrive = $mutasiAwalKreditPrive - $mutasiAwalDebetPrive;
+              }
               // cek transaksi di field kode
               $mutasiDebetPrive = 0;
               $mutasiKreditPrive = 0;
 
-              $cekTransaksiDiKode = \App\Models\Jurnal::whereMonth('tanggal', '<=', $month)->whereYear('tanggal', '<=', $year)->where('kode', $rekeningPrive->kode_rekening)->count();
+              $cekTransaksiDiKode = \DB::table('view_ekuitas')->where('bulan', $month)->where('tahun', $year)->where('kode', $rekeningPrive->kode_rekening)->count();
                                 
               if ($cekTransaksiDiKode > 0) {
-                  $sumMutasiDebetDiKode = \DB::table('jurnal')->where('kode', $rekeningPrive->kode_rekening)->whereMonth('tanggal', '<=', $month)->whereYear('tanggal', '<=', $year)->where('tipe', 'Debet')->sum('jurnal.nominal');
+                  $sumMutasiDebetDiKode = \DB::table('view_ekuitas')->where('kode', $rekeningPrive->kode_rekening)->where('bulan', $month)->where('tahun', $year)->where('tipe', 'Debet')->sum('nominal');
                   
-                  $sumMutasiKreditDiKode = \DB::table('jurnal')->where('kode', $rekeningPrive->kode_rekening)->whereMonth('tanggal', '<=', $month)->whereYear('tanggal', '<=', $year)->where('tipe', 'Kredit')->sum('jurnal.nominal');
+                  $sumMutasiKreditDiKode = \DB::table('view_ekuitas')->where('kode', $rekeningPrive->kode_rekening)->where('bulan', $month)->where('tahun', $year)->where('tipe', 'Kredit')->sum('nominal');
 
                   $mutasiDebetPrive += $sumMutasiDebetDiKode;
                   $mutasiKreditPrive += $sumMutasiKreditDiKode;
 
                   // cek transaksi di field lawan
-                  $cekTransaksiDiLawan = \App\Models\Jurnal::whereMonth('tanggal', '<=', $month)->whereYear('tanggal', '<=', $year)->where('lawan', $rekeningPrive->kode_rekening)->count();
+                  $cekTransaksiDiLawan = \DB::table('view_ekuitas')->where('bulan', $month)->where('tahun', $year)->where('lawan', $rekeningPrive->kode_rekening)->count();
 
                   if ($cekTransaksiDiLawan > 0) {
-                      $sumMutasiDebetDiLawan = \DB::table('jurnal')->where('lawan', $rekeningPrive->kode_rekening)->whereMonth('tanggal', '<=', $month)->whereYear('tanggal', '<=', $year)->where('tipe', 'Kredit')->sum('jurnal.nominal');
+                      $sumMutasiDebetDiLawan = \DB::table('view_ekuitas')->where('lawan', $rekeningPrive->kode_rekening)->where('bulan', $month)->where('tahun', $year)->where('tipe', 'Kredit')->sum('nominal');
                       
-                      $sumMutasiKreditDiLawan = \DB::table('jurnal')->where('lawan', $rekeningPrive->kode_rekening)->whereMonth('tanggal', '<=', $month)->whereYear('tanggal', '<=', $year)->where('tipe', 'Debet')->sum('jurnal.nominal');
+                      $sumMutasiKreditDiLawan = \DB::table('view_ekuitas')->where('lawan', $rekeningPrive->kode_rekening)->where('bulan', $month)->where('tahun', $year)->where('tipe', 'Debet')->sum('nominal');
 
                       $mutasiDebetPrive += $sumMutasiDebetDiLawan;
                       $mutasiKreditPrive += $sumMutasiKreditDiLawan;
@@ -153,11 +251,11 @@
               }
               else{ // cek transaksi di field lawan
                   // cek transaksi di field lawan
-                  $cekTransaksiDiLawan = \App\Models\Jurnal::whereMonth('tanggal', '<=', $month)->whereYear('tanggal', '<=', $year)->where('lawan', $rekeningPrive->kode_rekening)->count();
+                  $cekTransaksiDiLawan = \DB::table('view_ekuitas')->where('bulan', $month)->where('tahun', $year)->where('lawan', $rekeningPrive->kode_rekening)->count();
                   if ($cekTransaksiDiLawan > 0) {
-                      $sumMutasiDebetDiLawan = \DB::table('jurnal')->where('lawan', $rekeningPrive->kode_rekening)->whereMonth('tanggal', '<=', $month)->whereYear('tanggal', '<=', $year)->where('tipe', 'Kredit')->sum('jurnal.nominal');
+                      $sumMutasiDebetDiLawan = \DB::table('view_ekuitas')->where('lawan', $rekeningPrive->kode_rekening)->where('bulan', $month)->where('tahun', $year)->where('tipe', 'Kredit')->sum('nominal');
                       
-                      $sumMutasiKreditDiLawan = \DB::table('jurnal')->where('lawan', $rekeningPrive->kode_rekening)->whereMonth('tanggal', '<=', $month)->whereYear('tanggal', '<=', $year)->where('tipe', 'Debet')->sum('jurnal.nominal');
+                      $sumMutasiKreditDiLawan = \DB::table('view_ekuitas')->where('lawan', $rekeningPrive->kode_rekening)->where('bulan', $month)->where('tahun', $year)->where('tipe', 'Debet')->sum('nominal');
 
                       $mutasiDebetPrive += $sumMutasiDebetDiLawan;
                       $mutasiKreditPrive += $sumMutasiKreditDiLawan;
@@ -165,13 +263,19 @@
               }
               
               $prive = $mutasiKreditPrive - $mutasiDebetPrive;
+
+              $modalAwal = $saldoAwalModal + $labaRugiBersihTahunBerjalan + $saldoAwalPrive;
           @endphp
           <div class="table-responsive">
             <table class="table table-bordered table-custom">
               <thead>
                 <tr>
                   <th>Modal Awal</th>
-                  <th>{{number_format($saldoAwalModal, 2, ',', '.')}}</th>
+                  <th>{{number_format($modalAwal, 2, ',', '.')}}</th>
+                </tr>
+                <tr>
+                  <th>Modal Disetor</th>
+                  <th>{{number_format($modal, 2, ',', '.')}}</th>
                 </tr>
                 <tr>
                   <th>Laba Bersih</th>
@@ -183,7 +287,7 @@
                 </tr>
                 <tr>
                   <th>Modal Akhir</th>
-                  <th>{{number_format($saldoAwalModal + $labaRugiBersih + $prive, 2, ',', '.')}}</th>
+                  <th>{{number_format($modalAwal + $modal + $labaRugiBersih + $prive, 2, ',', '.')}}</th>
                 </tr>
               </thead>
               
