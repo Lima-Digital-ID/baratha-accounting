@@ -367,4 +367,73 @@ class PenjualanCateringController extends Controller
         }
         return \view('penjualan.kartu-piutang', $this->param);
     }
+
+    public function reportPenjualanCatering()
+    {
+        try {
+            $this->param['pageInfo'] = 'Penjualan Catering / List Penjualan Catering';
+            $this->param['customer'] = Customer::get();
+            $this->param['report'] = null;
+        } catch (\Exception $e) {
+            return redirect()->back()->withStatus('Terjadi kesalahan. : ' . $e->getMessage());
+        }
+        catch(\Illuminate\Database\QueryException $e){
+            return redirect()->back()->withStatus('Terjadi kesalahan pada database. : ' . $e->getMessage());
+        }
+        return \view('penjualan.penjualan-catering.laporan-penjualan-catering', $this->param);
+    }
+
+    public function getReport(Request $request)
+    {
+        try {
+            $this->param['pageInfo'] = 'Penjualan Catering / List Penjualan Catering';
+            $this->param['customer'] = Customer::get();
+            $whereCustomer = null;
+            if($request->get('kode_customer') != ''){
+                $whereCustomer = 'penjualan_lain.kode_customer';
+            }
+            $this->param['report'] = PenjualanLain::select('penjualan_lain.*', 'c.kode_customer', 'c.nama')
+                                                    ->join('customer AS c', 'c.kode_customer', 'penjualan_lain.kode_customer')
+                                                    ->where($whereCustomer, $request->get('kode_customer'))
+                                                    ->where('penjualan_lain.tipe_penjualan', 'catering')
+                                                    ->whereBetween('tanggal', [$request->get('start'), $request->get('end')])
+                                                    ->orderBy('penjualan_lain.'.$request->get('order'), 'ASC')
+                                                    ->get();
+            
+        } catch (\Exception $e) {
+            return redirect()->back()->withError('Terjadi kesalahan. : ' . $e->getMessage());
+        }
+        catch(\Illuminate\Database\QueryException $e){
+            return redirect()->back()->withError('Terjadi kesalahan pada database. : ' . $e->getMessage());
+        }
+        return \view('penjualan.penjualan-catering.laporan-penjualan-catering', $this->param);
+    }
+
+    public function printReport(Request $request)
+    {
+        try {
+            $this->param['customer'] = Customer::get();
+
+            $whereCustomer = null;
+            if($request->get('kode_customer') != ''){
+                $whereCustomer = 'penjualan_lain.kode_customer';
+            }
+            $this->param['report'] = PenjualanLain::select('penjualan_lain.*', 'c.kode_customer', 'c.nama')
+                                                    ->join('customer AS c', 'c.kode_customer', 'penjualan_lain.kode_customer')
+                                                    ->where($whereCustomer, $request->get('kode_customer'))
+                                                    ->where('penjualan_lain.tipe_penjualan', 'catering')
+                                                    ->whereBetween('tanggal', [$request->get('start'), $request->get('end')])
+                                                    ->orderBy('penjualan_lain.'.$request->get('order'), 'ASC')
+                                                    ->get();
+
+            return \view('penjualan.penjualan-catering.print-laporan-catering', $this->param);
+        } catch (\Exception $e) {
+            return $e;
+            return redirect()->back()->withError('Terjadi kesalahan. : ' . $e->getMessage());
+        }
+        catch(\Illuminate\Database\QueryException $e){
+            return $e;
+            return redirect()->back()->withError('Terjadi kesalahan pada database. : ' . $e->getMessage());
+        }
+    }
 }

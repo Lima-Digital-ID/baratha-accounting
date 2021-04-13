@@ -263,6 +263,9 @@
                 <a class="nav-link" href="{{url('penjualan/kartu-piutang')}}">
                   <span>Kartu Piutang</span>
                 </a>
+                <a class="nav-link" href="{{url('penjualan/laporan-penjualan-catering')}}">
+                  <span>Laporan Penjualan Catering</span>
+                </a>
               </div>
             </div>
           </li>

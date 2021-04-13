@@ -93,6 +93,11 @@ Route::group(['middleware' => ['auth:sanctum', 'verified']], function () {
         Route::get('kartu-piutang', 'PenjualanCateringController@kartuPiutang');
         Route::get('kartu-piutang/get', 'PenjualanCateringController@getKartuPiutang');
         Route::resource('hpp', 'HppController');
+        Route::group(['prefix' => 'laporan-penjualan-catering'], function(){
+            Route::get('/', 'PenjualanCateringController@reportPenjualanCatering');
+            Route::get('result', 'PenjualanCateringController@getReport')->name('laporan-penjualan-catering');
+            Route::get('print', 'PenjualanCateringController@printReport')->name('print-penjualan-catering');
+        });
     });
 
     Route::group(['prefix' => 'kas'], function () {
