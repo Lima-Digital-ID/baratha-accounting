@@ -36,8 +36,8 @@ class RekapHotelController extends Controller
             $json = $this->getRekap($_GET['tanggal']);
             $rekapHotel = new Rekap_hotel;
             $rekapHotel->tanggal = $_GET['tanggal'];
-            $rekapHotel->total = $json['total'];
-            $rekapHotel->total_ppn = $json['total_ppn'];
+            $rekapHotel->total = $json['data']['total'];
+            $rekapHotel->total_ppn = $json['data']['total_ppn'];
             $rekapHotel->save();
 
             // save jurnal penjualan
@@ -50,7 +50,7 @@ class RekapHotelController extends Controller
             $newJurnal->kode = '1101';
             $newJurnal->lawan = '4101';
             $newJurnal->tipe = 'Debet';
-            $newJurnal->nominal = $json['total'];
+            $newJurnal->nominal = $json['data']['total'];
             $newJurnal->id_detail = '';
             $newJurnal->save();
 

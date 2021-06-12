@@ -18,6 +18,14 @@
         </div>
     </div>
 </div>
+@if (session('status'))
+    <div class="alert alert-success alert-dismissible mt-3 fade show" role="alert">
+        {{ session('status') }}
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+@endif
 @if (session('error'))
     <div class="alert alert-danger alert-dismissible mt-3 fade show" role="alert">
         {{ session('error') }}
@@ -43,8 +51,8 @@
                     <tr>
                         <td>1</td>
                         <td>{{date('d-m-Y',strtotime($_GET['tanggal']))}}</td>
-                        <td>{{number_format($json['total'],0,',','.')}}</td>
-                        <td>{{number_format($json['total_ppn'],0,',','.')}}</td>
+                        <td>Rp{{number_format($json['data']['total'],2,',','.')}}</td>
+                        <td>Rp{{number_format($json['data']['total_ppn'],2,',','.')}}</td>
                         <td><a href="{{url('penjualan/rekap-resto/save?tanggal='.$_GET['tanggal'])}}" data-alert='Akan dilakukan penarikan data'  class="confirm-alert btn btn-default"><span class="fa fa-download"></span> Tarik Data</a></td>
                     </tr>
                 </tbody>
