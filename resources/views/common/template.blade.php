@@ -70,7 +70,7 @@
           <!-- Nav Item - Pages Collapse Menu -->
           <li class="nav-item {{Request::segment(1) == 'data-master' ? 'active' : ''}}">
             <a
-              class="nav-link collapsed"
+              class="nav-link {{Request::segment(1) == 'data-master' ? '' : 'collapsed'}}"
               href="#"
               data-toggle="collapse"
               data-target="#data-master"
@@ -82,7 +82,7 @@
             </a>
             <div
               id="data-master"
-              class="collapse"
+              class="collapse {{Request::segment(1) == 'data-master' ? 'show' : ''}}"
               aria-labelledby="headingTwo"
               data-parent="#accordionSidebar"
             >
@@ -99,7 +99,7 @@
 
           <li class="nav-item {{Request::segment(1) == 'master-akuntansi' ? 'active' : ''}}">
             <a
-              class="nav-link collapsed"
+              class="nav-link {{Request::segment(1) == 'master-akuntansi' ? '' : 'collapsed'}}"
               href="#"
               data-toggle="collapse"
               data-target="#master-akuntansi"
@@ -111,7 +111,7 @@
             </a>
             <div
               id="master-akuntansi"
-              class="collapse"
+              class="collapse {{Request::segment(1) == 'master-akuntansi' ? 'show' : ''}}"
               aria-labelledby="headingTwo"
               data-parent="#accordionSidebar"
             >
@@ -134,7 +134,7 @@
           
           <li class="nav-item {{Request::segment(1) == 'persediaan' ? 'active' : ''}}">
             <a
-              class="nav-link collapsed"
+              class="nav-link {{Request::segment(1) == 'persediaan' ? '' : 'collapsed'}}"
               href="#"
               data-toggle="collapse"
               data-target="#persediaan"
@@ -146,7 +146,7 @@
             </a>
             <div
               id="persediaan"
-              class="collapse"
+              class="collapse {{Request::segment(1) == 'persediaan' ? 'show' : ''}}"
               aria-labelledby="headingTwo"
               data-parent="#accordionSidebar"
             >
@@ -182,7 +182,7 @@
 
           <li class="nav-item {{Request::segment(1) == 'pembelian' ? 'active' : ''}}">
             <a
-              class="nav-link collapsed"
+              class="nav-link {{Request::segment(1) == 'pembelian' ? '' : 'collapsed'}}"
               href="#"
               data-toggle="collapse"
               data-target="#pembelian"
@@ -194,7 +194,7 @@
             </a>
             <div
               id="pembelian"
-              class="collapse"
+              class="collapse {{Request::segment(1) == 'pembelian' ? 'show' : ''}}"
               aria-labelledby="headingTwo"
               data-parent="#accordionSidebar"
             >
@@ -221,7 +221,7 @@
 
           <li class="nav-item {{Request::segment(1) == 'penjualan' ? 'active' : ''}}">
             <a
-              class="nav-link collapsed"
+              class="nav-link {{Request::segment(1) == 'penjualan' ? '' : 'collapsed'}}"
               href="#"
               data-toggle="collapse"
               data-target="#penjualan"
@@ -233,7 +233,7 @@
             </a>
             <div
               id="penjualan"
-              class="collapse"
+              class="collapse {{Request::segment(1) == 'penjualan' ? 'show' : ''}}"
               aria-labelledby="headingTwo"
               data-parent="#accordionSidebar"
             >
@@ -272,7 +272,7 @@
           
           <li class="nav-item {{Request::segment(1) == 'kas' ? 'active' : ''}}">
             <a
-              class="nav-link collapsed"
+              class="nav-link {{Request::segment(1) == 'kas' ? '' : 'collapsed'}}"
               href="#"
               data-toggle="collapse"
               data-target="#kas"
@@ -284,7 +284,7 @@
             </a>
             <div
               id="kas"
-              class="collapse"
+              class="collapse {{Request::segment(1) == 'kas' ? 'show' : ''}}"
               aria-labelledby="headingTwo"
               data-parent="#accordionSidebar"
             >
@@ -302,7 +302,7 @@
           
           <li class="nav-item {{Request::segment(1) == 'bank' ? 'active' : ''}}">
             <a
-              class="nav-link collapsed"
+              class="nav-link {{Request::segment(1) == 'bank' ? '' : 'collapsed'}}"
               href="#"
               data-toggle="collapse"
               data-target="#bank"
@@ -314,7 +314,7 @@
             </a>
             <div
               id="bank"
-              class="collapse"
+              class="collapse {{Request::segment(1) == 'bank' ? 'show' : ''}}"
               aria-labelledby="headingTwo"
               data-parent="#accordionSidebar"
             >
@@ -332,7 +332,7 @@
           
           <li class="nav-item {{Request::segment(1) == 'memorial' ? 'active' : ''}}">
             <a
-              class="nav-link collapsed"
+              class="nav-link {{Request::segment(1) == 'memorial' ? '' : 'collapsed'}}"
               href="#"
               data-toggle="collapse"
               data-target="#memorial"
@@ -344,7 +344,7 @@
             </a>
             <div
               id="memorial"
-              class="collapse"
+              class="collapse {{Request::segment(1) == 'memorial' ? 'show' : ''}}"
               aria-labelledby="headingTwo"
               data-parent="#accordionSidebar"
             >
@@ -362,7 +362,7 @@
 
           <li class="nav-item {{Request::segment(1) == 'general-ledger' ? 'active' : ''}}">
             <a
-              class="nav-link collapsed"
+              class="nav-link {{Request::segment(1) == 'general-ledger' ? '' : 'collapsed'}}"
               href="#"
               data-toggle="collapse"
               data-target="#general-ledger"
@@ -374,7 +374,7 @@
             </a>
             <div
               id="general-ledger"
-              class="collapse"
+              class="collapse {{Request::segment(1) == 'general-ledger' ? 'show' : ''}}"
               aria-labelledby="headingTwo"
               data-parent="#accordionSidebar"
             >
