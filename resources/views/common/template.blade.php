@@ -52,10 +52,7 @@
             class="sidebar-brand d-flex align-items-center justify-content-center"
             href="{{ url('/dashboard') }}"
           >
-            <div class="sidebar-brand-icon">
-              <i class="fa fa-calculator"></i>
-            </div>
-            <div class="sidebar-brand-text">Baratha Accounting </div>
+          <img src="{{asset('img/logo.png')}}" alt="" srcset="" width="130">
           </a>
 
           <!-- Nav Item - Dashboard -->
