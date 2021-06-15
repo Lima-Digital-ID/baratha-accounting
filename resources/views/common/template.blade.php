@@ -52,10 +52,7 @@
             class="sidebar-brand d-flex align-items-center justify-content-center"
             href="{{ url('/dashboard') }}"
           >
-            <div class="sidebar-brand-icon">
-              <i class="fa fa-calculator"></i>
-            </div>
-            <div class="sidebar-brand-text">Baratha Accounting </div>
+          <img src="{{asset('img/logo.png')}}" alt="" srcset="" width="130">
           </a>
 
           <!-- Nav Item - Dashboard -->
@@ -67,32 +64,32 @@
           </li>
 
           @if (auth()->user()->akses == 'Owner')
-            <li class="nav-item {{Request::segment(1) == 'data-master' ? 'active' : ''}}">
-              <a
-                class="nav-link collapsed"
-                href="#"
-                data-toggle="collapse"
-                data-target="#data-master"
-                aria-expanded="true"
-                aria-controls="data-master"
-              >
-              <i class="fas fa-fw fa-cog"></i>
-                <span>Data Master</span>
-              </a>
-              <div
-                id="data-master"
-                class="collapse"
-                aria-labelledby="headingTwo"
-                data-parent="#accordionSidebar"
-              >
-                <div class="py-2 collapse-inner rounded">
-                  <a class="nav-link" href="{{url('data-master/user')}}">
-                    <span>Manage User</span>
-                  </a>
-                  <a class="nav-link" href="{{url('data-master/perusahaan')}}">
-                    <span>Setup Perusahaan</span>
-                  </a>
-                </div>
+          <!-- Nav Item - Pages Collapse Menu -->
+          <li class="nav-item {{Request::segment(1) == 'data-master' ? 'active' : ''}}">
+            <a
+              class="nav-link {{Request::segment(1) == 'data-master' ? '' : 'collapsed'}}"
+              href="#"
+              data-toggle="collapse"
+              data-target="#data-master"
+              aria-expanded="true"
+              aria-controls="data-master"
+            >
+            <i class="fas fa-fw fa-cog"></i>
+              <span>Data Master</span>
+            </a>
+            <div
+              id="data-master"
+              class="collapse {{Request::segment(1) == 'data-master' ? 'show' : ''}}"
+              aria-labelledby="headingTwo"
+              data-parent="#accordionSidebar"
+            >
+              <div class="py-2 collapse-inner rounded">
+                <a class="nav-link" href="{{url('data-master/user')}}">
+                  <span>Manage User</span>
+                </a>
+                <a class="nav-link" href="{{url('data-master/perusahaan')}}">
+                  <span>Setup Perusahaan</span>
+                </a>
               </div>
             </li>
           @endif
@@ -101,7 +98,7 @@
           @if (auth()->user()->akses == 'Owner' || auth()->user()->akses == 'Accounting')
           <li class="nav-item {{Request::segment(1) == 'master-akuntansi' ? 'active' : ''}}">
             <a
-              class="nav-link collapsed"
+              class="nav-link {{Request::segment(1) == 'master-akuntansi' ? '' : 'collapsed'}}"
               href="#"
               data-toggle="collapse"
               data-target="#master-akuntansi"
@@ -113,7 +110,7 @@
             </a>
             <div
               id="master-akuntansi"
-              class="collapse"
+              class="collapse {{Request::segment(1) == 'master-akuntansi' ? 'show' : ''}}"
               aria-labelledby="headingTwo"
               data-parent="#accordionSidebar"
             >
@@ -137,7 +134,7 @@
           
           <li class="nav-item {{Request::segment(1) == 'persediaan' ? 'active' : ''}}">
             <a
-              class="nav-link collapsed"
+              class="nav-link {{Request::segment(1) == 'persediaan' ? '' : 'collapsed'}}"
               href="#"
               data-toggle="collapse"
               data-target="#persediaan"
@@ -149,7 +146,7 @@
             </a>
             <div
               id="persediaan"
-              class="collapse"
+              class="collapse {{Request::segment(1) == 'persediaan' ? 'show' : ''}}"
               aria-labelledby="headingTwo"
               data-parent="#accordionSidebar"
             >
@@ -186,7 +183,7 @@
           @if (auth()->user()->akses == 'Owner' || auth()->user()->akses == 'Accounting')
           <li class="nav-item {{Request::segment(1) == 'pembelian' ? 'active' : ''}}">
             <a
-              class="nav-link collapsed"
+              class="nav-link {{Request::segment(1) == 'pembelian' ? '' : 'collapsed'}}"
               href="#"
               data-toggle="collapse"
               data-target="#pembelian"
@@ -198,7 +195,7 @@
             </a>
             <div
               id="pembelian"
-              class="collapse"
+              class="collapse {{Request::segment(1) == 'pembelian' ? 'show' : ''}}"
               aria-labelledby="headingTwo"
               data-parent="#accordionSidebar"
             >
@@ -225,7 +222,7 @@
 
           <li class="nav-item {{Request::segment(1) == 'penjualan' ? 'active' : ''}}">
             <a
-              class="nav-link collapsed"
+              class="nav-link {{Request::segment(1) == 'penjualan' ? '' : 'collapsed'}}"
               href="#"
               data-toggle="collapse"
               data-target="#penjualan"
@@ -237,7 +234,7 @@
             </a>
             <div
               id="penjualan"
-              class="collapse"
+              class="collapse {{Request::segment(1) == 'penjualan' ? 'show' : ''}}"
               aria-labelledby="headingTwo"
               data-parent="#accordionSidebar"
             >
@@ -276,7 +273,7 @@
           
           <li class="nav-item {{Request::segment(1) == 'kas' ? 'active' : ''}}">
             <a
-              class="nav-link collapsed"
+              class="nav-link {{Request::segment(1) == 'kas' ? '' : 'collapsed'}}"
               href="#"
               data-toggle="collapse"
               data-target="#kas"
@@ -288,7 +285,7 @@
             </a>
             <div
               id="kas"
-              class="collapse"
+              class="collapse {{Request::segment(1) == 'kas' ? 'show' : ''}}"
               aria-labelledby="headingTwo"
               data-parent="#accordionSidebar"
             >
@@ -306,7 +303,7 @@
           
           <li class="nav-item {{Request::segment(1) == 'bank' ? 'active' : ''}}">
             <a
-              class="nav-link collapsed"
+              class="nav-link {{Request::segment(1) == 'bank' ? '' : 'collapsed'}}"
               href="#"
               data-toggle="collapse"
               data-target="#bank"
@@ -318,7 +315,7 @@
             </a>
             <div
               id="bank"
-              class="collapse"
+              class="collapse {{Request::segment(1) == 'bank' ? 'show' : ''}}"
               aria-labelledby="headingTwo"
               data-parent="#accordionSidebar"
             >
@@ -336,7 +333,7 @@
           
           <li class="nav-item {{Request::segment(1) == 'memorial' ? 'active' : ''}}">
             <a
-              class="nav-link collapsed"
+              class="nav-link {{Request::segment(1) == 'memorial' ? '' : 'collapsed'}}"
               href="#"
               data-toggle="collapse"
               data-target="#memorial"
@@ -348,7 +345,7 @@
             </a>
             <div
               id="memorial"
-              class="collapse"
+              class="collapse {{Request::segment(1) == 'memorial' ? 'show' : ''}}"
               aria-labelledby="headingTwo"
               data-parent="#accordionSidebar"
             >
@@ -366,7 +363,7 @@
 
           <li class="nav-item {{Request::segment(1) == 'general-ledger' ? 'active' : ''}}">
             <a
-              class="nav-link collapsed"
+              class="nav-link {{Request::segment(1) == 'general-ledger' ? '' : 'collapsed'}}"
               href="#"
               data-toggle="collapse"
               data-target="#general-ledger"
@@ -378,7 +375,7 @@
             </a>
             <div
               id="general-ledger"
-              class="collapse"
+              class="collapse {{Request::segment(1) == 'general-ledger' ? 'show' : ''}}"
               aria-labelledby="headingTwo"
               data-parent="#accordionSidebar"
             >

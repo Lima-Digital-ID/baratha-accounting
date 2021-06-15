@@ -12,32 +12,46 @@ use Illuminate\Support\Facades\Auth;
 
 class PiutangRestoController extends Controller
 {
-    public function getPiutang($kodePenjualan=null)
+    public function getPiutang()
     {
-        $kodePenjualan = $kodePenjualan!=null ? "?kode_penjualan=".$kodePenjualan : '/';
-        $url = urlApiResto()."piutang-resto".$kodePenjualan;
-        $json = json_decode(file_get_contents($url), true);
+        $json = '';
+     
+        $url = urlApiResto()."list-piutang-resto";
+     
+        $json = json_decode(file_get_contents($url));
+        return json_encode($json);
+    }
+
+    public function getPiutangByKode($kodeInvoice)
+    {
+        $url = urlApiResto()."piutang-resto".'/'.$kodeInvoice;
+
+        $json = file_get_contents($url);
         return $json;
     }
+
     public function index()
     {
         $this->param['pageInfo'] = 'Input Piutang Resto';
         $this->param['customer'] = Customer::select('kode_customer','nama')->get();
         $piutang = $this->getPiutang();
+        $piutang = json_decode($piutang, true);
         
-        $this->param['piutang']['data'] = [];
-        $this->param['piutang']['status'] = $piutang['status'];
-        foreach ($piutang['data'] as $key => $value) {
-            $cek = PenjualanLain::where('kode_penjualan',$value['kode_penjualan'])->count();
-            if($cek==0){
-                $arr = array(
-                    "kode_penjualan" => $value['kode_penjualan'],
-                    "nama_customer" => $value['nama_customer'],
-                    "total" => $value['total'],
-                    "total_ppn" => $value['total_ppn'],
-                    "waktu" => $value['waktu'],
-                );
-                array_push($this->param['piutang']['data'],$arr);
+        if($piutang['status']!='Kosong'){
+            $this->param['piutang']['data'] = [];
+            $this->param['piutang']['status'] = $piutang['status'];
+            foreach ($piutang['data'] as $key => $value) {
+                $cek = PenjualanLain::where('kode_penjualan',$value['kode_penjualan'])->count();
+                if($cek==0){
+                    $arr = array(
+                        "kode_penjualan" => $value['kode_penjualan'],
+                        "nama_customer" => $value['nama_customer'],
+                        "total" => $value['total'],
+                        "total_ppn" => $value['total_ppn'],
+                        "waktu" => $value['waktu'],
+                    );
+                    array_push($this->param['piutang']['data'],$arr);
+                }
             }
         }
 
@@ -46,18 +60,19 @@ class PiutangRestoController extends Controller
     public function store(Request $request)
     {
         try {
-            $piutang = $this->getPiutang($request->kode_penjualan)['data'][0];
-            $totalPpn = $piutang['total_ppn'];
-            $piutang['tanggal'] = date('Y-m-d', strtotime($piutang['waktu']));
+            $piutang = json_decode($this->getPiutangByKode($request->kode_penjualan), true);
+            $totalPpn = $piutang['data'][0]['total_ppn'];
+            
+            $piutang['tanggal'] = date('Y-m-d', strtotime($piutang['data'][0]['waktu']));
 
-            $total = $piutang['total'];
+            $total = $piutang['data'][0]['total'];
 
             $grandtotal = $total + $totalPpn;
 
             $newPenjualan = new PenjualanLain;
             $newPenjualan->kode_penjualan = $request->get('kode_penjualan');
             $newPenjualan->kode_customer = $request->get('kode_customer');
-            $newPenjualan->tanggal = $piutang['tanggal'];
+            $newPenjualan->tanggal = date('Y-m-d', strtotime($piutang['data'][0]['waktu']));
             $newPenjualan->status_ppn = 'Belum';
             $newPenjualan->jatuh_tempo = "0000-00-00";
             $newPenjualan->qty = 1;
@@ -83,7 +98,7 @@ class PiutangRestoController extends Controller
 
              // save jurnal penjualan
             $newJurnal = new Jurnal;
-            $newJurnal->tanggal = $piutang['tanggal'];
+            $newJurnal->tanggal = date('Y-m-d', strtotime($piutang['data'][0]['waktu']));
             $newJurnal->jenis_transaksi = 'Penjualan Catering';
             $newJurnal->kode_transaksi = $request->get('kode_penjualan');
             $newJurnal->keterangan = 'Penjualan Catering';
@@ -120,7 +135,7 @@ class PiutangRestoController extends Controller
             $kartuPiutang->tipe = 'Penjualan';
             $kartuPiutang->kode_transaksi = $request->get('kode_penjualan');
             $kartuPiutang->nominal = $grandtotal;
-            $kartuPiutang->tanggal = $piutang['tanggal'];
+            $kartuPiutang->tanggal = date('Y-m-d', strtotime($piutang['data'][0]['waktu']));
             $kartuPiutang->save();
 
             return redirect()->back()->withStatus('Data berhasil ditambahkan.');
