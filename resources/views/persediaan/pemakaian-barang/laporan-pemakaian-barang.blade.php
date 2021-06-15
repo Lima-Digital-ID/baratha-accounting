@@ -70,7 +70,7 @@
                 
                 <div class="col-md-4">
                     <label>Kode Biaya</label>
-                    <select name="kode_biaya" id="kode_biaya" class="form-control {{ $errors->has('kode_biaya') ? ' is-invalid' : '' }}">
+                    <select name="kode_biaya" id="kode_biaya" class="form-control select2 {{ $errors->has('kode_biaya') ? ' is-invalid' : '' }}">
                         <option value="">-- Semua Kode Biaya --</option>
                         @foreach ($kode_biaya as $item)
                             @if (isset($_GET['kode_biaya']))
@@ -91,7 +91,7 @@
 
                 <div class="col-md-4">
                     <label>Urutkan Berdasarkan</label>
-                    <select name="order" id="order" class="form-control {{ $errors->has('order') ? ' is-invalid' : '' }}">
+                    <select name="order" id="order" class="form-control select2 {{ $errors->has('order') ? ' is-invalid' : '' }}">
                         @if (isset($_GET['order']))
                         <option value="tanggal" {{ old('order', $_GET['order'] == 'tanggal' ? 'selected' : '') }} >Tanggal</option>
                         <option value="kode_barang" {{ old('order', $_GET['order'] == 'kode_barang' ? 'selected' : '') }} >Kode Barang</option>
@@ -110,8 +110,25 @@
 
                     <br>
                 </div>
-                <div class="col-md-4"></div>
-                <div class="d-flex pl-3 flex-wrap align-content-center justify-content-end">
+
+                <div class="col-md-4">
+                    <label>Keterangan</label>
+                    <select name="keterangan" id="keterangan" class="form-control select2 {{ $errors->has('keterangan') ? ' is-invalid' : '' }}">
+                        <option value="">-- Semua Keterangan --</option>
+                        @foreach ($keterangan as $item)
+                            <option value="{{$item->keterangan}}" {{ old('keterangan', $_GET['keterangan'] == $item->keterangan ? 'selected' : '') }} >{{$item->keterangan}}</option>
+                        @endforeach
+                    </select>
+                    @if ($errors->has('keterangan'))
+                        <span class="invalid-feedback" role="alert">
+                            <strong>{{ $errors->first('keterangan') }}</strong>
+                        </span>
+                    @endif
+
+                    <br>
+                </div>
+
+                <div class="col-md-4 mt-3">
                     <button type="submit" class="btn btn-primary"> <span class="fa fa-filter"></span> Filter</button>
                     <button type="reset" class="btn btn-default mx-2"> <span class="fa fa-times"></span> Cancel</button>
                 </div>
@@ -127,10 +144,10 @@
                     <h6 class="heading-small text-dark mb-3">Periode {{ \Request::get('start') }} s/d {{ \Request::get('end') }}</h6>
                 </div>
                 <div class="form-group mr-3">
-                    <a href="{{ route('print-pemakaian')."?start=$_GET[start]&end=$_GET[end]&kode_stok=$_GET[kode_stok]&kode_biaya=$_GET[kode_biaya]&order=$_GET[order]" }}" class="btn btn-primary btn-sm">
+                    <a href="{{ route('print-pemakaian')."?start=$_GET[start]&end=$_GET[end]&kode_stok=$_GET[kode_stok]&kode_biaya=$_GET[kode_biaya]&keterangan=$_GET[keterangan]&order=$_GET[order]" }}" target="_blank" class="btn btn-primary btn-sm">
                         <i class="fa fa-print" aria-hidden="true"></i> Cetak
                     </a>
-                    <a href="{{ route('print-pemakaian')."?start=$_GET[start]&end=$_GET[end]&kode_stok=$_GET[kode_stok]&kode_biaya=$_GET[kode_biaya]&order=$_GET[order]&xls=true" }}" class="btn btn-success btn-sm">
+                    <a href="{{ route('print-pemakaian')."?start=$_GET[start]&end=$_GET[end]&kode_stok=$_GET[kode_stok]&kode_biaya=$_GET[kode_biaya]&keterangan=$_GET[keterangan]&order=$_GET[order]&xls=true" }}" target="_blank" class="btn btn-success btn-sm">
                         <i class="fa fa-download"></i> Download xls
                     </a>
                 </div>

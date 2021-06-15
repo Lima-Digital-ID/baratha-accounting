@@ -56,6 +56,26 @@ class PembelianBarangController extends Controller
             $this->param['btnRight']['link'] = route('pembelian-barang.index');
             $this->param['supplier'] = Supplier::get();
             $this->param['barang'] = Barang::get();
+
+            $lastKode = PembelianBarang::select('kode_pembelian')
+            ->whereMonth('tanggal', date('m'))
+            ->whereYear('tanggal', date('Y'))
+            ->orderBy('kode_pembelian', 'desc')
+            ->skip(0)->take(1)
+            ->get();
+            if (count($lastKode) == 0) {
+                // $dateCreate = date('my');
+                $date = date('my');
+                $kode = "PB" . $date . "-0001";
+            } else {
+                $ex = explode('-', $lastKode[0]->kode_pembelian);
+                $no = (int)$ex[1] + 1;
+                $newNo = sprintf("%04s", $no);
+                $kode = $ex[0] . '-' . $newNo;
+            }
+
+            $this->param['kodePembelian'] = $kode;
+
         } catch (\Exception $e) {
             return redirect()->back()->withStatus('Terjadi kesalahan. : ' . $e->getMessage());
         }

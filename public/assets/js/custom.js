@@ -1,15 +1,29 @@
 $(document).ready(function() {
     // $(".datatable").DataTable();
+
+    var d = new Date();
+    var currDate = d.getDate();
+    var currMonth = d.getMonth();
+    var currYear = d.getFullYear();
+    var startDate = new Date(currYear, currMonth, currDate);
+
+    
     $(function () {
         $('[data-toggle="tooltip"]').tooltip()
-    })    
+    });
+
     $(".select2").select2();
+
     $(".datepicker").datepicker({
         format: "yyyy-mm-dd"
     });
+
+    $(".datepicker").datepicker("setDate", startDate);
+
     $(".datepickerDate").datepicker({
         format: "yyyy-mm-dd",
     });
+
     $("form").submit(function() {
         $(".loading").addClass("show");
     });
@@ -108,6 +122,11 @@ $(document).ready(function() {
                 $(".getSubtotal").keyup(function() {
                     getSubtotal($(this));
                 });
+                
+                $(".getHargaSatuan").keyup(function() {
+                    getSubtotal($(this));
+                });
+
                 $('.kode_barang').change(function () { 
                     kodeBarang($(this))
                 });
@@ -210,7 +229,7 @@ $(document).ready(function() {
         var totalQty = 0;
         $(".getTotalQty").each(function() {
             var getQty = parseFloat($(this).val());
-            console.log(getQty);
+            // console.log(getQty);
             getQty = isNaN(getQty) ? 0 : getQty;
             totalQty += getQty;
         });
@@ -221,9 +240,13 @@ $(document).ready(function() {
         getSubtotal($(this));        
     });
     
+    $(".getHargaSatuan").keyup(function() {
+        getHargaSatuan($(this));        
+    });
+    
     $(".getTotalQty").keyup(function() {
         getTotalQty($(this));
-        console.log($(this).val())
+        // console.log($(this).val())
     });
 
     function kodeBarang(thisParam){

@@ -50,7 +50,7 @@
                             <td>{{$value->name}}</td>
                             <td>{{$value->username}}</td>
                             <td>{{$value->email}}</td>
-                            <td>{{$value->akses}}</td>
+                            <td>{{$value->akses == 'Gudang' ? 'Admin Gudang' : $value->akses}}</td>
                             <td>
                                 {{-- <div class="dropdown dropdown-link">
                                     <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">

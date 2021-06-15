@@ -63,7 +63,7 @@
             >
           </li>
 
-
+          @if (auth()->user()->akses == 'Owner')
           <!-- Nav Item - Pages Collapse Menu -->
           <li class="nav-item {{Request::segment(1) == 'data-master' ? 'active' : ''}}">
             <a
@@ -91,9 +91,11 @@
                   <span>Setup Perusahaan</span>
                 </a>
               </div>
-            </div>
-          </li>
-
+            </li>
+          @endif
+          <!-- Nav Item - Pages Collapse Menu -->
+          
+          @if (auth()->user()->akses == 'Owner' || auth()->user()->akses == 'Accounting')
           <li class="nav-item {{Request::segment(1) == 'master-akuntansi' ? 'active' : ''}}">
             <a
               class="nav-link {{Request::segment(1) == 'master-akuntansi' ? '' : 'collapsed'}}"
@@ -128,6 +130,7 @@
               </div>
             </div>
           </li>
+          @endif
           
           <li class="nav-item {{Request::segment(1) == 'persediaan' ? 'active' : ''}}">
             <a
@@ -177,6 +180,7 @@
             </div>
           </li>
 
+          @if (auth()->user()->akses == 'Owner' || auth()->user()->akses == 'Accounting')
           <li class="nav-item {{Request::segment(1) == 'pembelian' ? 'active' : ''}}">
             <a
               class="nav-link {{Request::segment(1) == 'pembelian' ? '' : 'collapsed'}}"
@@ -250,9 +254,9 @@
                 <a class="nav-link" href="{{url('penjualan/piutang-resto')}}">
                   <span>Piutang Resto</span>
                 </a>
-                <a class="nav-link" href="{{url('penjualan/hpp')}}">
+                {{-- <a class="nav-link" href="{{url('penjualan/hpp')}}">
                   <span>Input HPP</span>
-                </a>
+                </a> --}}
                 <a class="nav-link" href="{{url('penjualan/penjualan-jatuh-tempo')}}">
                   <span>Penjualan Jatuh Tempo</span>
                 </a>
@@ -391,13 +395,16 @@
               </div>
             </div>
           </li>
+          @endif
 
+          @if (auth()->user()->akses == 'Owner')
           <li class="nav-item {{Request::segment(1) == 'log/log-activity' ? 'active' : ''}}">
             <a class="nav-link" href="{{url('log/log-activity')}}">
               <i class="fas fa-fw fa-history"></i>
               <span>Log Activity</span></a
             >
           </li>
+          @endif
           
           <!-- Sidebar Toggler (Sidebar) -->
           <div class="text-center d-none d-md-inline">

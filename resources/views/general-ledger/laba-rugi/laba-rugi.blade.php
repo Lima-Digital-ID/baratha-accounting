@@ -136,15 +136,15 @@
                 </tr>
               </thead>
               {{-- Harga Pokok Penjualan --}}
-              <thead>
+              {{-- <thead>
                 <tr>
                   <th>Harga Pokok Penjualan</th>
                   <th>({{number_format($hpp, 2, ',', '.')}})</th>
                 </tr>
-              </thead>
+              </thead> --}}
               {{-- laba rugi kotor  --}}
               @php
-                  $labaRugiKotor = $totalPenjualan - $hpp;
+                  $labaRugiKotor = $totalPenjualan;
               @endphp
               <thead>
                 <tr>
