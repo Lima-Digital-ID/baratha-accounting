@@ -16,11 +16,16 @@
         </button>
     </div>
 @endif
-@if($piutang['status']!='Success')
+@if($piutang['status']!='Success' && $piutang['status']!='Kosong')
 <div class="alert alert-danger">
     <b>Gagal Mengambil Data</b>
 </div>
 @else
+@if($piutang['status']=='Kosong')
+<div class="alert alert-info">
+    <b>Data belum tersedia</b>
+</div>
+@endif
 <div class="table-responsive">
     <table class="table table-custom">
         <thead>

@@ -37,7 +37,7 @@ class PiutangRestoController extends Controller
         $piutang = $this->getPiutang();
         $piutang = json_decode($piutang, true);
         
-        if($piutang['status']!='Kosong'){
+        if($piutang['status'] != 'Kosong'){
             $this->param['piutang']['data'] = [];
             $this->param['piutang']['status'] = $piutang['status'];
             foreach ($piutang['data'] as $key => $value) {
@@ -53,6 +53,9 @@ class PiutangRestoController extends Controller
                     array_push($this->param['piutang']['data'],$arr);
                 }
             }
+        }
+        else {
+            $this->param['piutang'] = $piutang;
         }
 
         return view('penjualan.piutang-resto.input-piutang-resto', $this->param);

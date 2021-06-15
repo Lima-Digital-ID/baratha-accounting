@@ -56,7 +56,7 @@
                                         <a href="{{ route('kunci-transaksi.edit', $value) }}" class="dropdown-item">{{ __('Edit') }}</a>
                                     </div>
                                 </div> --}}
-                                <a href="{{ route('kode-transaksi.edit', $value) }}" class="btn btn-success mr-2"> <span class="fa fa-pen"></span> </a>
+                                <a href="{{ route('kunci-transaksi.edit', $value) }}" class="btn btn-success mr-2"> <span class="fa fa-pen"></span> </a>
                             </td>
                         </tr>
                         @php
