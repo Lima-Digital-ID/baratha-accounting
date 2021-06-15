@@ -27,7 +27,7 @@
             <div class="row">
                 <div class="col-md-4">
                     <label>Kode Pembelian</label>
-                    <input type="text" id="kode" class="form-control {{ $errors->has('kode_pembelian') ? ' is-invalid' : '' }}" value="{{ old('kode_pembelian') }}" name="kode_pembelian" placeholder="Kode Pembelian" readonly>
+                    <input type="text" id="kode" class="form-control {{ $errors->has('kode_pembelian') ? ' is-invalid' : '' }}" value="{{ old('kode_pembelian', $kodePembelian) }}" name="kode_pembelian" placeholder="Kode Pembelian" readonly>
                     @if ($errors->has('kode_pembelian'))
                         <span class="invalid-feedback" role="alert">
                             <strong>{{ $errors->first('kode_pembelian') }}</strong>

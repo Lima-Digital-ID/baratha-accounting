@@ -25,7 +25,7 @@
       @csrf
       @method('put')
       <label>Nama</label>
-      <input type="text" class="form-control {{ $errors->has('name') ? ' is-invalid' : '' }}" value="{{ old('name', $user->name) }}" autofocus name="name" placeholder="ex : Anthony Davis">
+      <input type="text" class="form-control {{ $errors->has('name') ? ' is-invalid' : '' }}" value="{{ old('name', $user->name) }}" autofocus name="name" placeholder="Nama User">
       @if ($errors->has('name'))
           <span class="invalid-feedback" role="alert">
               <strong>{{ $errors->first('name') }}</strong>
@@ -35,7 +35,7 @@
       <br>
 
       <label>Username</label>
-      <input type="text" class="form-control {{ $errors->has('username') ? ' is-invalid' : '' }}" value="{{ old('username', $user->username) }}" autofocus name="username" placeholder="ex : Anthony Davis" readonly>
+      <input type="text" class="form-control {{ $errors->has('username') ? ' is-invalid' : '' }}" value="{{ old('username', $user->username) }}" name="username" placeholder="ex : Anthony Davis" readonly>
       @if ($errors->has('username'))
           <span class="invalid-feedback" role="alert">
               <strong>{{ $errors->first('username') }}</strong>
@@ -57,10 +57,9 @@
       <label for="">Akses</label>
       <select name="akses" id="akses" class="form-control select2 {{ $errors->has('akses') ? ' is-invalid' : '' }}">
         <option value="">--Pilih Akses--</option>
-        <option value="Akuntan" {{old('akses', $user->akses) == 'Akuntan' ? 'selected' : ''}} >Akuntan</option>
-        <option value="Persediaan" {{old('akses', $user->akses) == 'Persediaan' ? 'selected' : ''}} >Persediaan</option>
-        <option value="Pembelian" {{old('akses', $user->akses) == 'Pembelian' ? 'selected' : ''}} >Pembelian</option>
-        <option value="Super Admin" {{old('akses', $user->akses) == 'Super Admin' ? 'selected' : ''}} >Super Admin</option>
+        <option value="Accounting" {{old('akses', $user->akses) == 'Accounting' ? 'selected' : ''}} >Accounting</option>
+        <option value="Gudang" {{old('akses', $user->akses) == 'Gudang' ? 'selected' : ''}} >Admin Gudang</option>
+        <option value="Owner" {{old('akses', $user->akses) == 'Owner' ? 'selected' : ''}} >Owner</option>
       </select>
       @if ($errors->has('akses'))
           <span class="invalid-feedback" role="alert">

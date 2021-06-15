@@ -40,6 +40,25 @@ class PenjualanCateringController extends Controller
             $this->param['btnRight']['text'] = 'Lihat Data';
             $this->param['btnRight']['link'] = route('penjualan-catering.index');
             $this->param['customer'] = Customer::get();
+
+            $lastKode = PenjualanLain::select('kode_penjualan')
+            ->whereMonth('tanggal', date('m'))
+            ->whereYear('tanggal', date('Y'))
+            ->orderBy('kode_penjualan', 'desc')
+            ->skip(0)->take(1)
+            ->get();
+            if (count($lastKode) == 0) {
+                // $dateCreate = date_create($_GET['tanggal']);
+                $date = date('my');
+                $kode = "PJ" . $date . "-0001";
+            } else {
+                $ex = explode('-', $lastKode[0]->kode_penjualan);
+                $no = (int)$ex[1] + 1;
+                $newNo = sprintf("%04s", $no);
+                $kode = $ex[0] . '-' . $newNo;
+            }
+            $this->param['kodePenjualan'] = $kode;
+
         } catch (\Exception $e) {
             return redirect()->back()->withStatus('Terjadi kesalahan. : ' . $e->getMessage());
         }

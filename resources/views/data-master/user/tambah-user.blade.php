@@ -24,7 +24,7 @@
     <form action="{{ route('user.store') }}" method="POST">
       @csrf
       <label>Nama</label>
-      <input type="text" class="form-control {{ $errors->has('name') ? ' is-invalid' : '' }}" value="{{ old('name') }}" autofocus name="name" placeholder="ex : Anthony Davis">
+      <input type="text" class="form-control {{ $errors->has('name') ? ' is-invalid' : '' }}" value="{{ old('name') }}" autofocus name="name" placeholder="Nama User">
       @if ($errors->has('name'))
           <span class="invalid-feedback" role="alert">
               <strong>{{ $errors->first('name') }}</strong>
@@ -34,7 +34,7 @@
       <br>
 
       <label>Username</label>
-      <input type="text" class="form-control {{ $errors->has('username') ? ' is-invalid' : '' }}" value="{{ old('username') }}" autofocus name="username" placeholder="ex : Anthony Davis">
+      <input type="text" class="form-control {{ $errors->has('username') ? ' is-invalid' : '' }}" value="{{ old('username') }}" autofocus name="username" placeholder="Username">
       @if ($errors->has('username'))
           <span class="invalid-feedback" role="alert">
               <strong>{{ $errors->first('username') }}</strong>
@@ -44,7 +44,7 @@
       <br>
 
       <label>Email</label>
-      <input type="email" class="form-control {{ $errors->has('email') ? ' is-invalid' : '' }}" value="{{ old('email') }}" name="email" placeholder="ex : anthonydavis@mail.test">
+      <input type="email" class="form-control {{ $errors->has('email') ? ' is-invalid' : '' }}" value="{{ old('email') }}" name="email" placeholder="Email">
       @if ($errors->has('email'))
           <span class="invalid-feedback" role="alert">
               <strong>{{ $errors->first('email') }}</strong>
@@ -76,10 +76,9 @@
       <label for="">Akses</label>
       <select name="akses" id="akses" class="form-control select2 {{ $errors->has('akses') ? ' is-invalid' : '' }}">
         <option value="">--Pilih Akses--</option>
-        <option value="Akuntan" {{old('akses') == 'Akuntan' ? 'selected' : ''}} >Akuntan</option>
-        <option value="Persediaan" {{old('akses') == 'Persediaan' ? 'selected' : ''}} >Persediaan</option>
-        <option value="Pembelian" {{old('akses') == 'Pembelian' ? 'selected' : ''}} >Pembelian</option>
-        <option value="Super Admin" {{old('akses') == 'Super Admin' ? 'selected' : ''}} >Super Admin</option>
+        <option value="Accounting" {{old('akses') == 'Accounting' ? 'selected' : ''}} >Accounting</option>
+        <option value="Gudang" {{old('akses') == 'Gudang' ? 'selected' : ''}} >Admin Gudang</option>
+        <option value="Owner" {{old('akses') == 'Owner' ? 'selected' : ''}} >Owner</option>
       </select>
       @if ($errors->has('akses'))
           <span class="invalid-feedback" role="alert">

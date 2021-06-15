@@ -79,12 +79,12 @@ class LabaRugiController extends Controller
                 
                 $this->param['rekeningPajak'] = KodeRekening::select('kode_rekening', 'nama', 'saldo_awal', 'tipe')->where('kode_rekening', 'LIKE', '6%')->orderBy('kode_rekening', 'ASC')->get();
 
-                if (count($this->param['hpp']) == 0) {
-                    return redirect('/general-ledger/laba-rugi')->withStatus('Hpp Bulan Tersebut Belum Diinput.');
-                }
-                else{
-                    $this->param['hpp'] =  $this->param['hpp'][0]->nominal;
-                }
+                // if (count($this->param['hpp']) == 0) {
+                //     return redirect('/general-ledger/laba-rugi')->withStatus('Hpp Bulan Tersebut Belum Diinput.');
+                // }
+                // else{
+                //     $this->param['hpp'] =  $this->param['hpp'][0]->nominal;
+                // }
 
                 $this->param['month'] = $month;
                 $this->param['year'] = $year;

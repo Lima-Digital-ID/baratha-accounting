@@ -66,37 +66,39 @@
             >
           </li>
 
-
-          <!-- Nav Item - Pages Collapse Menu -->
-          <li class="nav-item {{Request::segment(1) == 'data-master' ? 'active' : ''}}">
-            <a
-              class="nav-link collapsed"
-              href="#"
-              data-toggle="collapse"
-              data-target="#data-master"
-              aria-expanded="true"
-              aria-controls="data-master"
-            >
-            <i class="fas fa-fw fa-cog"></i>
-              <span>Data Master</span>
-            </a>
-            <div
-              id="data-master"
-              class="collapse"
-              aria-labelledby="headingTwo"
-              data-parent="#accordionSidebar"
-            >
-              <div class="py-2 collapse-inner rounded">
-                <a class="nav-link" href="{{url('data-master/user')}}">
-                  <span>Manage User</span>
-                </a>
-                <a class="nav-link" href="{{url('data-master/perusahaan')}}">
-                  <span>Setup Perusahaan</span>
-                </a>
+          @if (auth()->user()->akses == 'Owner')
+            <li class="nav-item {{Request::segment(1) == 'data-master' ? 'active' : ''}}">
+              <a
+                class="nav-link collapsed"
+                href="#"
+                data-toggle="collapse"
+                data-target="#data-master"
+                aria-expanded="true"
+                aria-controls="data-master"
+              >
+              <i class="fas fa-fw fa-cog"></i>
+                <span>Data Master</span>
+              </a>
+              <div
+                id="data-master"
+                class="collapse"
+                aria-labelledby="headingTwo"
+                data-parent="#accordionSidebar"
+              >
+                <div class="py-2 collapse-inner rounded">
+                  <a class="nav-link" href="{{url('data-master/user')}}">
+                    <span>Manage User</span>
+                  </a>
+                  <a class="nav-link" href="{{url('data-master/perusahaan')}}">
+                    <span>Setup Perusahaan</span>
+                  </a>
+                </div>
               </div>
-            </div>
-          </li>
-
+            </li>
+          @endif
+          <!-- Nav Item - Pages Collapse Menu -->
+          
+          @if (auth()->user()->akses == 'Owner' || auth()->user()->akses == 'Accounting')
           <li class="nav-item {{Request::segment(1) == 'master-akuntansi' ? 'active' : ''}}">
             <a
               class="nav-link collapsed"
@@ -131,6 +133,7 @@
               </div>
             </div>
           </li>
+          @endif
           
           <li class="nav-item {{Request::segment(1) == 'persediaan' ? 'active' : ''}}">
             <a
@@ -180,6 +183,7 @@
             </div>
           </li>
 
+          @if (auth()->user()->akses == 'Owner' || auth()->user()->akses == 'Accounting')
           <li class="nav-item {{Request::segment(1) == 'pembelian' ? 'active' : ''}}">
             <a
               class="nav-link collapsed"
@@ -253,9 +257,9 @@
                 <a class="nav-link" href="{{url('penjualan/piutang-resto')}}">
                   <span>Piutang Resto</span>
                 </a>
-                <a class="nav-link" href="{{url('penjualan/hpp')}}">
+                {{-- <a class="nav-link" href="{{url('penjualan/hpp')}}">
                   <span>Input HPP</span>
-                </a>
+                </a> --}}
                 <a class="nav-link" href="{{url('penjualan/penjualan-jatuh-tempo')}}">
                   <span>Penjualan Jatuh Tempo</span>
                 </a>
@@ -394,13 +398,16 @@
               </div>
             </div>
           </li>
+          @endif
 
+          @if (auth()->user()->akses == 'Owner')
           <li class="nav-item {{Request::segment(1) == 'log/log-activity' ? 'active' : ''}}">
             <a class="nav-link" href="{{url('log/log-activity')}}">
               <i class="fas fa-fw fa-history"></i>
               <span>Log Activity</span></a
             >
           </li>
+          @endif
           
           <!-- Sidebar Toggler (Sidebar) -->
           <div class="text-center d-none d-md-inline">
