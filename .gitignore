@@ -10,3 +10,6 @@ Homestead.json
 Homestead.yaml
 npm-debug.log
 yarn-error.log
+run-server.bat
+config/app.php
+app/Helpers/helpers.php
