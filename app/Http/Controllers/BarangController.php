@@ -50,6 +50,20 @@ class BarangController extends Controller
             $this->param['btnRight']['text'] = 'Lihat Data';
             $this->param['btnRight']['link'] = route('barang.index');
             $this->param['kategoriBarang'] = KategoriBarang::get();
+            $kodeBarang = null;
+            $data = Barang::orderBy('kode_barang', 'DESC')->get();
+
+            if($data->count() > 0){
+                $lastkodeBarang = $data[0]->kode_barang;
+    
+                $lastIncrement = substr($lastkodeBarang, 2);
+    
+                $kodeBarang = 'BR'.str_pad($lastIncrement + 1, 5, 0, STR_PAD_LEFT);
+            }
+            else{
+                $kodeBarang = "BR00001";
+            }
+            $this->param['kode_barang'] = $kodeBarang;
         } catch (\Exception $e) {
             return redirect()->back()->withStatus('Terjadi kesalahan. : '. $e->getMessage());
         }

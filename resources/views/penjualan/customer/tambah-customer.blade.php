@@ -24,7 +24,7 @@
     <form action="{{ route('customer.store') }}" method="POST">
       @csrf
       <label>Kode Customer</label>
-      <input type="text" class="form-control {{ $errors->has('kode_customer') ? ' is-invalid' : '' }}" value="{{ old('kode_customer') }}" autofocus name="kode_customer" placeholder="ex : Customer 1">
+      <input type="text" class="form-control {{ $errors->has('kode_customer') ? ' is-invalid' : '' }}" value="{{ old('kode_customer', $kode_customer) }}" autofocus name="kode_customer" placeholder="ex : Customer 1" readonly>
       @if ($errors->has('kode_customer'))
           <span class="invalid-feedback" role="alert">
               <strong>{{ $errors->first('kode_customer') }}</strong>

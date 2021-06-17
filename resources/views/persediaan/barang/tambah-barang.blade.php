@@ -25,7 +25,7 @@
       @csrf
 
       <label>Kode Barang</label>
-      <input type="text" id="kode_barang" class="form-control {{ $errors->has('kode_barang') ? ' is-invalid' : '' }}" value="{{ old('kode_barang') }}" autofocus name="kode_barang" placeholder="Kode Barang">
+      <input type="text" id="kode_barang" class="form-control {{ $errors->has('kode_barang') ? ' is-invalid' : '' }}" value="{{ old('kode_barang', $kode_barang) }}" autofocus name="kode_barang" placeholder="Kode Barang" readonly>
       @if ($errors->has('kode_barang'))
           <span class="invalid-feedback" role="alert">
               <strong>{{ $errors->first('kode_barang') }}</strong>

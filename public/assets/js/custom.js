@@ -124,7 +124,8 @@ $(document).ready(function() {
                 });
                 
                 $(".getHargaSatuan").keyup(function() {
-                    getSubtotal($(this));
+                    // getSubtotal($(this));
+                    getHargaSatuan($(this));
                 });
 
                 $('.kode_barang').change(function () { 
@@ -191,8 +192,17 @@ $(document).ready(function() {
         var other = parseFloat($(parent + " " + thisParam.data("other")).val());
         // console.log(other);
         other = isNaN(other) ? 0 : other;
-        var subtotal = thisval * other;
-        $(parent + " " + ".subtotal").val(subtotal);
+        
+        var subtotal = $(parent + " " + ".getSubtotal").val();
+        var qty = $(parent + " " + ".getTotalQty").val();
+        
+        var harga_satuan = subtotal / qty;
+        
+        $(parent + " " +".harga_satuan").val(harga_satuan);
+        // console.log('parent : ' + parent + " " + ".harga_satuan");
+        // console.log('subtotal : ' + subtotal);
+        // console.log('qty : ' + qty);
+        // console.log('harga satuan : ' + harga_satuan);
         getTotal();
     }
 
@@ -203,11 +213,13 @@ $(document).ready(function() {
             subtotalVal = isNaN(subtotalVal) ? 0 : subtotalVal;
             total = total + subtotalVal;
         });
+        console.log('getTotal : ' + total);
         $("#total").html(new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR' }).format(total));
         getTotalPpn(total)
     }
 
     function getTotalPpn(total) {
+        console.log('getTotalPpn : ' + total);
         let statusPpn = $('#status_ppn').val();
         let totalPpn = 0;
         if (statusPpn == 'Tanpa') {
@@ -237,16 +249,19 @@ $(document).ready(function() {
     }
 
     $(".getSubtotal").keyup(function() {
-        getSubtotal($(this));        
+        getSubtotal($(this));
+        console.log('subtotal: ' + $(this).val());     
     });
     
     $(".getHargaSatuan").keyup(function() {
-        getHargaSatuan($(this));        
+        // getHargaSatuan($(this));        
+        console.log('getHargaSatuan');        
     });
     
     $(".getTotalQty").keyup(function() {
         getTotalQty($(this));
         // console.log($(this).val())
+        console.log('getTotalQty');        
     });
 
     function kodeBarang(thisParam){

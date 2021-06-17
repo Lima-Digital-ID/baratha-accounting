@@ -29,6 +29,7 @@ class CustomerController extends Controller
             }
             else{
                 $customer = Customer::paginate(10);
+                // return $customer;
             }
         } catch (\Illuminate\Database\QueryException $e) {
             return redirect()->back()->withStatus('Terjadi Kesalahan');
@@ -42,6 +43,20 @@ class CustomerController extends Controller
         $this->param['pageInfo'] = 'Manage Customer / Tambah Data';
         $this->param['btnRight']['text'] = 'Lihat Data';
         $this->param['btnRight']['link'] = route('customer.index');
+        $kodeCustomer = null;
+        $data = Customer::orderBy('kode_customer', 'DESC')->get();
+
+        if($data->count() > 0){
+            $lastkodeCustomer = $data[0]->kode_customer;
+
+            $lastIncrement = substr($lastkodeCustomer, 3);
+
+            $kodeCustomer = 'CST'.str_pad($lastIncrement + 1, 4, 0, STR_PAD_LEFT);
+        }
+        else{
+            $kodeCustomer = "CST0001";
+        }
+        $this->param['kode_customer'] = $kodeCustomer;
 
         return \view('penjualan.customer.tambah-customer', $this->param);
     }
@@ -140,6 +155,7 @@ class CustomerController extends Controller
             return redirect()->route('customer.index')->withError('Terjadi kesalahan : '. $e->getMessage());
         }
         catch(\Illuminate\Database\QueryException $e){
+            return $e->getMessage();
             return redirect()->route('customer.index')->withError('Terjadi kesalahan pada database : '. $e->getMessage());
         }
     }

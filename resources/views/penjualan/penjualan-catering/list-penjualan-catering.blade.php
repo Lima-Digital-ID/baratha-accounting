@@ -84,6 +84,9 @@
                                             <span class="fa fa-minus-circle"></span>
                                         </button>
                                     </form>
+                                    <a href="{{ route('print-invoice-catering')."?kode_penjualan=$value->kode_penjualan" }}" class="btn btn-info ml-2">
+                                        <span class="fa fa-print" aria-hidden="true"></span>
+                                    </a>
                                 </div>
                             </td>
                         </tr>

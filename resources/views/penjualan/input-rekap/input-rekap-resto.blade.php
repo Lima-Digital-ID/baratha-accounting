@@ -35,7 +35,10 @@
     </div>
 @endif
 @if (isset($_GET['tanggal']))
-    @if(isset($json))
+    @if(isset($json)  && $json['message'] != 'Kosong')
+        <div class="alert alert-success font-weight-bold mt-3">
+            Rekap pada tanggal {{date('d-m-Y',strtotime($_GET['tanggal']))}} sudah dilakukan.
+        </div>
         <div class="table-responsive">
             <table class="table table-custom">
                 <thead>
@@ -59,8 +62,8 @@
             </table>
         </div>
     @else
-    <div class="alert alert-success font-weight-bold mt-3">
-        Rekap pada tanggal {{date('d-m-Y',strtotime($_GET['tanggal']))}} sudah dilakukan.
+    <div class="alert alert-info font-weight-bold mt-3">
+        Tidak ada rekap data pada {{ $_GET['tanggal'] }}.
     </div>
     @endif
 

@@ -97,6 +97,7 @@ Route::group(['middleware' => ['auth:sanctum', 'verified']], function () {
             Route::get('/', 'PenjualanCateringController@reportPenjualanCatering');
             Route::get('result', 'PenjualanCateringController@getReport')->name('laporan-penjualan-catering');
             Route::get('print', 'PenjualanCateringController@printReport')->name('print-penjualan-catering');
+            Route::get('print-invoice', 'PenjualanCateringController@printInvoice')->name('print-invoice-catering');
         });
     });
 

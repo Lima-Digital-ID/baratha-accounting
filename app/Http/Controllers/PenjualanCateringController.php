@@ -455,4 +455,24 @@ class PenjualanCateringController extends Controller
             return redirect()->back()->withError('Terjadi kesalahan pada database. : ' . $e->getMessage());
         }
     }
+
+    public function printInvoice(Request $request)
+    {
+        try {            
+            $this->param['report'] = PenjualanLain::select('penjualan_lain.*', 'c.kode_customer', 'c.nama')
+                                                    ->join('customer AS c', 'c.kode_customer', 'penjualan_lain.kode_customer')
+                                                    ->where('penjualan_lain.kode_penjualan', $request->get('kode_penjualan'))
+                                                    ->first();
+
+            // return $this->param['report'];
+            return \view('penjualan.penjualan-catering.print-invoice-catering', $this->param);
+        } catch (\Exception $e) {
+            return $e;
+            return redirect()->back()->withError('Terjadi kesalahan. : ' . $e->getMessage());
+        }
+        catch(\Illuminate\Database\QueryException $e){
+            return $e;
+            return redirect()->back()->withError('Terjadi kesalahan pada database. : ' . $e->getMessage());
+        }
+    }
 }
