@@ -572,6 +572,7 @@
     <script src="{{ asset('js/custom.js') }}"></script>
     <script>
       const tel = document.getElementById('kode_rekening');
+      if(tel!=null){
 
       tel.addEventListener('input', function() {
         let start = this.selectionStart;
@@ -584,6 +585,7 @@
         if (corrected.length < current.length) --end;
         this.setSelectionRange(start, end);
       });
+      }
     </script>
   </body>
 </html>

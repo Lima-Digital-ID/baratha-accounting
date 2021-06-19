@@ -70,7 +70,7 @@
                 
                 <div class="col-md-4">
                     <label>Statun PPN</label>
-                    <select name="status_ppn" id="status_ppn" class="form-control {{ $errors->has('status_ppn') ? ' is-invalid' : '' }}" disabled>
+                    <select name="status_ppn" id="status_ppn" class="form-control status_ppn_catering {{ $errors->has('status_ppn') ? ' is-invalid' : '' }}" disabled>
                         <option value="Tanpa" {{old('status_ppn', $penjualan->status_ppn) == 'Tanpa' ? 'selected' : ''}} >Tanpa</option>
                         <option value="Belum" {{old('status_ppn', $penjualan->status_ppn) == 'Belum' ? 'selected' : ''}} >Belum</option>
                         <option value="Sudah" {{old('status_ppn', $penjualan->status_ppn) == 'Sudah' ? 'selected' : ''}} >Sudah</option>
@@ -101,7 +101,7 @@
             <div class="row">
                 <div class="col-md-4">
                     <label>Quantity</label>
-                    <input type="number" step=".01" class="form-control getTotalCatering getTotalQty {{ $errors->has('qty') ? ' is-invalid' : '' }}" value="{{ old('qty', $penjualan->qty) }}" name="qty" placeholder="Quantity" data-other='#harga_satuan' id='qty'>
+                    <input type="number" step=".01" class="form-control getTotalCatering {{ $errors->has('qty') ? ' is-invalid' : '' }}" value="{{ old('qty', $penjualan->qty) }}" name="qty" placeholder="Quantity" data-other='#harga_satuan' id='qty'>
                     @if ($errors->has('qty'))
                         <span class="invalid-feedback" role="alert">
                             <strong>{{ $errors->first('qty') }}</strong>

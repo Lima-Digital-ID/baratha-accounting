@@ -475,4 +475,12 @@ class PenjualanCateringController extends Controller
             return redirect()->back()->withError('Terjadi kesalahan pada database. : ' . $e->getMessage());
         }
     }
+    
+    public function getTtlPiutang()
+    {
+        $ttl = PenjualanLain::selectRaw('sum(grandtotal-terbayar) as ttl')->where('kode_customer',$_GET['kode'])->whereRaw('terbayar != grandtotal')->get();
+        $data['ttl'] = $ttl[0]['ttl']==null ? 0 : $ttl[0]['ttl'];
+        $data['kode_rekening'] = '1103';
+        echo json_encode($data);
+    }
 }

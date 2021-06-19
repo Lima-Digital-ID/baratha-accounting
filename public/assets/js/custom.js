@@ -73,17 +73,21 @@ $(document).ready(function() {
 
     $('#tipe').change(function () { 
         let tipe = $(this).val();
+        $('#kode_supplier').attr('disabled', true);
+        $('#kode_customer').attr('disabled', true);
         if (tipe == 'Masuk') {
             // $('#kode_supplier').val("");
-            $('#kode_supplier').val('').trigger('change');
+            $('#kode_supplier').val('');
             $('#kode_supplier').attr('disabled', true);
             $('#kode_customer').attr('disabled', false);
         }
         else{
             $('#kode_customer').attr('disabled', true);
-            $('#kode_customer').val('').trigger('change');
+            $('#kode_customer').val('');
             $('#kode_supplier').attr('disabled', false);
         }
+
+        $(".select2").select2()
     });
 
     function addDetail(thisParam) {
@@ -217,7 +221,6 @@ $(document).ready(function() {
         $("#total").html(new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR' }).format(total));
         getTotalPpn(total)
     }
-
     function getTotalPpn(total) {
         console.log('getTotalPpn : ' + total);
         let statusPpn = $('#status_ppn').val();
@@ -351,8 +354,22 @@ $(document).ready(function() {
         other = isNaN(other) ? 0 : other;
         var total = thisval * other;
         $("#total").html(new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR' }).format(total));
+        $("#totalQty").html(new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR' }).format($("#qty").val()))
         getTotalPpn(total);
     });
+    $(".status_ppn_catering").change(function(){
+        var qty = parseInt($("#qty").val())
+        var harga_satuan = parseInt($("#harga_satuan").val())
+        var total = qty * harga_satuan
+        $("#total").html(new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR' }).format(total));
+        $("#totalQty").html(new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR' }).format($("#qty").val()))
+        getTotalPpn(total)
+    })
+    $("#status_ppn").change(function(){
+        if(!$(this).hasClass('status_ppn_catering')){
+            getTotal()
+        }
+    })
     $(".btn-pembayaran").click(function(e) {
         e.preventDefault();
         
@@ -368,5 +385,36 @@ $(document).ready(function() {
                 $(data[i+1]).val(d)
             }
         })
+    })
+    $(".setLawan").change(function(){
+        var tipe = $(this).data('tipe')
+        var thisVal = $(this).val()
+        var url
+        if(tipe=='supplier'){
+            url = location.origin+"/pembelian/getTtlHutang"
+        }
+        else{
+            url = location.origin+"/penjualan/getTtlPiutang"
+        }
+
+        $(".row-detail[data-no='1'] select").val('')
+        $(".select2").select2()
+
+        $(".row-detail[data-no='1'] .getTotalKas").val('')
+        if(thisVal!=''){
+            $.ajax({
+                type : 'get',
+                url : url,
+                dataType : 'json',
+                data : {kode : thisVal},
+                success : function(data){
+                    $(".row-detail[data-no='1'] select").val(data.kode_rekening)
+                    $(".select2").select2()
+
+                    $(".row-detail[data-no='1'] .getTotalKas").val(parseInt(data.ttl)) //total hutang atau  piutang
+                }
+            })
+        }
+
     })
 });

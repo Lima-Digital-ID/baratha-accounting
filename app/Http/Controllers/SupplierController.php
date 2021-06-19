@@ -187,5 +187,12 @@ class SupplierController extends Controller
         }
         return \view('pembelian.supplier.list-hutang-supplier',$this->param);
     }
+    public function getTtlHutang()
+    {
+        $ttl = PembelianBarang::selectRaw('sum(grandtotal-terbayar) as ttl')->where('kode_supplier',$_GET['kode'])->whereRaw('terbayar != grandtotal')->get();
+        $data['ttl'] = $ttl[0]['ttl']==null ? 0 : $ttl[0]['ttl'];
+        $data['kode_rekening'] = '2101';
+        echo json_encode($data);
+    }
 
 }
