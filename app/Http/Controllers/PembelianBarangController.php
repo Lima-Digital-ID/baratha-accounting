@@ -165,28 +165,28 @@ class PembelianBarangController extends Controller
             $newJurnal->jenis_transaksi = 'Pembelian';
             $newJurnal->kode_transaksi = $request->get('kode_pembelian');
             $newJurnal->keterangan = 'Pembelian Barang';
-            $newJurnal->kode = '1102';
-            $newJurnal->lawan = '2101';
+            $newJurnal->kode = '1102'; //akun persediaan
+            $newJurnal->lawan = '2101'; //akun hutang usaha
             $newJurnal->tipe = 'Debet';
             $newJurnal->nominal = $total;
             $newJurnal->id_detail = '';
             $newJurnal->save();
 
             // jurnal ppn pembelian belum ada rekening nya
-            // if ($request->get('status_ppn') != 'Tanpa') {
-            //     // save jurnal ppn pembelian
-            //     $newJurnal = new Jurnal;
-            //     $newJurnal->tanggal = $request->get('tanggal');
-            //     $newJurnal->jenis_transaksi = 'Pembelian';
-            //     $newJurnal->kode_transaksi = $request->get('kode_pembelian');
-            //     $newJurnal->keterangan = 'PPN Pembelian';
-            //     $newJurnal->kode = '1161.0001';
-            //     $newJurnal->lawan = '2113.0001';
-            //     $newJurnal->tipe = 'Debet';
-            //     $newJurnal->nominal = $totalPpn;
-            //     $newJurnal->id_detail = '';
-            //     $newJurnal->save();
-            // }
+            if ($request->get('status_ppn') != 'Tanpa') {
+                // save jurnal ppn pembelian
+                $newJurnal = new Jurnal;
+                $newJurnal->tanggal = $request->get('tanggal');
+                $newJurnal->jenis_transaksi = 'Pembelian';
+                $newJurnal->kode_transaksi = $request->get('kode_pembelian');
+                $newJurnal->keterangan = 'PPN Pembelian Barang';
+                $newJurnal->kode = '1301'; //akun ppn keluaran
+                $newJurnal->lawan = '2101'; //akun hutang usaha
+                $newJurnal->tipe = 'Debet';
+                $newJurnal->nominal = $totalPpn;
+                $newJurnal->id_detail = '';
+                $newJurnal->save();
+            }
 
 
             //update hutang supplier
@@ -510,16 +510,15 @@ class PembelianBarangController extends Controller
                     'nominal' => $newTotal,
                 ]);
             
-            // jurnal ppn pembelian belum ada rekeningnya
-            // if ($statusPpn != 'Tanpa') {
-            //     //update jurnal ppn pembelian
-            //     Jurnal::where('kode_transaksi', $_POST['kode_pembelian'])->where('keterangan', 'PPN Pembelian')
-            //         ->update([
-            //             'tanggal' => $_POST['tanggal'],
-            //             'nominal' => $newTotalPpn,
-            //         ]);
+            if ($statusPpn != 'Tanpa') {
+                //update jurnal ppn pembelian
+                Jurnal::where('kode_transaksi', $_POST['kode_pembelian'])->where('keterangan', 'PPN Pembelian Barang')
+                    ->update([
+                        'tanggal' => $_POST['tanggal'],
+                        'nominal' => $newTotalPpn,
+                    ]);
 
-            // }
+            }
             
             return redirect()->route('pembelian-barang.index')->withStatus('Data berhasil diperbarui.');
         } catch (\Exception $e) {

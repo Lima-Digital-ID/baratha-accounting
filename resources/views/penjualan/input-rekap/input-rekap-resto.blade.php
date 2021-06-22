@@ -10,7 +10,7 @@
                         <div class="input-group-prepend">
                             <span class="input-group-text" id="basic-addon1"><span class="fa fa-calendar"></span></span>
                         </div>                
-                        <input type="text" class="form-control datepickerDate" value="{{ isset($_GET['tanggal']) ? $_GET['tanggal'] : '' }}" name="tanggal" placeholder="Pilih Tanggal" autocomplete="off" required>
+                        <input type="text" class="form-control datepickerDate" value="{{ isset($_GET['tanggal']) ? $_GET['tanggal'] : date('Y-m-d') }}" name="tanggal" placeholder="Pilih Tanggal" autocomplete="off" required>
                     </div>
                     <button type="submit" class="btn btn-primary"> <span class="fa fa-filter"></span> Filter</button>
                 </form>
@@ -35,10 +35,14 @@
     </div>
 @endif
 @if (isset($_GET['tanggal']))
-    @if(isset($json)  && $json['message'] != 'Kosong')
+    
+    @if(isset($json) && $json['message'] != 'Kosong')
+        @if (isset($status))
         <div class="alert alert-success font-weight-bold mt-3">
             Rekap pada tanggal {{date('d-m-Y',strtotime($_GET['tanggal']))}} sudah dilakukan.
         </div>
+            
+        @endif
         <div class="table-responsive">
             <table class="table table-custom">
                 <thead>

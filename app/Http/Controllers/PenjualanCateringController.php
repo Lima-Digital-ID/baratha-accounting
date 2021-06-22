@@ -150,28 +150,28 @@ class PenjualanCateringController extends Controller
             $newJurnal->jenis_transaksi = 'Penjualan Catering';
             $newJurnal->kode_transaksi = $request->get('kode_penjualan');
             $newJurnal->keterangan = 'Penjualan Catering';
-            $newJurnal->kode = '1103';
-            $newJurnal->lawan = '4101';
+            $newJurnal->kode = '1103'; //piutang
+            $newJurnal->lawan = '4101'; //pendapatan
             $newJurnal->tipe = 'Debet';
             $newJurnal->nominal = $total;
             $newJurnal->id_detail = '';
             $newJurnal->save();
 
-            // jurnal ppn belum ada rekeningnya
-            // if ($request->get('status_ppn') != 'Tanpa') {
-            //     // save jurnal ppn penjualan
-            //     $newJurnal = new Jurnal;
-            //     $newJurnal->tanggal = $request->get('tanggal');
-            //     $newJurnal->jenis_transaksi = 'Penjualan Catering';
-            //     $newJurnal->kode_transaksi = $request->get('kode_penjualan');
-            //     $newJurnal->keterangan = 'PPN Penjualan Catering';
-            //     $newJurnal->kode = '1120.0001';
-            //     $newJurnal->lawan = '2116.0001';
-            //     $newJurnal->tipe = 'Debet';
-            //     $newJurnal->nominal = $totalPpn;
-            //     $newJurnal->id_detail = '';
-            //     $newJurnal->save();
-            // }
+            // save jurnal ppn
+            if ($request->get('status_ppn') != 'Tanpa') {
+                // save jurnal ppn penjualan
+                $newJurnal = new Jurnal;
+                $newJurnal->tanggal = $request->get('tanggal');
+                $newJurnal->jenis_transaksi = 'Penjualan Catering';
+                $newJurnal->kode_transaksi = $request->get('kode_penjualan');
+                $newJurnal->keterangan = 'PPN Penjualan Catering';
+                $newJurnal->kode = '1103'; //piutang
+                $newJurnal->lawan = '2105'; //ppn masukan
+                $newJurnal->tipe = 'Debet';
+                $newJurnal->nominal = $totalPpn;
+                $newJurnal->id_detail = '';
+                $newJurnal->save();
+            }
 
             //update piutang supplier
             Customer::where('kode_customer', $request->get('kode_customer'))
@@ -283,16 +283,15 @@ class PenjualanCateringController extends Controller
                 'nominal' => $newTotal,
             ]);
             
-            // jurnal ppn belum ada rekeningnya
-            // if ($statusPpn != 'Tanpa') {
-            //     //update jurnal ppn penjualan
-            //     Jurnal::where('kode_transaksi', $kode)->where('keterangan', 'PPN Penjualan Catering')
-            //         ->update([
-            //             'tanggal' => $request->get('tanggal'),
-            //             'nominal' => $newTotalPpn,
-            //         ]);
+            if ($statusPpn != 'Tanpa') {
+                //update jurnal ppn penjualan
+                Jurnal::where('kode_transaksi', $kode)->where('keterangan', 'PPN Penjualan Catering')
+                    ->update([
+                        'tanggal' => $request->get('tanggal'),
+                        'nominal' => $newTotalPpn,
+                    ]);
 
-            // }
+            }
 
             Customer::where('kode_customer', $kodeCustomer)
                         ->update([

@@ -24,6 +24,10 @@ class RekapHotelController extends Controller
                 if($cek==0){
                     $this->param['json'] = $this->getRekap($_GET['tanggal']);
                 }
+                elseif ($cek > 0) {
+                    $this->param['status'] = 'Data pada tanggal ' . $_GET['tanggal'] . ' telah ditarik.';
+                    $this->param['json'] = $this->getRekap($_GET['tanggal']);
+                }
             }
             return view('penjualan.input-rekap.input-rekap-hotel', $this->param);
         } catch (\Throwable $th) {
@@ -56,19 +60,18 @@ class RekapHotelController extends Controller
 
             
             // save jurnal ppn penjualan
-            // ppn penjualan hotel belum ada rekening
 
-            // $newJurnalPpn = new Jurnal;
-            // $newJurnalPpn->tanggal = $_GET['tanggal'];
-            // $newJurnalPpn->jenis_transaksi = 'Penjualan Resto';
-            // $newJurnalPpn->kode_transaksi = 'Penjualan Resto';
-            // $newJurnalPpn->keterangan = 'PPN Penjualan Resto';
-            // $newJurnalPpn->kode = '1120.0001';
-            // $newJurnalPpn->lawan = '2116.0001';
-            // $newJurnalPpn->tipe = 'Debet';
-            // $newJurnalPpn->nominal = $totalPpn;
-            // $newJurnalPpn->id_detail = '';
-            // $newJurnalPpn->save();
+            $newJurnalPpn = new Jurnal;
+            $newJurnalPpn->tanggal = $_GET['tanggal'];
+            $newJurnalPpn->jenis_transaksi = 'Penjualan Hotel';
+            $newJurnalPpn->kode_transaksi = 'Penjualan Hotel';
+            $newJurnalPpn->keterangan = 'PPN Penjualan Hotel';
+            $newJurnalPpn->kode = '1101';
+            $newJurnalPpn->lawan = '2105';
+            $newJurnalPpn->tipe = 'Debet';
+            $newJurnalPpn->nominal = $json['data']['total_ppn'];
+            $newJurnalPpn->id_detail = '';
+            $newJurnalPpn->save();
 
             return redirect()->back()->withStatus('Penarikan Data Berhasil');
 

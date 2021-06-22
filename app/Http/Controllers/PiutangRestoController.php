@@ -99,32 +99,32 @@ class PiutangRestoController extends Controller
 
             $newPenjualan->save();
 
-             // save jurnal penjualan
+            // save jurnal penjualan
             $newJurnal = new Jurnal;
             $newJurnal->tanggal = date('Y-m-d', strtotime($piutang['data'][0]['waktu']));
-            $newJurnal->jenis_transaksi = 'Penjualan Catering';
+            $newJurnal->jenis_transaksi = 'Penjualan Resto';
             $newJurnal->kode_transaksi = $request->get('kode_penjualan');
-            $newJurnal->keterangan = 'Penjualan Catering';
-            $newJurnal->kode = '1101';
-            $newJurnal->lawan = '4101';
+            $newJurnal->keterangan = 'Penjualan Resto';
+            $newJurnal->kode = '1103'; //piutang
+            $newJurnal->lawan = '4101'; //pendapatan
             $newJurnal->tipe = 'Debet';
             $newJurnal->nominal = $total;
             $newJurnal->id_detail = '';
             $newJurnal->save();
 
             // save jurnal ppn penjualan
-            // jurnal ppn belum ada kode rekeningnya
-            // $newJurnal = new Jurnal;
-            // $newJurnal->tanggal = $piutang['tanggal'];
-            // $newJurnal->jenis_transaksi = 'Penjualan Catering';
-            // $newJurnal->kode_transaksi = $request->get('kode_penjualan');
-            // $newJurnal->keterangan = 'PPN Penjualan Catering';
-            // $newJurnal->kode = '1120.0001';
-            // $newJurnal->lawan = '2116.0001';
-            // $newJurnal->tipe = 'Debet';
-            // $newJurnal->nominal = $totalPpn;
-            // $newJurnal->id_detail = '';
-            // $newJurnal->save();
+            
+            $newJurnal = new Jurnal;
+            $newJurnal->tanggal = $piutang['tanggal'];
+            $newJurnal->jenis_transaksi = 'Penjualan Resto';
+            $newJurnal->kode_transaksi = $request->get('kode_penjualan');
+            $newJurnal->keterangan = 'PPN Penjualan Resto';
+            $newJurnal->kode = '1103'; //piutang
+            $newJurnal->lawan = '2105'; //ppn masukan
+            $newJurnal->tipe = 'Debet';
+            $newJurnal->nominal = $totalPpn;
+            $newJurnal->id_detail = '';
+            $newJurnal->save();
  
             //update piutang customer
             Customer::where('kode_customer', $request->get('kode_customer'))

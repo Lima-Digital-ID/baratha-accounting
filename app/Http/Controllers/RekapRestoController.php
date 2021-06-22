@@ -10,8 +10,9 @@ class RekapRestoController extends Controller
 {
     public function getRekap($tanggal)
     {
-        $url = urlApiResto()."rekap-resto/".$_GET['tanggal'];
+        $url = urlApiResto()."rekap-resto/".$tanggal;
         $json = json_decode(file_get_contents($url), true);
+        
         return $json;
     }
     public function index()
@@ -23,7 +24,12 @@ class RekapRestoController extends Controller
             if($cek==0){
                 $this->param['json'] = $this->getRekap($_GET['tanggal']);
             }
+            else{
+                $this->param['status'] = 'Data pada tanggal ' . $_GET['tanggal'] . ' telah ditarik.';
+                $this->param['json'] = $this->getRekap($_GET['tanggal']);
+            }
         }
+        
         return view('penjualan.input-rekap.input-rekap-resto', $this->param);
     }
     public function save()
@@ -52,19 +58,18 @@ class RekapRestoController extends Controller
 
             
             // save jurnal ppn penjualan
-            // ppn penjualan resto belum fix
 
-            // $newJurnalPpn = new Jurnal;
-            // $newJurnalPpn->tanggal = $_GET['tanggal'];
-            // $newJurnalPpn->jenis_transaksi = 'Penjualan Resto';
-            // $newJurnalPpn->kode_transaksi = 'Penjualan Resto';
-            // $newJurnalPpn->keterangan = 'PPN Penjualan Resto';
-            // $newJurnalPpn->kode = '1120.0001';
-            // $newJurnalPpn->lawan = '2116.0001';
-            // $newJurnalPpn->tipe = 'Debet';
-            // $newJurnalPpn->nominal = $totalPpn;
-            // $newJurnalPpn->id_detail = '';
-            // $newJurnalPpn->save();
+            $newJurnalPpn = new Jurnal;
+            $newJurnalPpn->tanggal = $_GET['tanggal'];
+            $newJurnalPpn->jenis_transaksi = 'Penjualan Resto';
+            $newJurnalPpn->kode_transaksi = 'Penjualan Resto';
+            $newJurnalPpn->keterangan = 'PPN Penjualan Resto';
+            $newJurnalPpn->kode = '1101';
+            $newJurnalPpn->lawan = '2105';
+            $newJurnalPpn->tipe = 'Debet';
+            $newJurnalPpn->nominal = $json['data']['total_ppn'];
+            $newJurnalPpn->id_detail = '';
+            $newJurnalPpn->save();
             
             return redirect()->back()->withStatus('Penarikan Data Berhasil');
 
