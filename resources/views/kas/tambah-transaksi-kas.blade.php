@@ -82,7 +82,7 @@
 
                 <div class="col-md-4 mb-3">
                     <label for="" class="form-control-label">Supplier</label>
-                    <select name="kode_supplier" class="form-control select2 @error('kode_supplier') is-invalid @enderror" id="kode_supplier" {{old('kode_supplier')=='' ? 'disabled' : ''}}>
+                    <select name="kode_supplier" class="form-control setLawan select2 @error('kode_supplier') is-invalid @enderror" data-tipe='supplier' id="kode_supplier" {{old('kode_supplier')=='' ? 'disabled' : ''}}>
                         <option value="">--Pilih Supplier--</option>
                         @foreach ($supplier as $item)
                             <option value="{{$item->kode_supplier}}" {{old('kode_supplier') == $item->kode_supplier ? 'selected' : ''}} >{{$item->kode_supplier . ' ~ '.$item->nama}}</option>
@@ -98,7 +98,7 @@
                 
                 <div class="col-md-4 mb-3">
                     <label for="" class="form-control-label">Customer</label>
-                    <select name="kode_customer" class="form-control select2 @error('kode_customer') is-invalid @enderror" id="kode_customer" {{old('kode_customer')=='' ? 'disabled' : ''}}>
+                    <select name="kode_customer" class="form-control select2 setLawan @error('kode_customer') is-invalid @enderror" data-tipe='customer' id="kode_customer" {{old('kode_customer')=='' ? 'disabled' : ''}}>
                         <option value="">--Pilih Customer--</option>
                         @foreach ($customer as $item)
                             <option value="{{$item->kode_customer}}" {{old('kode_customer') == $item->kode_customer ? 'selected' : ''}} >{{$item->kode_customer . ' ~ '.$item->nama}}</option>
