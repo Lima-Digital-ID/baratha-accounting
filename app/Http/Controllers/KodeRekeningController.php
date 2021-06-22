@@ -73,7 +73,7 @@ class KodeRekeningController extends Controller
             $newKodeRekening = new KodeRekening;
     
             $newKodeRekening->kode_rekening = $request->get('kode_rekening');
-            $newKodeRekening->nama = $request->get('nama');
+            $newKodeRekening->nama = str_replace(' ', '-', ucwords($request->get('nama')));
             $newKodeRekening->tipe = $request->get('tipe');
             $newKodeRekening->saldo_awal = $request->get('saldo_awal');
             $newKodeRekening->kode_induk = $request->get('kode_induk');
@@ -134,7 +134,7 @@ class KodeRekeningController extends Controller
         try{
 
             // $kodeRekening->kode_rekening = $request->get('kode_rekening');
-            $kodeRekening->nama = $request->get('nama');
+            $kodeRekening->nama = str_replace(' ', '-', ucwords($request->get('nama')));
             $kodeRekening->tipe = $request->get('tipe');
             $kodeRekening->saldo_awal = $request->get('saldo_awal');
             // $kodeRekening->kode_induk = $request->get('kode_induk');

@@ -55,7 +55,7 @@ class HppController extends Controller
     
             $newHpp->tanggal = $request->get('tanggal');
             $newHpp->nominal_hpp = $request->get('nominal_hpp');
-            $newHpp->keterangan = $request->get('keterangan');
+            $newHpp->keterangan = str_replace(' ', '-', ucwords($request->get('keterangan')));
     
             $newHpp->save();
     
@@ -100,7 +100,7 @@ class HppController extends Controller
         try{
             $hpp->tanggal = $request->get('tanggal');
             $hpp->nominal_hpp = $request->get('nominal_hpp');
-            $hpp->keterangan = $request->get('keterangan');
+            $hpp->keterangan = str_replace(' ', '-', ucwords($request->get('keterangan')));
             $hpp->save();
 
             return back()->withStatus('Data berhasil diperbarui.');

@@ -28,7 +28,7 @@
     
     <div class="col-md-4">
         <label for="" class="form-control-label">Keterangan</label>
-        <input type="text" name="keterangan[]" value="{{old($fields['keterangan'], isset($edit) ? $edit['keterangan'] : '')}}" class="form-control {{ isset($n)&&$errors->has('keterangan.'.$n) ? ' is-invalid' : '' }}">
+        <input type="text" name="keterangan[]" value="{{old($fields['keterangan'], isset($edit) ? str_replace('-', ' ', $edit['keterangan']) : '')}}" class="form-control {{ isset($n)&&$errors->has('keterangan.'.$n) ? ' is-invalid' : '' }}">
         @if(isset($n)&&$errors->has('keterangan.'.$n))
         <span class="invalid-feedback" role="alert">
             <strong>{{ $errors->first('keterangan.'.$n) }}</strong>

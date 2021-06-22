@@ -62,7 +62,7 @@ class KodeIndukController extends Controller
             $newKodeInduk = new KodeInduk;
     
             $newKodeInduk->kode_induk = $request->get('kode_induk');
-            $newKodeInduk->nama = $request->get('nama');
+            $newKodeInduk->nama = ucwords($request->get('nama'));
     
             $newKodeInduk->save();
     
@@ -116,7 +116,7 @@ class KodeIndukController extends Controller
         try{
 
             // $kodeInduk->kode_induk = $request->get('kode_induk');
-            $kodeInduk->nama = $request->get('nama');
+            $kodeInduk->nama = str_replace(' ', '-', ucwords($request->get('nama')));
             
             $kodeInduk->save();
 

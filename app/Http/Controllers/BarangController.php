@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use \App\Models\Barang;
 use \App\Models\KategoriBarang;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\Date;
 
 class BarangController extends Controller
@@ -97,14 +98,14 @@ class BarangController extends Controller
             $newBarang = new Barang;
     
             $newBarang->kode_barang = $request->get('kode_barang');
-            $newBarang->nama = $request->get('nama');
+            $newBarang->nama = ucwords($request->get('nama'));
             $newBarang->satuan = $request->get('satuan');
             $newBarang->stock_awal = $request->get('stock_awal');
             $newBarang->saldo_awal = $request->get('saldo_awal');
             $newBarang->stock += $request->get('stock_awal');
             $newBarang->saldo += $request->get('saldo_awal');
             $newBarang->exp_date = $request->get('exp_date');
-            $newBarang->keterangan = $request->get('keterangan');
+            $newBarang->keterangan = str_replace(' ', '-', ucwords($request->get('keterangan')));
             $newBarang->tempat_penyimpanan = $request->get('tempat_penyimpanan');
             $newBarang->minimum_stock = $request->get('minimum_stock');
             $newBarang->id_kategori = $request->get('id_kategori');
@@ -171,14 +172,14 @@ class BarangController extends Controller
             }
 
             // $barang->kode_barang = $request->get('kode_barang');
-            $barang->nama = $request->get('nama');
+            $barang->nama = ucwords($request->get('nama'));
             $barang->satuan = $request->get('satuan');
             $barang->stock_awal = $request->get('stock_awal');
             $barang->saldo_awal = $request->get('saldo_awal');
             $barang->stock += $request->get('stock_awal');
             $barang->saldo += $request->get('saldo_awal');
             $barang->exp_date = $request->get('exp_date');
-            $barang->keterangan = $request->get('keterangan');
+            $barang->keterangan = str_replace(' ', '-', ucwords($request->get('keterangan')));
             $barang->tempat_penyimpanan = $request->get('tempat_penyimpanan');
             $barang->minimum_stock = $request->get('minimum_stock');
             $barang->id_kategori = $request->get('id_kategori');
@@ -220,7 +221,6 @@ class BarangController extends Controller
         try {
             $this->param['barang'] = Barang::where('minimum_stock', '!=', NULL)->whereRaw('stock <= minimum_stock')->paginate(10);
         } catch (\Illuminate\Database\QueryException $e) {
-            return $e;
             return redirect()->back()->withErrors('Terjadi Kesalahan');
         }
 
@@ -229,15 +229,28 @@ class BarangController extends Controller
 
     public function barangExpired()
     {
-        $this->param['pageInfo'] = 'Barang / List Barang Expired';
+        $this->param['pageInfo'] = 'Barang / List Barang Kadaluarsa';
 
         try {
-            $this->param['barang'] = Barang::where('exp_date', '<', Date('Y-m-d'))->paginate(10);
+            $this->param['barang'] = Barang::where('exp_date', '<=', Date('Y-m-d'))->paginate(10);
         } catch (\Illuminate\Database\QueryException $e) {
-            return $e;
             return redirect()->back()->withErrors('Terjadi Kesalahan');
         }
 
-        return \view('persediaan.barang.barang-minim-stock', $this->param);
+        return \view('persediaan.barang.barang-expired', $this->param);
+    }
+
+    public function barangHampirExpired()
+    {
+        $this->param['pageInfo'] = 'Barang / List Barang Hampir Kadaluarsa';
+
+        try {
+            $exp_date = Carbon::createFromFormat('Y-m-d', Date('Y-m-d'))->addDays(7)->format('Y-m-d');
+            $this->param['barang'] = Barang::where('exp_date', '<=', $exp_date)->where('exp_date', '!=', Date('Y-m-d'))->paginate(10);
+        } catch (\Illuminate\Database\QueryException $e) {
+            return redirect()->back()->withErrors('Terjadi Kesalahan');
+        }
+
+        return \view('persediaan.barang.barang-will-expired', $this->param);
     }
 }

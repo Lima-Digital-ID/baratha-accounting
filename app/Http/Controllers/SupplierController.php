@@ -43,6 +43,20 @@ class SupplierController extends Controller
         $this->param['pageInfo'] = 'Manage Supplier / Tambah Data';
         $this->param['btnRight']['text'] = 'Lihat Data';
         $this->param['btnRight']['link'] = route('supplier.index');
+        $kodeSupplier = null;
+        $data = Supplier::orderBy('kode_supplier', 'DESC')->get();
+
+        if($data->count() > 0){
+            $lastkodeSupplier = $data[0]->kode_supplier;
+
+            $lastIncrement = substr($lastkodeSupplier, 2);
+
+            $kodeSupplier = 'SP'.str_pad($lastIncrement + 1, 4, 0, STR_PAD_LEFT);
+        }
+        else{
+            $kodeSupplier = "SP0001";
+        }
+        $this->param['kode_supplier'] = $kodeSupplier;
 
         return \view('pembelian.supplier.tambah-supplier', $this->param);
     }
@@ -60,8 +74,8 @@ class SupplierController extends Controller
         try{
             $newSupplier = new Supplier;
     
-            $newSupplier->kode_supplier = $request->get('kode_supplier');
-            $newSupplier->nama = $request->get('nama');
+            $newSupplier->kode_supplier = str_replace(' ', '-', strtoupper($request->get('kode_supplier')));
+            $newSupplier->nama = ucwords($request->get('nama'));
             $newSupplier->alamat = $request->get('alamat');
             $newSupplier->no_hp = $request->get('no_hp');
             $newSupplier->hutang = $request->get('hutang');
@@ -111,8 +125,8 @@ class SupplierController extends Controller
             'hutang' => 'required'
         ]);
         try{
-            $supplier->kode_supplier = $request->get('kode_supplier');
-            $supplier->nama = $request->get('nama');
+            $supplier->kode_supplier = str_replace(' ', '-', strtoupper($request->get('kode_supplier')));
+            $supplier->nama = ucwords($request->get('nama'));
             $supplier->alamat = $request->get('alamat');
             $supplier->no_hp = $request->get('no_hp');
             $supplier->hutang = $request->get('hutang');

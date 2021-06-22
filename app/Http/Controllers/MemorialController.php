@@ -139,7 +139,7 @@ class MemorialController extends Controller
 
                 $newDetail = new DetailMemorial;
                 $newDetail->kode_memorial = $request->get('kode_memorial');
-                $newDetail->keterangan = $_POST['keterangan'][$key];
+                $newDetail->keterangan = str_replace(' ', '-', strtoupper($_POST['keterangan'][$key]));
                 $newDetail->kode = $_POST['kode'][$key];
                 $newDetail->lawan = $_POST['lawan'][$key];
                 $newDetail->subtotal = $value;
@@ -150,7 +150,7 @@ class MemorialController extends Controller
                 $newJurnal->tanggal = $request->get('tanggal');
                 $newJurnal->jenis_transaksi = 'Memorial';
                 $newJurnal->kode_transaksi = $request->get('kode_memorial');
-                $newJurnal->keterangan = $_POST['keterangan'][$key];
+                $newJurnal->keterangan = str_replace(' ', '-', strtoupper($_POST['keterangan'][$key]));
                 $newJurnal->kode = $_POST['kode'][$key];
                 $newJurnal->lawan = $_POST['lawan'][$key];
                 $newJurnal->tipe = $request->get('tipe') == 'Masuk' ? 'Debet' : 'Kredit';
@@ -247,14 +247,14 @@ class MemorialController extends Controller
                     $getDetail = DetailMemorial::select('kode','lawan', 'keterangan', 'subtotal')->where('id', $_POST['id_detail'][$key])->get()[0];
 
                     // cek apakah terdapat perubahan pada detail
-                    if ($_POST['kode'][$key] != $getDetail['kode'] || $_POST['lawan'][$key] != $getDetail['lawan'] || $_POST['keterangan'][$key] != $getDetail['keterangan'] || $_POST['subtotal'][$key] != $getDetail['subtotal']) { 
+                    if ($_POST['kode'][$key] != $getDetail['kode'] || $_POST['lawan'][$key] != $getDetail['lawan'] || str_replace(' ', '-', strtoupper($_POST['keterangan'][$key])) != $getDetail['keterangan'] || $_POST['subtotal'][$key] != $getDetail['subtotal']) { 
                         //update detail
                         DetailMemorial::where('id', $_POST['id_detail'][$key])
                         ->update([
                             'kode' => $_POST['kode'][$key],
                             'lawan' => $_POST['lawan'][$key],
                             'subtotal' => $_POST['subtotal'][$key],
-                            'keterangan' => $_POST['keterangan'][$key],
+                            'keterangan' => str_replace(' ', '-', strtoupper($_POST['keterangan'][$key])),
                         ]);
 
                     // update jurnal
@@ -262,7 +262,7 @@ class MemorialController extends Controller
                         ->where('kode_transaksi', $kode)
                         ->update([
                             'tanggal' => $_POST['tanggal'],
-                            'keterangan' => $_POST['keterangan'][$key],
+                            'keterangan' => str_replace(' ', '-', strtoupper($_POST['keterangan'][$key])),
                             'kode' => $_POST['kode'][$key],
                             'lawan' => $_POST['lawan'][$key],
                             'nominal' => $_POST['subtotal'][$key],
@@ -284,7 +284,7 @@ class MemorialController extends Controller
                     //insert to detail
                     $newDetail = DetailMemorial::create([
                             'kode_memorial' => $_POST['kode_memorial'],
-                            'keterangan' => $_POST['keterangan'][$key],
+                            'keterangan' => str_replace(' ', '-', strtoupper($_POST['keterangan'][$key])),
                             'kode' => $_POST['kode'][$key],
                             'lawan' => $_POST['lawan'][$key],
                             'subtotal' => $_POST['subtotal'][$key],
@@ -295,7 +295,7 @@ class MemorialController extends Controller
                             'tanggal' => $_POST['tanggal'],
                             'jenis_transaksi' => 'Memorial',
                             'kode_transaksi' => $_POST['kode_memorial'],
-                            'keterangan' => $_POST['keterangan'][$key],
+                            'keterangan' => str_replace(' ', '-', strtoupper($_POST['keterangan'][$key])),
                             'kode' => $_POST['kode'][$key],
                             'lawan' => $_POST['lawan'][$key],
                             'tipe' => $tipe == 'Masuk' ? 'Debet' : 'Kredit',

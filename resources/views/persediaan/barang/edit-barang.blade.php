@@ -85,7 +85,7 @@
       <br>
 
       <label>Keterangan</label>
-      <input type="text" class="form-control {{ $errors->has('keterangan') ? ' is-invalid' : '' }}" value="{{ old('keterangan', $barang->keterangan) }}" name="keterangan" placeholder="Keterangan">
+      <input type="text" class="form-control {{ $errors->has('keterangan') ? ' is-invalid' : '' }}" value="{{ old('keterangan', str_replace('-', ' ', $barang->keterangan)) }}" name="keterangan" placeholder="Keterangan">
       @if ($errors->has('keterangan'))
           <span class="invalid-feedback" role="alert">
               <strong>{{ $errors->first('keterangan') }}</strong>

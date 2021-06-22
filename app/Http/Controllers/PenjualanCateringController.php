@@ -126,7 +126,7 @@ class PenjualanCateringController extends Controller
             $newPenjualan->jatuh_tempo = $request->get('jatuh_tempo');
             $newPenjualan->qty = $request->get('qty');
             $newPenjualan->harga_satuan = $request->get('harga_satuan');
-            $newPenjualan->keterangan = $request->get('keterangan');
+            $newPenjualan->keterangan = str_replace(' ', '-', ucwords($request->get('keterangan')));
             $newPenjualan->total = $total;
             $newPenjualan->total_ppn = $totalPpn;
             $newPenjualan->grandtotal = $grandtotal;
@@ -262,7 +262,7 @@ class PenjualanCateringController extends Controller
                     'jatuh_tempo' => $request->get('jatuh_tempo'),
                     'qty' => $request->get('qty'),
                     'harga_satuan' => $request->get('harga_satuan'),
-                    'keterangan' => $request->get('keterangan'),
+                    'keterangan' => str_replace(' ', '-', ucwords($request->get('keterangan'))),
                     'total' => $newTotal,
                     'total_ppn' => $newTotalPpn,
                     'grandtotal' => $newGrandtotal,

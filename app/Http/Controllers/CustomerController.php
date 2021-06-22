@@ -75,7 +75,7 @@ class CustomerController extends Controller
             $newCustomer = new Customer;
     
             $newCustomer->kode_customer = $request->get('kode_customer');
-            $newCustomer->nama = $request->get('nama');
+            $newCustomer->nama = ucwords($request->get('nama'));
             $newCustomer->alamat = $request->get('alamat');
             $newCustomer->no_hp = $request->get('no_hp');
             $newCustomer->piutang = $request->get('piutang');
@@ -126,7 +126,7 @@ class CustomerController extends Controller
         ]);
         try{
             $customer->kode_customer = $request->get('kode_customer');
-            $customer->nama = $request->get('nama');
+            $customer->nama = ucwords($request->get('nama'));
             $customer->alamat = $request->get('alamat');
             $customer->no_hp = $request->get('no_hp');
             $customer->piutang = $request->get('piutang');

@@ -70,8 +70,8 @@ class KodeBiayaController extends Controller
     
             $newKodeBiaya = new KodeBiaya;
     
-            $newKodeBiaya->kode_biaya = $request->get('kode_biaya');
-            $newKodeBiaya->nama = $request->get('nama');
+            $newKodeBiaya->kode_biaya = str_replace(' ', '-', strtoupper($request->get('kode_biaya')));
+            $newKodeBiaya->nama = ucwords($request->get('nama'));
             $newKodeBiaya->kode_rekening = $request->get('kode_rekening');
     
             $newKodeBiaya->save();
@@ -124,7 +124,7 @@ class KodeBiayaController extends Controller
         try{
             $kodeBiaya = KodeBiaya::find($id);
             // $kodeBiaya->kode_biaya = $request->get('kode_biaya');
-            $kodeBiaya->nama = $request->get('nama');
+            $kodeBiaya->nama = ucwords($request->get('nama'));
             $kodeBiaya->kode_rekening = $request->get('kode_rekening');
             
             $kodeBiaya->save();

@@ -430,6 +430,24 @@
           <!-- Topbar Navbar -->
           <ul class="navbar-nav ml-auto">
             
+            <ul class="navbar-nav ml-auto">
+              {{-- <li class="nav-item dropdown no-arrow mx-1">
+                <a class="nav-link dropdown-toggle" href="#" id="alertsDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <i class="fas fa-bell fa-notif-top fa-fw"></i>
+                    <!-- Counter - Alerts -->
+                    <span class="badge badge-danger badge-counter badge-notif">
+                    
+                    </span>
+                </a>
+                <!-- Dropdown - Alerts -->
+                <div class="dropdown-list dropdown-menu dropdown-menu-right shadow animated--grow-in " aria-labelledby="alertsDropdown">
+                    <h6 class="dropdown-header">
+                        Notification
+                    </h6>
+                    <div class="dropdown-notif"></div>
+                </div>
+            </li> --}}
+
             <div class="topbar-divider d-none d-sm-block"></div>
             <!-- Nav Item - User Information -->
             <span class="my-auto">{{ Auth::user()->name }}</span>
@@ -570,7 +588,57 @@
     <script src="{{ asset('vendor/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js') }}"></script>
     <script src="{{asset('vendor/sweetalert-master/dist/sweetalert-dev.js')}}"></script>
     <script src="{{ asset('js/custom.js') }}"></script>
+    {{-- <script>
+      const tel = document.getElementById('kode_rekening');
+
+      tel.addEventListener('input', function() {
+        let start = this.selectionStart;
+        let end = this.selectionEnd;
+        
+        const current = this.value
+        const corrected = current.replace(/([^+0-9.]+)/gi, '');
+        this.value = corrected;
+        
+        if (corrected.length < current.length) --end;
+        this.setSelectionRange(start, end);
+      });
+    </script> --}}
     <script>
+      $(document).ready(function(){
+        $.ajax({
+            type : "get",
+            url : "<?= url('dashboard/cekNotif') ?>",
+            success : function(data){
+              if(data!=0){
+                console.log('cekNotif');
+                $(".badge-notif").html(data)
+              }
+            }
+          })
+          setInterval(() => {
+          $.ajax({
+            type : "get",
+            url : "<?= url('dashboard/cekNotif') ?>",
+            success : function(data){
+              if(data!=0){
+                console.log('cekNotif');
+                $(".badge-notif").html(data)
+              }
+            }
+          })
+        }, 3000);
+        $(".fa-notif-top").click(function(){
+          $.ajax({
+            type : "get",
+            url : "<?= url('dashboard/cekDetailNotif') ?>",
+            success : function(data){
+                $(".dropdown-notif").html(data)
+            }
+          })
+        })
+      })
+
+
       const tel = document.getElementById('kode_rekening');
 
       tel.addEventListener('input', function() {

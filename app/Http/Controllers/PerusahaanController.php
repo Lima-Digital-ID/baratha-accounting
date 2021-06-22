@@ -50,7 +50,7 @@ class PerusahaanController extends Controller
                 
             $perusahaan = Perusahaan::find($id);
             // $perusahaan->kode_induk = $request->get('kode_induk');
-            $perusahaan->nama = $request->get('nama');
+            $perusahaan->nama = str_replace(' ', '-', ucwords($request->get('nama')));
             $perusahaan->alamat = $request->get('alamat');
             $perusahaan->kota = $request->get('kota');
             $perusahaan->provinsi = $request->get('provinsi');

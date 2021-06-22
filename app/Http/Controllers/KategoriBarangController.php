@@ -57,7 +57,7 @@ class KategoriBarangController extends Controller
         try{    
             $newKategoriBarang = new KategoriBarang;
     
-            $newKategoriBarang->nama = $request->get('nama');
+            $newKategoriBarang->nama = ucwords($request->get('nama'));
     
             $newKategoriBarang->save();
     
@@ -107,7 +107,7 @@ class KategoriBarangController extends Controller
          ]);
         try{
             // $kategoriBarang->kategori_barang = $request->get('kategori_barang');
-            $kategoriBarang->nama = $request->get('nama');
+            $kategoriBarang->nama = ucwords($request->get('nama'));
             
             $kategoriBarang->save();
 

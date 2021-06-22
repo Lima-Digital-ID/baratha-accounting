@@ -20,6 +20,9 @@ Route::get('/', function () {
 Route::middleware(['auth:sanctum', 'verified'])->get('/dashboard', 'DashboardController@index')->name('dashboard');
 
 Route::group(['middleware' => ['auth:sanctum', 'verified']], function () {
+    Route::get('dashboard/cekNotif', 'DashboardController@cekNotif');
+    Route::get('dashboard/cekDetailNotif', 'DashboardController@cekDetailNotif');
+
     Route::group(['prefix' => 'data-master'], function () {
         Route::resource('user', 'UserController');
         Route::resource('perusahaan', 'PerusahaanController');
@@ -48,6 +51,7 @@ Route::group(['middleware' => ['auth:sanctum', 'verified']], function () {
         });
         Route::get('barang-minim', 'BarangController@barangMinim');
         Route::get('barang-expired', 'BarangController@barangExpired');
+        Route::get('barang-hampir-expired', 'BarangController@barangHampirExpired');
 
         Route::get('kartu-stock', 'KartuStockController@index');
         Route::get('posisi-stock', 'KartuStockController@posisiStock');

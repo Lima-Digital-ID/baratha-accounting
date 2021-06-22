@@ -69,8 +69,7 @@ class UserController extends Controller
         ]);
         try{
             $newUser = new User;
-    
-            $newUser->name = $request->get('name');
+            $newUser->name = ucwords($request->get('name'));
             $newUser->username = $request->get('username');
             $newUser->email = $request->get('email');
             $newUser->password = \Hash::make($request->get('password'));
@@ -126,7 +125,7 @@ class UserController extends Controller
         ]);
         try{
 
-            $user->name = $request->get('name');
+            $user->name = ucwords($request->get('name'));
             // $user->email = $request->get('email');
             $user->akses = $request->get('akses');
             $user->save();

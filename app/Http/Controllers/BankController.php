@@ -139,7 +139,7 @@ class BankController extends Controller
 
                 $newDetail = new DetailBank;
                 $newDetail->kode_bank = $request->get('kode_bank');
-                $newDetail->keterangan = $_POST['keterangan'][$key];
+                $newDetail->keterangan = str_replace(' ', '-', strtoupper($_POST['keterangan'][$key]));
                 $newDetail->lawan = $_POST['lawan'][$key];
                 $newDetail->subtotal = $value;
 
@@ -149,7 +149,7 @@ class BankController extends Controller
                 $newJurnal->tanggal = $request->get('tanggal');
                 $newJurnal->jenis_transaksi = 'Bank';
                 $newJurnal->kode_transaksi = $request->get('kode_bank');
-                $newJurnal->keterangan = $_POST['keterangan'][$key];
+                $newJurnal->keterangan = str_replace(' ', '-', strtoupper($_POST['keterangan'][$key]));
                 $newJurnal->kode = $request->get('kode_rekening');
                 $newJurnal->lawan = $_POST['lawan'][$key];
                 $newJurnal->tipe = $request->get('tipe') == 'Masuk' ? 'Debet' : 'Kredit';
@@ -246,13 +246,13 @@ class BankController extends Controller
                     $getDetail = DetailBank::select('lawan', 'keterangan', 'subtotal')->where('id', $_POST['id_detail'][$key])->get()[0];
 
                     // cek apakah terdapat perubahan pada detail
-                    if ($_POST['lawan'][$key] != $getDetail['lawan'] || $_POST['keterangan'][$key] != $getDetail['keterangan'] || $_POST['subtotal'][$key] != $getDetail['subtotal']) { 
+                    if ($_POST['lawan'][$key] != $getDetail['lawan'] || str_replace(' ', '-', strtoupper($_POST['keterangan'][$key])) != $getDetail['keterangan'] || $_POST['subtotal'][$key] != $getDetail['subtotal']) { 
                         //update detail
                         DetailBank::where('id', $_POST['id_detail'][$key])
                         ->update([
                             'lawan' => $_POST['lawan'][$key],
                             'subtotal' => $_POST['subtotal'][$key],
-                            'keterangan' => $_POST['keterangan'][$key],
+                            'keterangan' => str_replace(' ', '-', strtoupper($_POST['keterangan'][$key])),
                         ]);
 
                     // update jurnal
@@ -260,7 +260,7 @@ class BankController extends Controller
                         ->where('kode_transaksi', $kode)
                         ->update([
                             'tanggal' => $_POST['tanggal'],
-                            'keterangan' => $_POST['keterangan'][$key],
+                            'keterangan' => str_replace(' ', '-', strtoupper($_POST['keterangan'][$key])),
                             'kode' => $request->get('kode_rekening'),
                             'lawan' => $_POST['lawan'][$key],
                             'nominal' => $_POST['subtotal'][$key],
@@ -283,7 +283,7 @@ class BankController extends Controller
                     //insert to detail
                     $newDetail = DetailBank::create([
                             'kode_bank' => $_POST['kode_bank'],
-                            'keterangan' => $_POST['keterangan'][$key],
+                            'keterangan' => str_replace(' ', '-', strtoupper($_POST['keterangan'][$key])),
                             'lawan' => $_POST['lawan'][$key],
                             'subtotal' => $_POST['subtotal'][$key],
                         ]);
@@ -293,7 +293,7 @@ class BankController extends Controller
                             'tanggal' => $_POST['tanggal'],
                             'jenis_transaksi' => 'Bank',
                             'kode_transaksi' => $_POST['kode_bank'],
-                            'keterangan' => $_POST['keterangan'][$key],
+                            'keterangan' => str_replace(' ', '-', strtoupper($_POST['keterangan'][$key])),
                             'kode' => $_POST['kode_rekening'],
                             'lawan' => $_POST['lawan'][$key],
                             'tipe' => $tipe == 'Masuk' ? 'Debet' : 'Kredit',
