@@ -208,5 +208,11 @@ class SupplierController extends Controller
         $data['kode_rekening'] = '2101';
         echo json_encode($data);
     }
+    public function getHutangJson()
+    {
+        $hutang = PembelianBarang::select('kode_pembelian as  kode_transaksi','kode_supplier as kode','tanggal','jatuh_tempo','grandtotal','terbayar')->where('kode_supplier',$_GET['kode'])->whereRaw('terbayar != grandtotal')->get();
+
+        echo json_encode($hutang);
+    }
 
 }

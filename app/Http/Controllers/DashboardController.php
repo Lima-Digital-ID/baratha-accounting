@@ -28,14 +28,14 @@ class DashboardController extends Controller
         return view('dashboard', $this->param);
     }
 
-    public function cekNotif()
-    {
-        $count = Customer::all()->count();
-        echo $count;
-    }
+    // public function cekNotif()
+    // {
+    //     $count = Customer::all()->count();
+    //     echo $count;
+    // }
 
-    public function cekDetailNotif()
-    {
-        # code...
-    }
+    // public function cekDetailNotif()
+    // {
+    //     # code...
+    // }
 }

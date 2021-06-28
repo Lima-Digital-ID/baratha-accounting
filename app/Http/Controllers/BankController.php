@@ -106,22 +106,31 @@ class BankController extends Controller
 
     public function store(Request $request)
     {
-        $validatedData = $request->validate([
+        $validate = array(
             'kode_bank' => 'required',
             'tanggal' => 'required',
             'tipe' => 'required',
             'kode_rekening' => 'required',
-            'lawan.*' => 'required',
-            'subtotal.*' => 'required|numeric|gt:0',
-            'keterangan.*' => 'required',
-            ]
         );
+        if(isset($_POST['subtotal'])){
+            $validate['lawan.*'] = 'required';
+            $validate['subtotal.*'] = 'required|numeric|gt:0';
+            $validate['keterangan.*'] = 'required';
+            $loopTotal = $_POST['subtotal'];
+        }
+        else{
+            $validate['bayar.*'] = 'required|numeric';
+            $loopTotal = $_POST['bayar'];
+        }
+        $validatedData = $request->validate($validate);
 
         try {
-            $total = 0;
+
             
-            foreach ($_POST['subtotal'] as $key => $value) {
-                $total += $value;
+            $total = 0;
+
+            foreach ($loopTotal as $key => $value) {
+                $total+=$value;
             }
 
             $newBank = new Bank;
@@ -135,13 +144,117 @@ class BankController extends Controller
             $newBank->created_by = Auth::user()->id;
             $newBank->save();
 
-            foreach ($_POST['subtotal'] as $key => $value) {
+
+            if(isset($_POST['subtotal'])){
+    
+                foreach ($_POST['subtotal'] as $key => $value) {
+    
+                    $newDetail = new DetailBank;
+                    $newDetail->kode_bank = $request->get('kode_bank');
+                    $newDetail->keterangan = str_replace(' ', '-', strtoupper($_POST['keterangan'][$key]));
+                    $newDetail->lawan = $_POST['lawan'][$key];
+                    $newDetail->subtotal = $value;
+    
+                    $newDetail->save();
+    
+                    $newJurnal = new Jurnal;
+                    $newJurnal->tanggal = $request->get('tanggal');
+                    $newJurnal->jenis_transaksi = 'Bank';
+                    $newJurnal->kode_transaksi = $request->get('kode_bank');
+                    $newJurnal->keterangan = str_replace(' ', '-', strtoupper($_POST['keterangan'][$key]));
+                    $newJurnal->kode = $request->get('kode_rekening');
+                    $newJurnal->lawan = $_POST['lawan'][$key];
+                    $newJurnal->tipe = $request->get('tipe') == 'Masuk' ? 'Debet' : 'Kredit';
+                    $newJurnal->nominal = $_POST['subtotal'][$key];
+                    $newJurnal->id_detail = $newDetail->id;
+                    $newJurnal->save();
+    
+                }
+                    
+            }
+            else{
+                if(isset($_POST['kode_supplier'])){
+                    $lawan = '2101';
+                    $keterangan = 'Pembayaran Hutang';
+
+                    foreach ($_POST['bayar'] as $key => $value) {
+                        if($value!=0){
+                            //insert ke kartu hutang
+                            $kartuHutang = new KartuHutang;
+                            $kartuHutang->tanggal = date('Y-m-d');
+                            $kartuHutang->kode_supplier = $request->get('kode_supplier');
+                            $kartuHutang->kode_transaksi = $_POST['kode_transaksi'][$key];
+                            $kartuHutang->nominal = $value;
+                            $kartuHutang->tipe = 'Pembayaran';
+                            $kartuHutang->save();
+    
+                            //update terbayar pembelian barang
+                            PembelianBarang::where('kode_pembelian', $_POST['kode_transaksi'][$key])
+                            ->update([
+                                'terbayar' => \DB::raw('terbayar+' . $value),
+                                'updated_by' => Auth::user()->id
+                            ]);
+                            //update hutang Supplier
+                            Supplier::where('kode_supplier', $request->get('kode_supplier'))
+                            ->update([
+                                'hutang' => \DB::raw('hutang-' . $value),
+                            ]);
+                        }
+
+                    }                    
+                }
+                else{
+                    $lawan = '1103';
+                    $keterangan = 'Pembayaran Piutang';
+
+                    foreach ($_POST['bayar'] as $key => $value) {
+                        if($value!=0){
+                            //insert ke kartu piutang
+                            $kartuHutang = new KartuPiutang;
+                            $kartuHutang->tanggal = date('Y-m-d');
+                            $kartuHutang->kode_customer = $request->get('kode_customer');
+                            $kartuHutang->kode_transaksi = $_POST['kode_transaksi'][$key];
+                            $kartuHutang->nominal = $value;
+                            $kartuHutang->tipe = 'Pelunasan';
+                            $kartuHutang->save();
+
+                            //update terbayar penjualan barang
+                            PenjualanLain::where('kode_penjualan', $_POST['kode_transaksi'][$key])
+                            ->update([
+                                'terbayar' => \DB::raw('terbayar+' . $value),
+                                'updated_by' => Auth::user()->id
+                            ]);
+
+                            //update piutang customer
+                            Customer::where('kode_customer', $request->get('kode_customer'))
+                            ->update([
+                                'piutang' => \DB::raw('piutang-' . $value),
+                            ]);
+
+                            $getTipe = PenjualanLain::select('tipe_penjualan')->where('kode_penjualan', $_POST['kode_transaksi'][$key])->get()[0];
+                            if($getTipe->tipe_penjualan=='resto'){
+                                $url = urlApiResto()."bayar-piutang";
+                                $data = array("kode_transaksi" => $_POST['kode_transaksi'][$key]);
+                                $options = array(
+                                            "http"=> array(
+                                                "method"=>"POST",
+                                                "header"=>"Content-Type: application/x-www-form-urlencoded",
+                                                "content"=>http_build_query($data)
+                                            )
+                                );
+                                file_get_contents($url,false,stream_context_create($options));
+                            }
+                        }
+
+                    }
+
+                }
 
                 $newDetail = new DetailBank;
                 $newDetail->kode_bank = $request->get('kode_bank');
-                $newDetail->keterangan = str_replace(' ', '-', strtoupper($_POST['keterangan'][$key]));
-                $newDetail->lawan = $_POST['lawan'][$key];
-                $newDetail->subtotal = $value;
+                $newDetail->keterangan = $keterangan;
+                $newDetail->lawan = $lawan;
+                $newDetail->subtotal = $total;
 
                 $newDetail->save();
 
@@ -149,17 +262,19 @@ class BankController extends Controller
                 $newJurnal->tanggal = $request->get('tanggal');
                 $newJurnal->jenis_transaksi = 'Bank';
                 $newJurnal->kode_transaksi = $request->get('kode_bank');
-                $newJurnal->keterangan = str_replace(' ', '-', strtoupper($_POST['keterangan'][$key]));
+                $newJurnal->keterangan = $keterangan;
                 $newJurnal->kode = $request->get('kode_rekening');
-                $newJurnal->lawan = $_POST['lawan'][$key];
+                $newJurnal->lawan = $lawan;
                 $newJurnal->tipe = $request->get('tipe') == 'Masuk' ? 'Debet' : 'Kredit';
-                $newJurnal->nominal = $_POST['subtotal'][$key];
+                $newJurnal->nominal = $total;
                 $newJurnal->id_detail = $newDetail->id;
                 $newJurnal->save();
 
-            }
 
-            return redirect()->route('transaksi-bank.edit', $request->get('kode_bank'))->withStatus('Data berhasil ditambahkan.');
+            }
+            
+
+            return redirect()->route('transaksi-bank.index')->withStatus('Data berhasil ditambahkan.');
         } catch (\Exception $e) {
             return redirect()->back()->withStatus('Terjadi kesalahan. : ' . $e->getMessage());
         } catch (\Illuminate\Database\QueryException $e) {

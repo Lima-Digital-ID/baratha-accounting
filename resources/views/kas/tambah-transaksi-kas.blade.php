@@ -82,7 +82,7 @@
 
                 <div class="col-md-4 mb-3">
                     <label for="" class="form-control-label">Supplier</label>
-                    <select name="kode_supplier" class="form-control setLawan select2 @error('kode_supplier') is-invalid @enderror" data-tipe='supplier' id="kode_supplier" {{old('kode_supplier')=='' ? 'disabled' : ''}}>
+                    <select name="kode_supplier" class="form-control getHutangPiutang select2 @error('kode_supplier') is-invalid @enderror" data-tipe='supplier' id="kode_supplier" {{old('kode_supplier')=='' ? 'disabled' : ''}}>
                         <option value="">--Pilih Supplier--</option>
                         @foreach ($supplier as $item)
                             <option value="{{$item->kode_supplier}}" {{old('kode_supplier') == $item->kode_supplier ? 'selected' : ''}} >{{$item->kode_supplier . ' ~ '.$item->nama}}</option>
@@ -98,7 +98,7 @@
                 
                 <div class="col-md-4 mb-3">
                     <label for="" class="form-control-label">Customer</label>
-                    <select name="kode_customer" class="form-control select2 setLawan @error('kode_customer') is-invalid @enderror" data-tipe='customer' id="kode_customer" {{old('kode_customer')=='' ? 'disabled' : ''}}>
+                    <select name="kode_customer" class="form-control select2 getHutangPiutang @error('kode_customer') is-invalid @enderror" data-tipe='customer' id="kode_customer" {{old('kode_customer')=='' ? 'disabled' : ''}}>
                         <option value="">--Pilih Customer--</option>
                         @foreach ($customer as $item)
                             <option value="{{$item->kode_customer}}" {{old('kode_customer') == $item->kode_customer ? 'selected' : ''}} >{{$item->kode_customer . ' ~ '.$item->nama}}</option>
@@ -115,21 +115,44 @@
             </div>
 
             <hr class="my-2">
-            <h6 class="heading-small text-muted mb-3">Detail Transaksi Kas</h6>
+            <div class="detail-lawan">
+                <h6 class="heading-small text-muted mb-3">Detail Transaksi Kas</h6>
 
-            <div class="pl-lg-4" id='urlAddDetail' data-url="{{url('kas/transaksi-kas/addDetailTransaksiKas')}}">
-                @if(!is_null(old('lawan')))
-                  @php $no = 0 @endphp
-                  @foreach(old('lawan') as $n => $value)
-                    @php $no++ @endphp
-                    @include('kas.tambah-detail-transaksi-kas',['hapus' => false, 'no' => $no, 'lawan' => $lawan])
-                  @endforeach
-                @else
-                  @include('kas.tambah-detail-transaksi-kas',['hapus' => false, 'no' => 1, 'lawan' => $lawan])
-                @endif
+                <div class="pl-lg-4" id='urlAddDetail' data-url="{{url('kas/transaksi-kas/addDetailTransaksiKas')}}">
+                    @if(!is_null(old('lawan')))
+                    @php $no = 0 @endphp
+                    @foreach(old('lawan') as $n => $value)
+                        @php $no++ @endphp
+                        @include('kas.tambah-detail-transaksi-kas',['hapus' => false, 'no' => $no, 'lawan' => $lawan])
+                    @endforeach
+                    @else
+                    @include('kas.tambah-detail-transaksi-kas',['hapus' => false, 'no' => 1, 'lawan' => $lawan])
+                    @endif
+                </div>
+                
+                <h5 class='text-right mt-1 pr-5'>Total : <span id='total' class="text-orange">0</span></h5>
             </div>
-            
-            <h5 class='text-right mt-1 pr-5'>Total : <span id='total' class="text-orange">0</span></h5>
+            <div class="hutang-piutang" style="display:none">
+                <h6 class="heading-small text-muted mb-3">Daftar <span class="titleHutangPiutang"></span></h6>
+                <div class="table-responsive">
+                    <table class="table table table-custom td-grey">
+                        <thead>
+                            <tr>
+                                <td>#</td>
+                                <td>Kode Transaksi</td>
+                                <td>Kode Supplier</td>
+                                <td>Tanggal Transaksi</td>
+                                <td>Jatuh Tempo</td>
+                                <td>Jumlah <span class="titleHutangPiutang"></span></td>
+                                <td>Sisa</td>
+                                <td>Bayar</td>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
             <div class="mt-4">
 
             <button type="reset" class="btn btn-default"> <span class="fa fa-times"></span> Cancel</button>

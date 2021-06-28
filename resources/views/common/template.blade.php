@@ -604,7 +604,7 @@
       });
     </script> --}}
     <script>
-      $(document).ready(function(){
+/*       $(document).ready(function(){
         $.ajax({
             type : "get",
             url : "<?= url('dashboard/cekNotif') ?>",
@@ -638,21 +638,20 @@
         })
       })
 
-
+ */
       const tel = document.getElementById('kode_rekening');
       if(tel!=null){
-
-      tel.addEventListener('input', function() {
-        let start = this.selectionStart;
-        let end = this.selectionEnd;
-        
-        const current = this.value
-        const corrected = current.replace(/([^+0-9.]+)/gi, '');
-        this.value = corrected;
-        
-        if (corrected.length < current.length) --end;
-        this.setSelectionRange(start, end);
-      });
+        tel.addEventListener('input', function() {
+          let start = this.selectionStart;
+          let end = this.selectionEnd;
+          
+          const current = this.value
+          const corrected = current.replace(/([^+0-9.]+)/gi, '');
+          this.value = corrected;
+          
+          if (corrected.length < current.length) --end;
+          this.setSelectionRange(start, end);
+        });
       }
     </script>
   </body>

@@ -61,6 +61,7 @@ Route::group(['middleware' => ['auth:sanctum', 'verified']], function () {
         Route::get('getTtlHutang', 'SupplierController@getTtlHutang');
         Route::get('supplier/hutang', 'SupplierController@getHutang');
         Route::get('supplier/hutang/{kodeSupplier}', 'SupplierController@hutang')->name('hutang-supplier');
+        Route::get('supplier/getHutangJson', 'SupplierController@getHutangJson');
 
         Route::post('pembayaran-hutang', 'SupplierController@pembayaranHutang');
 
@@ -93,6 +94,7 @@ Route::group(['middleware' => ['auth:sanctum', 'verified']], function () {
         Route::post('pembayaran-piutang', 'CustomerController@pembayaranPiutang');
         Route::resource('rekap-resto', 'RekapRestoController');
         Route::get('customer/piutang/{kodeCustomer}', 'CustomerController@piutang')->name('piutang-customer');
+        Route::get('customer/getPiutangJson', 'CustomerController@getPiutangJson');
         Route::resource('customer', 'CustomerController');
         Route::get('penjualan-catering/getKode', 'PenjualanCateringController@getKode');
         Route::resource('penjualan-catering', 'PenjualanCateringController');

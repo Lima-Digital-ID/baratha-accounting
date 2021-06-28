@@ -217,4 +217,11 @@ class CustomerController extends Controller
         return \view('penjualan.customer.list-piutang-customer',$this->param);
     }
 
+    public function getPiutangJson()
+    {
+        $piutang = PenjualanLain::select('kode_penjualan as kode_transaksi','kode_customer as kode','tanggal','jatuh_tempo','grandtotal','terbayar')->where('kode_customer',$_GET['kode'])->whereRaw('terbayar != grandtotal')->get();
+
+        echo json_encode($piutang);
+    }
+
 }
