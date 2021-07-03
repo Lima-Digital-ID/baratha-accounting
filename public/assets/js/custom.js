@@ -27,6 +27,15 @@ $(document).ready(function() {
     $("form").submit(function() {
         $(".loading").addClass("show");
     });
+
+    function indoDate(date){
+        var year = date.substr(0,4);
+        var month = date.substr(5,2);
+        var day = date.substr(8,2);
+        var newFormat = day+"-"+month+"-"+year 
+
+        return newFormat;
+    }
     
     function formatRupiah(angka) {
         var number_string = angka.toString(),
@@ -81,10 +90,21 @@ $(document).ready(function() {
             $('#kode_supplier').attr('disabled', true);
             $('#kode_customer').attr('disabled', false);
         }
-        else{
+        else if(tipe=='Keluar'){
             $('#kode_customer').attr('disabled', true);
             $('#kode_customer').val('');
             $('#kode_supplier').attr('disabled', false);
+        }
+
+        $(".hutang-piutang").hide()
+        $(".hutang-piutang tbody tr").remove()
+        if(tipe!=''){
+            $(".detail-lawan").hide();
+            $(".detail-lawan input, .detail-lawan select").attr('disabled',true)
+        }
+        else{
+            $(".detail-lawan input, .detail-lawan select").attr('disabled',false)
+            $(".detail-lawan").show();
         }
 
         $(".select2").select2()
@@ -386,35 +406,43 @@ $(document).ready(function() {
             }
         })
     })
-    $(".setLawan").change(function(){
+    $(".getHutangPiutang").change(function(){
         var tipe = $(this).data('tipe')
         var thisVal = $(this).val()
         var url
-        if(tipe=='supplier'){
-            url = location.origin+"/pembelian/getTtlHutang"
-        }
-        else{
-            url = location.origin+"/penjualan/getTtlPiutang"
-        }
+        $(".hutang-piutang tbody tr").remove()
+        if(thisVal!=""){
+        $(".hutang-piutang").show()
+            if(tipe=='supplier'){
+                url = location.origin+"/pembelian/supplier/getHutangJson"
+                $(".titleHutangPiutang").html('Hutang')
+            }
+            else{
+                url = location.origin+"/penjualan/customer/getPiutangJson"
+                $(".titleHutangPiutang").html('Piutang')
+            }
+            $(".loading").addClass("show");
 
-        $(".row-detail[data-no='1'] select").val('')
-        $(".select2").select2()
-
-        $(".row-detail[data-no='1'] .getTotalKas").val('')
-        if(thisVal!=''){
             $.ajax({
                 type : 'get',
-                url : url,
                 dataType : 'json',
                 data : {kode : thisVal},
+                url : url,
+                beforeSend: function() {
+                    $(".loading").addClass("show");
+                },
                 success : function(data){
-                    $(".row-detail[data-no='1'] select").val(data.kode_rekening)
-                    $(".select2").select2()
-
-                    $(".row-detail[data-no='1'] .getTotalKas").val(parseInt(data.ttl)) //total hutang atau  piutang
+                    $(".loading").removeClass("show");
+                    $.each(data, function(i,v){
+                        i++;
+                        var sisa = parseInt(v.grandtotal) - parseInt(v.terbayar)
+                        $('.hutang-piutang tbody').append(`<tr><td>${i}</td><td><input type='hidden' name='kode_transaksi[]' value='${v.kode_transaksi}'> ${v.kode_transaksi}</td><td>${v.kode}</td><td>${indoDate(v.tanggal)}</td><td>${indoDate(v.jatuh_tempo)}</td><td>${formatRupiah(v.grandtotal)}</td><td>${formatRupiah(sisa)}</td><td><input type='number' class='form-control' name='bayar[]' value='${sisa}'></td></tr>`)
+                    })
                 }
             })
         }
-
+        else{
+            $(".hutang-piutang").hide()
+        }
     })
 });
