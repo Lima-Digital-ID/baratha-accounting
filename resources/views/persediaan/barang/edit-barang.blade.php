@@ -75,7 +75,7 @@
       <br>
 
       <label>Expired Date</label>
-      <input type="text" class="form-control datepicker {{ $errors->has('exp_date') ? ' is-invalid' : '' }}" value="{{ old('exp_date', $barang->exp_date) }}" name="exp_date" placeholder="Expired Date">
+      <input type="text" class="form-control datepickerDate {{ $errors->has('exp_date') ? ' is-invalid' : '' }}" value="{{ old('exp_date', $barang->exp_date) }}" name="exp_date" placeholder="Expired Date">
       @if ($errors->has('exp_date'))
           <span class="invalid-feedback" role="alert">
               <strong>{{ $errors->first('exp_date') }}</strong>
