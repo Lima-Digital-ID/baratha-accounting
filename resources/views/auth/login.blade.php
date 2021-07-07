@@ -51,11 +51,11 @@
                                     @enderror
                                     <br>
                                     <div class="form-underline">
-                                    <input style="width:auto" type="checkbox" name="remember" id="remember" {{ old('remember') ? 'checked' : '' }}>
+                                    {{-- <input style="width:auto" type="checkbox" name="remember" id="remember" {{ old('remember') ? 'checked' : '' }}>
         
                                     <label style="font-size:12px" class="form-check-label" for="remember">
                                         {{ __('Remember Me') }}
-                                    </label>
+                                    </label> --}}
         
                                     </div>
                                     <br>
