@@ -26,17 +26,25 @@ class BarangController extends Controller
         try {
             $keyword = $request->get('keyword');
             $kategori = $request->get('kategori');
+            $getBarang = Barang::with('kategoriBarang');
+            // if ($kategori) {
+            //     if ($keyword) {
+            //         $barang = Barang::with('kategoriBarang')->where('id_kategori', $kategori)->where('kode_barang', 'LIKE', "%$keyword%")->orWhere('nama', 'LIKE', "%$keyword%")->paginate(10);
+            //     }
+            //     else{
+            //         $barang = Barang::with('kategoriBarang')->where('id_kategori', $kategori)->paginate(10);
+            //     }
+            // }
             if ($kategori) {
-                if ($keyword) {
-                    $barang = Barang::with('kategoriBarang')->where('id_kategori', $kategori)->where('kode_barang', 'LIKE', "%$keyword%")->orWhere('nama', 'LIKE', "%$keyword%")->paginate(10);
-                }
-                else{
-                    $barang = Barang::with('kategoriBarang')->where('id_kategori', $kategori)->paginate(10);
-                }
+                $getBarang->where('id_kategori', $kategori);
             }
-            else{
-                $barang = Barang::with('kategoriBarang')->paginate(10);
+
+            if($keyword){
+                $getBarang->where('kode_barang', 'LIKE', "%$keyword%")->orWhere('nama', 'LIKE', "%$keyword%");
             }
+            
+            $barang = $getBarang->paginate(10);
+            
         } catch (\Illuminate\Database\QueryException $e) {
             return redirect()->back()->withStatus('Terjadi Kesalahan');
         }

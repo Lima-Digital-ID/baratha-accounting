@@ -96,7 +96,7 @@ class KategoriBarangController extends Controller
         $isUniqueNama = $kategoriBarang->nama == $request->nama ? '' : '|unique:kategori_barang';
 
         $validatedData = $request->validate([
-            'nama' => 'required'.$isUniqueNama,
+            'nama' => 'required',
         ],
         [
             'required' => ':attribute harus diisi.',
