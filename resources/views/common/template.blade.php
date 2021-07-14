@@ -180,7 +180,7 @@
             </div>
           </li>
 
-          @if (auth()->user()->akses == 'Owner' || auth()->user()->akses == 'Accounting')
+          
           <li class="nav-item {{Request::segment(1) == 'pembelian' ? 'active' : ''}}">
             <a
               class="nav-link {{Request::segment(1) == 'pembelian' ? '' : 'collapsed'}}"
@@ -219,7 +219,8 @@
               </div>
             </div>
           </li>
-
+          
+          @if (auth()->user()->akses == 'Owner' || auth()->user()->akses == 'Accounting')
           <li class="nav-item {{Request::segment(1) == 'penjualan' ? 'active' : ''}}">
             <a
               class="nav-link {{Request::segment(1) == 'penjualan' ? '' : 'collapsed'}}"
