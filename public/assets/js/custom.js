@@ -84,6 +84,7 @@ $(document).ready(function() {
         let tipe = $(this).val();
         $('#kode_supplier').attr('disabled', true);
         $('#kode_customer').attr('disabled', true);
+        $(".detail-lawan").show();
         if (tipe == 'Masuk') {
             // $('#kode_supplier').val("");
             $('#kode_supplier').val('');
@@ -98,14 +99,14 @@ $(document).ready(function() {
 
         $(".hutang-piutang").hide()
         $(".hutang-piutang tbody tr").remove()
-        if(tipe!=''){
-            $(".detail-lawan").hide();
-            $(".detail-lawan input, .detail-lawan select").attr('disabled',true)
-        }
-        else{
-            $(".detail-lawan input, .detail-lawan select").attr('disabled',false)
-            $(".detail-lawan").show();
-        }
+        // if(tipe!=''){
+        //     $(".detail-lawan").hide();
+        //     $(".detail-lawan input, .detail-lawan select").attr('disabled',true)
+        // }
+        // else{
+        //     $(".detail-lawan input, .detail-lawan select").attr('disabled',false)
+        //     $(".detail-lawan").show();
+        // }
 
         $(".select2").select2()
     });
@@ -412,6 +413,7 @@ $(document).ready(function() {
         var url
         $(".hutang-piutang tbody tr").remove()
         if(thisVal!=""){
+        $(".detail-lawan").hide()
         $(".hutang-piutang").show()
             if(tipe=='supplier'){
                 url = location.origin+"/pembelian/supplier/getHutangJson"
@@ -442,6 +444,7 @@ $(document).ready(function() {
             })
         }
         else{
+            $(".detail-lawan").show()
             $(".hutang-piutang").hide()
         }
     })
