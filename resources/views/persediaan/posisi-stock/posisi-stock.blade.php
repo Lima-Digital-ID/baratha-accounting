@@ -37,12 +37,12 @@
 
                         <div class="col-md-6 mb-4">
                             <label for="">Tanggal Dari</label>
-                            <input type="text" name="tanggalDari" autocomplete="off" class="form-control datepicker" value="{{!is_null(Request::get('tanggalDari')) ? Request::get('tanggalDari') : '' }}" required>
+                            <input type="text" name="tanggalDari" autocomplete="off" class="form-control datepickerDate" value="{{!is_null(Request::get('tanggalDari')) ? Request::get('tanggalDari') : date('Y-m-d') }}" required>
                         </div>
                         
                         <div class="col-md-6 mb-4">
                             <label for="">Tanggal Sampai</label>
-                            <input type="text" name="tanggalSampai" autocomplete="off" class="form-control datepicker" value="{{!is_null(Request::get('tanggalSampai')) ? Request::get('tanggalSampai') : ''}}" required>
+                            <input type="text" name="tanggalSampai" autocomplete="off" class="form-control datepickerDate" value="{{!is_null(Request::get('tanggalSampai')) ? Request::get('tanggalSampai') : date('Y-m-d')}}" required>
                         </div>
 
                         <div class="col-md-6">
