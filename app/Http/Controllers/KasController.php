@@ -280,7 +280,7 @@ class KasController extends Controller
             $this->param['pageInfo'] = 'Transaksi Kas / Edit Data';
             $this->param['btnRight']['text'] = 'Lihat Data';
             $this->param['btnRight']['link'] = route('transaksi-kas.index');
-            $this->param['kodeRekeningKas'] = KodeRekening::select('kode_rekening', 'kode_rekening.nama')->join('kode_induk', 'kode_induk.kode_induk', '=', 'kode_rekening.kode_induk')->where('kode_rekening.nama', 'Kas')->get();
+            $this->param['kodeRekeningKas'] = KodeRekening::select('kode_rekening', 'kode_rekening.nama')->join('kode_induk', 'kode_induk.kode_induk', '=', 'kode_rekening.kode_induk')->where('kode_rekening.nama', 'LIKE', 'Kas%')->get();
 
             $this->param['lawan'] = KodeRekening::select('kode_rekening', 'kode_rekening.nama')->join('kode_induk', 'kode_induk.kode_induk', '=', 'kode_rekening.kode_induk')->where('kode_rekening.nama', '!=','Kas')->where('kode_rekening.nama', '!=','Bank')->get();
 
@@ -473,7 +473,7 @@ class KasController extends Controller
     public function reportKas()
     {
         try{
-            $this->param['kodeRekeningKas'] = KodeRekening::select('kode_rekening', 'kode_rekening.nama')->join('kode_induk', 'kode_induk.kode_induk', '=', 'kode_rekening.kode_induk')->where('kode_rekening.nama', 'Kas')->get();
+            $this->param['kodeRekeningKas'] = KodeRekening::select('kode_rekening', 'kode_rekening.nama')->join('kode_induk', 'kode_induk.kode_induk', '=', 'kode_rekening.kode_induk')->where('kode_rekening.nama', 'LIKE', 'Kas%')->get();
             $this->param['report'] = null;
 
             return view('kas.laporan-kas', $this->param);
@@ -494,7 +494,7 @@ class KasController extends Controller
             'end' => 'required'
         ]);
         try{
-            $this->param['kodeRekeningKas'] = KodeRekening::select('kode_rekening', 'kode_rekening.nama')->join('kode_induk', 'kode_induk.kode_induk', '=', 'kode_rekening.kode_induk')->where('kode_rekening.nama', 'Kas')->get();
+            $this->param['kodeRekeningKas'] = KodeRekening::select('kode_rekening', 'kode_rekening.nama')->join('kode_induk', 'kode_induk.kode_induk', '=', 'kode_rekening.kode_induk')->where('kode_rekening.nama', 'LIKE', 'Kas%')->get();
             $this->param['report'] = Kas::select(
                                         'kas.kode_kas',
                                         'kas.tanggal',
@@ -527,7 +527,7 @@ class KasController extends Controller
             'end' => 'required'
         ]);
         try{
-            $this->param['kodeRekeningKas'] = KodeRekening::select('kode_rekening', 'kode_rekening.nama')->join('kode_induk', 'kode_induk.kode_induk', '=', 'kode_rekening.kode_induk')->where('kode_rekening.nama', 'Kas')->get();
+            $this->param['kodeRekeningKas'] = KodeRekening::select('kode_rekening', 'kode_rekening.nama')->join('kode_induk', 'kode_induk.kode_induk', '=', 'kode_rekening.kode_induk')->where('kode_rekening.nama', 'LIKE', 'Kas%')->get();
             $this->param['report'] = Kas::select(
                                         'kas.kode_kas',
                                         'kas.tanggal',
