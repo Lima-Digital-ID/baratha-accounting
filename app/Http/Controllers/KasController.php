@@ -107,7 +107,7 @@ class KasController extends Controller
     public function store(Request $request)
     {
         
-        if(isset($_POST['subtotal'])){
+        if(empty($_POST['bayar'])){
             $validate['lawan.*'] = 'required';
             $validate['subtotal.*'] = 'required|numeric|gt:0';
             $validate['keterangan.*'] = 'required';
@@ -137,7 +137,7 @@ class KasController extends Controller
             $newKas->created_by = Auth::user()->id;
             $newKas->save();
 
-            if(isset($_POST['subtotal'])){
+            if(empty($_POST['bayar'])){
                 foreach ($_POST['subtotal'] as $key => $value) {
 
                     $newDetail = new DetailKas;

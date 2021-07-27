@@ -112,7 +112,7 @@ class BankController extends Controller
             'tipe' => 'required',
             'kode_rekening' => 'required',
         );
-        if(isset($_POST['subtotal'])){
+        if(empty($_POST['bayar'])){
             $validate['lawan.*'] = 'required';
             $validate['subtotal.*'] = 'required|numeric|gt:0';
             $validate['keterangan.*'] = 'required';
@@ -145,7 +145,7 @@ class BankController extends Controller
             $newBank->save();
 
 
-            if(isset($_POST['subtotal'])){
+            if(empty($_POST['bayar'])){
     
                 foreach ($_POST['subtotal'] as $key => $value) {
     
