@@ -25,7 +25,7 @@
             <div class="row">
                 <div class="col-md-4">
                     <label>Tanggal</label><span style="color: red;">*</span>
-                    <input type="text" class="form-control getKode datepicker {{ $errors->has('start') ? ' is-invalid' : '' }}" value="{{ old('start', isset($_GET['start']) != null ? $_GET['start'] : '') }}" name="start" placeholder="Tanggal" autocomplete="off">
+                    <input type="text" class="form-control getKode datepickerDate {{ $errors->has('start') ? ' is-invalid' : '' }}" value="{{ old('start', isset($_GET['start']) != null ? $_GET['start'] : date('Y-m-d')) }}" name="start" placeholder="Tanggal" autocomplete="off">
                     @if ($errors->has('start'))
                         <span class="invalid-feedback" role="alert">
                             <strong>{{ $errors->first('start') }}</strong>
@@ -37,7 +37,7 @@
 
                 <div class="col-md-4">
                     <label>S/d</label><span style="color: red;">*</span>
-                    <input type="text" class="form-control getKode datepicker {{ $errors->has('end') ? ' is-invalid' : '' }}" value="{{ old('end', isset($_GET['end']) != null ? $_GET['end'] : '') }}" name="end" placeholder="Tanggal" autocomplete="off">
+                    <input type="text" class="form-control getKode datepickerDate {{ $errors->has('end') ? ' is-invalid' : '' }}" value="{{ old('end', isset($_GET['end']) != null ? $_GET['end'] : date('Y-m-d')) }}" name="end" placeholder="Tanggal" autocomplete="off">
                     @if ($errors->has('end'))
                         <span class="invalid-feedback" role="alert">
                             <strong>{{ $errors->first('end') }}</strong>
@@ -110,13 +110,14 @@
 
                     <br>
                 </div>
-
                 <div class="col-md-4">
                     <label>Keterangan</label>
                     <select name="keterangan" id="keterangan" class="form-control select2 {{ $errors->has('keterangan') ? ' is-invalid' : '' }}">
                         <option value="">-- Semua Keterangan --</option>
                         @foreach ($keterangan as $item)
-                            <option value="{{$item->keterangan}}" {{ old('keterangan', $_GET['keterangan'] == $item->keterangan ? 'selected' : '') }} >{{$item->keterangan}}</option>
+                            @if (isset($item->keterangan))
+                                <option value="{{$item->keterangan}}" {{isset($_GET['keterangan']) && $_GET['keterangan'] ==  $item->keterangan ? 'selected' : ''}} >{{$item->keterangan}}</option>
+                            @endif
                         @endforeach
                     </select>
                     @if ($errors->has('keterangan'))
