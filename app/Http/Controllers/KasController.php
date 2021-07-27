@@ -174,7 +174,8 @@ class KasController extends Controller
                             $kartuHutang = new KartuHutang;
                             $kartuHutang->tanggal = date('Y-m-d');
                             $kartuHutang->kode_supplier = $request->get('kode_supplier');
-                            $kartuHutang->kode_transaksi = $_POST['kode_transaksi'][$key];
+                            // $kartuHutang->kode_transaksi = $_POST['kode_transaksi'][$key];
+                            $kartuHutang->kode_transaksi = $request->get('kode_kas');
                             $kartuHutang->nominal = $value;
                             $kartuHutang->tipe = 'Pembayaran';
                             $kartuHutang->save();
@@ -204,7 +205,8 @@ class KasController extends Controller
                             $kartuHutang = new KartuPiutang;
                             $kartuHutang->tanggal = date('Y-m-d');
                             $kartuHutang->kode_customer = $request->get('kode_customer');
-                            $kartuHutang->kode_transaksi = $_POST['kode_transaksi'][$key];
+                            // $kartuHutang->kode_transaksi = $_POST['kode_transaksi'][$key];
+                            $kartuHutang->kode_transaksi = $request->get('kode_kas');
                             $kartuHutang->nominal = $value;
                             $kartuHutang->tipe = 'Pelunasan';
                             $kartuHutang->save();
