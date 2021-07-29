@@ -140,12 +140,12 @@
                                 </div>
                                 <div class="form-group">
                                     <label for="">Total</label>
-                                    <input type="text" name="total" class="form-control" id="total" step=".01" readonly>
+                                    <input type="text" name="total" class="form-control" id="total" step=".01">
                                 </div>
                                 <div class="form-group">
                                     <label for="">Total PPN</label>
                                     <input type="text" name="total_ppn" class="form-control" id="total_ppn" step=".01"
-                                        readonly>
+                                    >
                                 </div>
                         </div>
                         <div class="modal-footer">
