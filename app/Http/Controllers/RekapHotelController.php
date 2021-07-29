@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use \App\Models\Rekap_hotel;
 use \App\Models\Jurnal;
+use App\Models\KodeRekening;
 
 class RekapHotelController extends Controller
 {
@@ -18,16 +19,16 @@ class RekapHotelController extends Controller
     {
         try {
             $this->param['pageInfo'] = 'Input Rekap Hotel';
-    
+            $this->param['kodeRekening'] = KodeRekening::select('kode_rekening', 'kode_rekening.nama')->join('kode_induk', 'kode_induk.kode_induk', '=', 'kode_rekening.kode_induk')->where('kode_rekening.nama', 'LIKE', 'Kas%')->orWhere('kode_rekening.nama', 'LIKE', 'Bank%')->get();
             if(isset($_GET['tanggal'])){
-                $cek = Rekap_hotel::where('tanggal',$_GET['tanggal'])->count();
-                if($cek==0){
-                    $this->param['json'] = $this->getRekap($_GET['tanggal']);
-                }
-                elseif ($cek > 0) {
-                    $this->param['status'] = 'Data pada tanggal ' . $_GET['tanggal'] . ' telah ditarik.';
-                    $this->param['json'] = $this->getRekap($_GET['tanggal']);
-                }
+                $this->param['json'] = $this->getRekap($_GET['tanggal']);
+                // $cek = Rekap_hotel::where('tanggal',$_GET['tanggal'])->count();
+                // if($cek==0){
+                // }
+                // elseif ($cek > 0) {
+                //     $this->param['status'] = 'Data pada tanggal ' . $_GET['tanggal'] . ' telah ditarik.';
+                //     $this->param['json'] = $this->getRekap($_GET['tanggal']);
+                // }
             }
             return view('penjualan.input-rekap.input-rekap-hotel', $this->param);
         } catch (\Throwable $th) {
@@ -37,11 +38,11 @@ class RekapHotelController extends Controller
     public function save()
     {
         try {
-            $json = $this->getRekap($_GET['tanggal']);
             $rekapHotel = new Rekap_hotel;
             $rekapHotel->tanggal = $_GET['tanggal'];
-            $rekapHotel->total = $json['data']['total'];
-            $rekapHotel->total_ppn = $json['data']['total_ppn'];
+            $rekapHotel->jenis_bayar = $_GET['jenis_bayar'];
+            $rekapHotel->total = $_GET['total'];
+            $rekapHotel->total_ppn = $_GET['total_ppn'];
             $rekapHotel->save();
 
             // save jurnal penjualan
@@ -51,10 +52,10 @@ class RekapHotelController extends Controller
             $newJurnal->jenis_transaksi = 'Penjualan Hotel';
             $newJurnal->kode_transaksi = 'Penjualan Hotel';
             $newJurnal->keterangan = 'Penjualan Hotel';
-            $newJurnal->kode = '1101';
+            $newJurnal->kode = $_GET['kode_rekening'];
             $newJurnal->lawan = '4101';
             $newJurnal->tipe = 'Debet';
-            $newJurnal->nominal = $json['data']['total'];
+            $newJurnal->nominal = $_GET['total'];
             $newJurnal->id_detail = '';
             $newJurnal->save();
 
@@ -66,10 +67,10 @@ class RekapHotelController extends Controller
             $newJurnalPpn->jenis_transaksi = 'Penjualan Hotel';
             $newJurnalPpn->kode_transaksi = 'Penjualan Hotel';
             $newJurnalPpn->keterangan = 'PPN Penjualan Hotel';
-            $newJurnalPpn->kode = '1101';
+            $newJurnalPpn->kode = $_GET['kode_rekening'];
             $newJurnalPpn->lawan = '2105';
             $newJurnalPpn->tipe = 'Debet';
-            $newJurnalPpn->nominal = $json['data']['total_ppn'];
+            $newJurnalPpn->nominal = $_GET['total_ppn'];
             $newJurnalPpn->id_detail = '';
             $newJurnalPpn->save();
 

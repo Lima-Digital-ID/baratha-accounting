@@ -448,4 +448,15 @@ $(document).ready(function() {
             $(".hutang-piutang").hide()
         }
     })
+
+    // tarik rekap resto hotel
+    $('.tarikData').click(function () { 
+        let jenis_bayar = $(this).data('jenis_bayar');
+        let total = $(this).data('total');
+        let total_ppn = $(this).data('total_ppn');
+
+        $('#jenis_bayar').val(jenis_bayar);
+        $('#total').val(total);
+        $('#total_ppn').val(total_ppn);
+    });
 });
