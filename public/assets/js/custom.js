@@ -24,8 +24,13 @@ $(document).ready(function() {
         format: "yyyy-mm-dd",
     });
 
-    $("form").submit(function() {
-        $(".loading").addClass("show");
+    $("form").submit(function(event) {
+        if( !confirm('Apakah anda yakin?') ) {
+            event.preventDefault();
+        }
+        else{
+            $(".loading").addClass("show");
+        }
     });
 
     function indoDate(date){
@@ -459,4 +464,8 @@ $(document).ready(function() {
         $('#total').val(total);
         $('#total_ppn').val(total_ppn);
     });
+    
+    // $("#form-tambah").submit(function(event) {
+        
+    // });
 });

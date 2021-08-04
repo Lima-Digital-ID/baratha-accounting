@@ -33,11 +33,14 @@ class MemorialController extends Controller
 
         try {
             $keyword = $request->get('keyword');
+            $getMemorial = Memorial::orderBy('tanggal', 'DESC');
+
             if ($keyword) {
-                $this->param['memorial'] = Memorial::where('kode_memorial', 'LIKE', "%$keyword%")->orWhere('kode_supplier', 'LIKE', "%$keyword%")->orWhere('kode_customer', 'LIKE', "%$keyword%")->orderBy('tanggal', 'DESC')->paginate(10);
-            } else {
-                $this->param['memorial'] = Memorial::orderBy('tanggal', 'DESC')->paginate(10);
+                $getMemorial->where('kode_memorial', 'LIKE', "%$keyword%")->orWhere('kode_supplier', 'LIKE', "%$keyword%")->orWhere('kode_customer', 'LIKE', "%$keyword%");
             }
+            
+            $this->param['memorial'] = $getMemorial->paginate(10);
+
         } catch (\Illuminate\Database\QueryException $e) {
             return redirect()->route('memorial.index')->withStatus('Terjadi Kesalahan');
             echo $e->getMessage();

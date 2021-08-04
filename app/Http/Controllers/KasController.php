@@ -33,11 +33,11 @@ class KasController extends Controller
 
         try {
             $keyword = $request->get('keyword');
+            $getKas = Kas::orderBy('tanggal', 'DESC');
             if ($keyword) {
-                $this->param['kas'] = Kas::where('kode_kas', 'LIKE', "%$keyword%")->orWhere('kode_supplier', 'LIKE', "%$keyword%")->orWhere('kode_customer', 'LIKE', "%$keyword%")->orderBy('tanggal', 'DESC')->paginate(10);
-            } else {
-                $this->param['kas'] = Kas::orderBy('tanggal', 'DESC')->paginate(10);
+                $getKas->where('kode_kas', 'LIKE', "%$keyword%")->orWhere('kode_supplier', 'LIKE', "%$keyword%")->orWhere('kode_customer', 'LIKE', "%$keyword%");
             }
+            $this->param['kas'] = $getKas->paginate(10);
         } catch (\Illuminate\Database\QueryException $e) {
             return redirect()->back()->withStatus('Terjadi Kesalahan');
         }

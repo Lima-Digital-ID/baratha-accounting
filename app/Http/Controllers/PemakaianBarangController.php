@@ -31,16 +31,16 @@ class PemakaianBarangController extends Controller
             $keyword = $request->get('keyword');
             $start = $request->get('start');
             $end = $request->get('end');
-            // $pemakaianBarang = PemakaianBarang::where('kode_pemakaian', 'LIKE', "%$keyword%")->orWhere('kode_supplier', 'LIKE', "%$keyword%")->paginate(10);
+            
+            $getPemakaianBarang = PemakaianBarang::orderBy('kode_pemakaian', 'DESC');
             if ($keyword) {
-                $pemakaianBarang = PemakaianBarang::where('kode_pemakaian', 'LIKE', "%$keyword%")->paginate(10);
-            }elseif($keyword == null && $start != null && $end != null){
-                $pemakaianBarang = PemakaianBarang::whereBetween('tanggal', [$start, $end])->paginate(10);
-            }elseif($keyword && $start && $end){
-                $pemakaianBarang = PemakaianBarang::whereBetween('tanggal', [$start, $end])->where('kode_pemakaian', 'LIKE', "%$keyword%")->paginate(10);
-            }else {
-                $pemakaianBarang = PemakaianBarang::paginate(10);
+                $getPemakaianBarang->where('kode_pemakaian', 'LIKE', "%$keyword%");
             }
+            if($start != null && $end != null){
+                $getPemakaianBarang->whereBetween('tanggal', [$start, $end]);
+            }
+            $pemakaianBarang = $getPemakaianBarang->paginate(10);
+            
         } catch (\Illuminate\Database\QueryException $e) {
             return redirect()->back()->withErrors('Terjadi Kesalahan');
             // return redirect()->back()->withStatus('Terjadi Kesalahan');

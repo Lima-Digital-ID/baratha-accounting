@@ -33,11 +33,12 @@ class BankController extends Controller
 
         try {
             $keyword = $request->get('keyword');
+            $getBank = Bank::orderBy('tanggal', 'DESC');
+
             if ($keyword) {
-                $this->param['bank'] = Bank::where('kode_bank', 'LIKE', "%$keyword%")->orWhere('kode_supplier', 'LIKE', "%$keyword%")->orWhere('kode_customer', 'LIKE', "%$keyword%")->orderBy('tanggal', 'DESC')->paginate(10);
-            } else {
-                $this->param['bank'] = Bank::orderBy('tanggal', 'DESC')->paginate(10);
+               $getBank->where('kode_bank', 'LIKE', "%$keyword%")->orWhere('kode_supplier', 'LIKE', "%$keyword%")->orWhere('kode_customer', 'LIKE', "%$keyword%");
             }
+            $this->param['bank'] = $getBank->paginate(10);
         } catch (\Illuminate\Database\QueryException $e) {
             return redirect()->back()->withStatus('Terjadi Kesalahan');
         }

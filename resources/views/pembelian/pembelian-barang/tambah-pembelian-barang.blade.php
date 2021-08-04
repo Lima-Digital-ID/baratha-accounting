@@ -21,7 +21,7 @@
         @endif
         <a href="{{$btnRight['link']}}" class="btn btn-primary mb-3"> <span class="fa fa-arrow-alt-circle-left"></span> {{$btnRight['text']}}</a>
         <hr>
-        <form action="{{ route('pembelian-barang.store') }}" method="POST">
+        <form action="{{ route('pembelian-barang.store') }}" method="POST" id="form-tambah">
             @csrf
             <h6 class="heading-small text-muted mb-3">Informasi Umum</h6>
             <div class="row">
