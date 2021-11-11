@@ -7,8 +7,8 @@ $(document).ready(function() {
     var currYear = d.getFullYear();
     var startDate = new Date(currYear, currMonth, currDate);
 
-    
-    $(function () {
+
+    $(function() {
         $('[data-toggle="tooltip"]').tooltip()
     });
 
@@ -25,23 +25,22 @@ $(document).ready(function() {
     });
 
     $("form").submit(function(event) {
-        if( !confirm('Apakah anda yakin?') ) {
+        if (!confirm('Apakah anda yakin?')) {
             event.preventDefault();
-        }
-        else{
+        } else {
             $(".loading").addClass("show");
         }
     });
 
-    function indoDate(date){
-        var year = date.substr(0,4);
-        var month = date.substr(5,2);
-        var day = date.substr(8,2);
-        var newFormat = day+"-"+month+"-"+year 
+    function indoDate(date) {
+        var year = date.substr(0, 4);
+        var month = date.substr(5, 2);
+        var day = date.substr(8, 2);
+        var newFormat = day + "-" + month + "-" + year
 
         return newFormat;
     }
-    
+
     function formatRupiah(angka) {
         var number_string = angka.toString(),
             sisa = number_string.length % 3,
@@ -85,7 +84,7 @@ $(document).ready(function() {
         }
     });
 
-    $('#tipe').change(function () { 
+    $('#tipe').change(function() {
         let tipe = $(this).val();
         $('#kode_supplier').attr('disabled', true);
         $('#kode_customer').attr('disabled', true);
@@ -95,8 +94,7 @@ $(document).ready(function() {
             $('#kode_supplier').val('');
             $('#kode_supplier').attr('disabled', true);
             $('#kode_customer').attr('disabled', false);
-        }
-        else if(tipe=='Keluar'){
+        } else if (tipe == 'Keluar') {
             $('#kode_customer').attr('disabled', true);
             $('#kode_customer').val('');
             $('#kode_supplier').attr('disabled', false);
@@ -104,14 +102,14 @@ $(document).ready(function() {
 
         $(".hutang-piutang").hide()
         $(".hutang-piutang tbody tr").remove()
-        // if(tipe!=''){
-        //     $(".detail-lawan").hide();
-        //     $(".detail-lawan input, .detail-lawan select").attr('disabled',true)
-        // }
-        // else{
-        //     $(".detail-lawan input, .detail-lawan select").attr('disabled',false)
-        //     $(".detail-lawan").show();
-        // }
+            // if(tipe!=''){
+            //     $(".detail-lawan").hide();
+            //     $(".detail-lawan input, .detail-lawan select").attr('disabled',true)
+            // }
+            // else{
+            //     $(".detail-lawan input, .detail-lawan select").attr('disabled',false)
+            //     $(".detail-lawan").show();
+            // }
 
         $(".select2").select2()
     });
@@ -152,19 +150,19 @@ $(document).ready(function() {
                 $(".getSubtotal").keyup(function() {
                     getSubtotal($(this));
                 });
-                
+
                 $(".getHargaSatuan").keyup(function() {
                     // getSubtotal($(this));
                     getHargaSatuan($(this));
                 });
 
-                $('.kode_barang').change(function () { 
+                $('.kode_barang').change(function() {
                     kodeBarang($(this))
                 });
                 $(".getTotalKas").keyup(function() {
                     getTotalKas($(this));
                 });
-                
+
 
                 // $(".barang").change(function() {
                 //     barang($(this));
@@ -194,6 +192,7 @@ $(document).ready(function() {
         e.preventDefault();
         addDetail($(this));
     });
+
     function deleteDetail(thisParam) {
         var delNo = thisParam.data("no");
         var parent = ".row-detail[data-no='" + delNo + "']";
@@ -201,8 +200,8 @@ $(document).ready(function() {
         if (thisParam.hasClass("addDeleteId") && idDetail != 0) {
             $(".idDelete").append(
                 "<input type='hidden' name='id_delete[]' value='" +
-                    idDetail +
-                    "'>"
+                idDetail +
+                "'>"
             );
         }
         $(parent).remove();
@@ -222,13 +221,13 @@ $(document).ready(function() {
         var other = parseFloat($(parent + " " + thisParam.data("other")).val());
         // console.log(other);
         other = isNaN(other) ? 0 : other;
-        
+
         var subtotal = $(parent + " " + ".getSubtotal").val();
         var qty = $(parent + " " + ".getTotalQty").val();
-        
+
         var harga_satuan = subtotal / qty;
-        
-        $(parent + " " +".harga_satuan").val(harga_satuan);
+
+        $(parent + " " + ".harga_satuan").val(harga_satuan);
         // console.log('parent : ' + parent + " " + ".harga_satuan");
         // console.log('subtotal : ' + subtotal);
         // console.log('qty : ' + qty);
@@ -247,17 +246,16 @@ $(document).ready(function() {
         $("#total").html(new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR' }).format(total));
         getTotalPpn(total)
     }
+
     function getTotalPpn(total) {
         console.log('getTotalPpn : ' + total);
         let statusPpn = $('#status_ppn').val();
         let totalPpn = 0;
         if (statusPpn == 'Tanpa') {
             totalPpn = 0;
-        }
-        else if(statusPpn == 'Belum'){
+        } else if (statusPpn == 'Belum') {
             totalPpn = 10 / 100 * total;
-        }
-        else{
+        } else {
             total = (100 / 110) * total;
             totalPpn = 10 / 100 * total;
             $("#total").html(new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR' }).format(total));
@@ -265,7 +263,7 @@ $(document).ready(function() {
         $("#totalPpn").html(new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR' }).format(totalPpn));
         $("#grandtotal").html(new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR' }).format(total + totalPpn));
     }
-    
+
     function getTotalQty() {
         var totalQty = 0;
         $(".getTotalQty").each(function() {
@@ -279,21 +277,21 @@ $(document).ready(function() {
 
     $(".getSubtotal").keyup(function() {
         getSubtotal($(this));
-        console.log('subtotal: ' + $(this).val());     
+        console.log('subtotal: ' + $(this).val());
     });
-    
+
     $(".getHargaSatuan").keyup(function() {
         // getHargaSatuan($(this));        
-        console.log('getHargaSatuan');        
+        console.log('getHargaSatuan');
     });
-    
+
     $(".getTotalQty").keyup(function() {
         getTotalQty($(this));
         // console.log($(this).val())
-        console.log('getTotalQty');        
+        console.log('getTotalQty');
     });
 
-    function kodeBarang(thisParam){
+    function kodeBarang(thisParam) {
         let url = thisParam.data('url');
         let kodeBarang = thisParam.val();
 
@@ -303,58 +301,56 @@ $(document).ready(function() {
         $.ajax({
             type: "get",
             url: url,
-            data: {kodeBarang : kodeBarang},
+            data: { kodeBarang: kodeBarang },
             dataType: 'JSON',
-            success: function (response) {
+            success: function(response) {
                 $(parent + " " + ".stock").val(response.stock);
                 $(parent + " " + ".saldo").val(response.saldo);
             }
         });
 
     }
-    $('.kode_barang').change(function () { 
+    $('.kode_barang').change(function() {
         kodeBarang($(this))
     });
-	$(".confirm-alert").click(function(e) {
-		e.preventDefault();
-		var url = $(this).attr("href");
-		var text = $(this).data('alert')
-		swal(
-			{
-				title: "Apakah anda yakin?",
-				text: text,
-				type: "warning",
-				showCancelButton: true,
-				confirmButtonColor: "#3c4099",
-				confirmButtonText: 'Submit',
-				closeOnConfirm: false
-			},
-			function() {
-				window.location = url;
-			}
-		);
-	});
-	$("#submitConfirm").submit(function(e) {
+    $(".confirm-alert").click(function(e) {
         e.preventDefault();
-		var id = $(this).attr("id");
+        var url = $(this).attr("href");
+        var text = $(this).data('alert')
+        swal({
+                title: "Apakah anda yakin?",
+                text: text,
+                type: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#3c4099",
+                confirmButtonText: 'Submit',
+                closeOnConfirm: false
+            },
+            function() {
+                window.location = url;
+            }
+        );
+    });
+    $("#submitConfirm").submit(function(e) {
+        e.preventDefault();
+        var id = $(this).attr("id");
         $(".loading").removeClass("show");
         var info = $(this).data('info')
-		swal(
-			{
-				title: "Apakah Anda Yakin?",
-				text: info,
-				type: "warning",
-				showCancelButton: true,
-				confirmButtonColor: "#DD6B55",
-				confirmButtonText: "Yakin",
-				closeOnConfirm: false
-			},
-			function() {
-				$("#"+id).unbind("submit").submit();
+        swal({
+                title: "Apakah Anda Yakin?",
+                text: info,
+                type: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#DD6B55",
+                confirmButtonText: "Yakin",
+                closeOnConfirm: false
+            },
+            function() {
+                $("#" + id).unbind("submit").submit();
                 $(".loading").addClass("show");
-			}
-		);
-	});
+            }
+        );
+    });
 
 
     function getTotalKas() {
@@ -369,7 +365,7 @@ $(document).ready(function() {
     }
 
     $(".getTotalKas").keyup(function() {
-        getTotalKas();        
+        getTotalKas();
     });
 
     $(".getTotalCatering").keyup(function() {
@@ -383,7 +379,7 @@ $(document).ready(function() {
         $("#totalQty").html(new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR' }).format($("#qty").val()))
         getTotalPpn(total);
     });
-    $(".status_ppn_catering").change(function(){
+    $(".status_ppn_catering").change(function() {
         var qty = parseInt($("#qty").val())
         var harga_satuan = parseInt($("#harga_satuan").val())
         var total = qty * harga_satuan
@@ -391,14 +387,14 @@ $(document).ready(function() {
         $("#totalQty").html(new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR' }).format($("#qty").val()))
         getTotalPpn(total)
     })
-    $("#status_ppn").change(function(){
-        if(!$(this).hasClass('status_ppn_catering')){
+    $("#status_ppn").change(function() {
+        if (!$(this).hasClass('status_ppn_catering')) {
             getTotal()
         }
     })
     $(".btn-pembayaran").click(function(e) {
         e.preventDefault();
-        
+
         var param = $(this).data('param')
         $("#kode-hutangpiutang").val(param[0])
         $("#jml-hutangpiutang").val(param[1])
@@ -406,56 +402,54 @@ $(document).ready(function() {
     })
     $(".sendParamToModal").click(function() {
         var data = $(this).data('param')
-        $.each(data, function(i,d) {
-            if(i%2==0){
-                $(data[i+1]).val(d)
+        $.each(data, function(i, d) {
+            if (i % 2 == 0) {
+                $(data[i + 1]).val(d)
             }
         })
     })
-    $(".getHutangPiutang").change(function(){
+    $(".getHutangPiutang").change(function() {
         var tipe = $(this).data('tipe')
         var thisVal = $(this).val()
         var url
         $(".hutang-piutang tbody tr").remove()
-        if(thisVal!=""){
-        $(".detail-lawan").hide()
-        $(".hutang-piutang").show()
-            if(tipe=='supplier'){
-                url = location.origin+"/pembelian/supplier/getHutangJson"
+        if (thisVal != "") {
+            $(".detail-lawan").hide()
+            $(".hutang-piutang").show()
+            if (tipe == 'supplier') {
+                url = location.origin + "/pembelian/supplier/getHutangJson"
                 $(".titleHutangPiutang").html('Hutang')
-            }
-            else{
-                url = location.origin+"/penjualan/customer/getPiutangJson"
+            } else {
+                url = location.origin + "/penjualan/customer/getPiutangJson"
                 $(".titleHutangPiutang").html('Piutang')
             }
             $(".loading").addClass("show");
 
             $.ajax({
-                type : 'get',
-                dataType : 'json',
-                data : {kode : thisVal},
-                url : url,
+                type: 'get',
+                dataType: 'json',
+                data: { kode: thisVal },
+                url: url,
                 beforeSend: function() {
                     $(".loading").addClass("show");
                 },
-                success : function(data){
+                success: function(data) {
                     $(".loading").removeClass("show");
-                    $.each(data, function(i,v){
+                    $.each(data, function(i, v) {
                         i++;
                         var sisa = parseInt(v.grandtotal) - parseInt(v.terbayar)
                         $('.hutang-piutang tbody').append(`<tr><td>${i}</td><td><input type='hidden' name='kode_transaksi[]' value='${v.kode_transaksi}'> ${v.kode_transaksi}</td><td>${v.kode}</td><td>${indoDate(v.tanggal)}</td><td>${indoDate(v.jatuh_tempo)}</td><td>${formatRupiah(v.grandtotal)}</td><td>${formatRupiah(sisa)}</td><td><input type='number' class='form-control' name='bayar[]' value='${sisa}'></td></tr>`)
                     })
                 }
             })
-        }
-        else{
+        } else {
             $(".detail-lawan").show()
             $(".hutang-piutang").hide()
         }
     })
 
     // tarik rekap resto hotel
-    $('.tarikData').click(function () { 
+    $('.tarikData').click(function() {
         let jenis_bayar = $(this).data('jenis_bayar');
         let total = $(this).data('total');
         let total_ppn = $(this).data('total_ppn');
@@ -464,8 +458,8 @@ $(document).ready(function() {
         $('#total').val(total);
         $('#total_ppn').val(total_ppn);
     });
-    
+
     // $("#form-tambah").submit(function(event) {
-        
+
     // });
 });
