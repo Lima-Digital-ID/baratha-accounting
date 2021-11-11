@@ -54,7 +54,7 @@ return [
 
     'url' => env('APP_URL', 'http://localhost:8001/baratha-accounting'),
 
-    'asset_url' => env('ASSET_URL', 'http://127.0.0.1:8080/assets'),
+    'asset_url' => env('ASSET_URL', 'http://192.168.36.8000/assets'),
 
     /*
     |--------------------------------------------------------------------------
