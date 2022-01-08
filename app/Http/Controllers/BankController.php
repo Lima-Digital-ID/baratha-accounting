@@ -235,8 +235,8 @@ class BankController extends Controller
                             ]);
 
                             $getTipe = PenjualanLain::select('tipe_penjualan')->where('kode_penjualan', $_POST['kode_transaksi'][$key])->get()[0];
-                            if($getTipe->tipe_penjualan=='resto'){
-                                $url = urlApiResto()."bayar-piutang";
+                            if($getTipe->tipe_penjualan=='resto' || $getTipe->tipe_penjualan=='hotel'){
+                                $url = $getTipe->tipe_penjualan=='resto' ? urlApiResto()."bayar-piutang" : urlApiHotel()."bayar-piutang";
                                 $data = array("kode_transaksi" => $_POST['kode_transaksi'][$key]);
                                 $options = array(
                                             "http"=> array(

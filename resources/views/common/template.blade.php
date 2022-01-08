@@ -252,6 +252,9 @@
                 <a class="nav-link" href="{{url('penjualan/penjualan-catering')}}">
                   <span>Penjualan Catering</span>
                 </a>
+                <a class="nav-link" href="{{url('penjualan/piutang-hotel')}}">
+                  <span>Piutang Hotel</span>
+                </a>
                 <a class="nav-link" href="{{url('penjualan/piutang-resto')}}">
                   <span>Piutang Resto</span>
                 </a>

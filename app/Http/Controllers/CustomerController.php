@@ -185,8 +185,8 @@ class CustomerController extends Controller
             ]);
 
             $getTipe = PenjualanLain::select('tipe_penjualan')->where('kode_penjualan', $request->get('kode_penjualan'))->get()[0];
-            if($getTipe->tipe_penjualan=='resto'){
-                $url = urlApiResto()."bayar-piutang";
+            if($getTipe->tipe_penjualan=='resto' || $getTipe->tipe_penjualan=='hotel'){
+                $url = $getTipe->tipe_penjualan=='resto' ? urlApiResto()."bayar-piutang" : urlApiHotel()."bayar-piutang";
                 $data = array("kode_transaksi" => $request->get('kode_penjualan'));
                 $options = array(
                             "http"=> array(

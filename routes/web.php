@@ -86,6 +86,8 @@ Route::group(['middleware' => ['auth:sanctum', 'verified']], function () {
         Route::get('getTtlPiutang', 'PenjualanCateringController@getTtlPiutang');
         Route::get('piutang-resto', 'PiutangRestoController@index');
         Route::post('piutang-resto/store', 'PiutangRestoController@store');
+        Route::get('piutang-hotel', 'PiutangHotelController@index');
+        Route::post('piutang-hotel/store', 'PiutangHotelController@store');
         Route::get('rekap-hotel', 'RekapHotelController@index');
         Route::get('rekap-hotel/save', 'RekapHotelController@save');
         Route::get('rekap-resto', 'RekapRestoController@index');
