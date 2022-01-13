@@ -100,7 +100,7 @@
                     @php
                         // count jumlah transaksi masing2 kode rekening sebelum tanggal dari
                         $cekTransaksi = \App\Models\Jurnal::where('tanggal', '<', $tanggalDari)->where('kode', $item->kode_rekening)->orWhere('lawan', $item->kode_rekening)->count();
-                        
+                        $cekLawan = false;
                         // cek apakah ada transaksi sebelum tanggal dari
                         // untuk ngambil saldo awal sebelum tanggal dari
                         if ($cekTransaksi > 0) {
@@ -116,6 +116,7 @@
                             // cek apakah rekening juga terdapat di field lawan di table jurnal
                             $isFieldLawan = \App\Models\Jurnal::where('lawan', $item->kode_rekening)->where('tanggal', '<', $tanggalDari)->count();
                             if ($isFieldLawan > 0) {
+                              $cekLawan = true;
                               $saldoAwalDebet2 = \App\Models\Jurnal::select(\DB::raw('SUM(nominal) AS nominal'))->where('lawan', $item->kode_rekening)->where('tipe', 'Kredit')->where('tanggal', '<',$tanggalDari)->get()[0]->nominal;
 
                               $saldoAwalKredit2 = \App\Models\Jurnal::select(\DB::raw('SUM(nominal) AS nominal'))->where('lawan', $item->kode_rekening)->where('tipe', 'Debet')->where('tanggal', '<',$tanggalDari)->get()[0]->nominal;
@@ -123,9 +124,11 @@
                             }
                           }
                           else{ //rekening tsb tidak terdapat di field kode dan hanya terdapat di field lawan
-                            $saldoAwalDebet = \App\Models\Jurnal::select(\DB::raw('SUM(nominal) AS nominal'))->where('lawan', $item->kode_rekening)->where('tipe', 'Kredit')->where('tanggal', '<',$tanggalDari)->get()[0]->nominal;
-
-                            $saldoAwalKredit = \App\Models\Jurnal::select(\DB::raw('SUM(nominal) AS nominal'))->where('lawan', $item->kode_rekening)->where('tipe', 'Debet')->where('tanggal', '<',$tanggalDari)->get()[0]->nominal;
+                            if (!$cekLawan) {
+                                $saldoAwalDebet = \App\Models\Jurnal::select(\DB::raw('SUM(nominal) AS nominal'))->where('lawan', $item->kode_rekening)->where('tipe', 'Kredit')->where('tanggal', '<',$tanggalDari)->get()[0]->nominal;
+    
+                                $saldoAwalKredit = \App\Models\Jurnal::select(\DB::raw('SUM(nominal) AS nominal'))->where('lawan', $item->kode_rekening)->where('tipe', 'Debet')->where('tanggal', '<',$tanggalDari)->get()[0]->nominal;
+                            }
                           }
 
                           // hitung saldoAwal dari rekening
