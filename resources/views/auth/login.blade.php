@@ -27,7 +27,7 @@
                         <div class="form mt-3">
                             <form id="FormLogin" method="post" class="" action="{{ route('login') }}">
                                 @csrf
-        
+
                                     <label for="">Username</label>
                                     <div class="form-underline">
                                         <input type="text" name="username" placeholder="Masukkan Username" class="@error('username') is-invalid @enderror" value="{{ old('username') }}" required autocomplete="username" autofocus>
@@ -52,11 +52,11 @@
                                     <br>
                                     <div class="form-underline">
                                     {{-- <input style="width:auto" type="checkbox" name="remember" id="remember" {{ old('remember') ? 'checked' : '' }}>
-        
+
                                     <label style="font-size:12px" class="form-check-label" for="remember">
                                         {{ __('Remember Me') }}
                                     </label> --}}
-        
+
                                     </div>
                                     <br>
                                     <button type="sumit" class="btn btn-primary px-5 font-weight-bold ls-1">Login</button>
@@ -65,7 +65,7 @@
                     </div>
                     <div class="right">
                         <div class="text">
-                            <h5>Baratha Accounting</h5>
+                            <h5>Lima Accounting</h5>
                             <p class="font-weight-light">Application</p>
                         </div>
                     </div>

@@ -10,14 +10,14 @@
     <meta name="description" content="" />
     <meta name="author" content="" />
     <title>
-      @php 
+      @php
       $pageSegment = empty(Request::segment(1)) ? 'Dashboard' : Request::segment(1);
       @endphp
-      {!!ucwords( str_replace("-"," ",$pageSegment) )!!} | Baratha Accounting
+      {!!ucwords( str_replace("-"," ",$pageSegment) )!!} | Lima Accounting
     </title>
     {{-- favicon --}}
-    <link href="{{ asset('img/logobaratha.png') }}" rel="icon">
-    <link href="{{ asset('img/logobaratha.png') }}" rel="apple-touch-icon">
+    <link href="{{ asset('img/logo-lima.png') }}" rel="icon">
+    <link href="{{ asset('img/logo-lima.png') }}" rel="apple-touch-icon">
     <!-- Custom fonts for this template-->
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.1/css/all.css" integrity="sha384-vp86vTRFVJgpjF9jiIGPEEqYqlDwgyBgEF109VFjmqGmIY/Y4HV4d3Gp2irVfcrp" crossorigin="anonymous">
     <!-- Custom styles for this template-->
@@ -52,7 +52,7 @@
             class="sidebar-brand d-flex align-items-center justify-content-center"
             href="{{ url('/dashboard') }}"
           >
-          <img src="{{asset('img/logo.png')}}" alt="" srcset="" width="130">
+          <img src="{{asset('img/logo-lima.png')}}" alt="" srcset="" width="130">
           </a>
 
           <!-- Nav Item - Dashboard -->
@@ -94,7 +94,7 @@
             </li>
           @endif
           <!-- Nav Item - Pages Collapse Menu -->
-          
+
           @if (auth()->user()->akses == 'Owner' || auth()->user()->akses == 'Accounting')
           <li class="nav-item {{Request::segment(1) == 'master-akuntansi' ? 'active' : ''}}">
             <a
@@ -131,7 +131,7 @@
             </div>
           </li>
           @endif
-          
+
           <li class="nav-item {{Request::segment(1) == 'persediaan' ? 'active' : ''}}">
             <a
               class="nav-link {{Request::segment(1) == 'persediaan' ? '' : 'collapsed'}}"
@@ -180,7 +180,7 @@
             </div>
           </li>
 
-          
+
           <li class="nav-item {{Request::segment(1) == 'pembelian' ? 'active' : ''}}">
             <a
               class="nav-link {{Request::segment(1) == 'pembelian' ? '' : 'collapsed'}}"
@@ -219,7 +219,7 @@
               </div>
             </div>
           </li>
-          
+
           @if (auth()->user()->akses == 'Owner' || auth()->user()->akses == 'Accounting')
           <li class="nav-item {{Request::segment(1) == 'penjualan' ? 'active' : ''}}">
             <a
@@ -274,7 +274,7 @@
               </div>
             </div>
           </li>
-          
+
           <li class="nav-item {{Request::segment(1) == 'kas' ? 'active' : ''}}">
             <a
               class="nav-link {{Request::segment(1) == 'kas' ? '' : 'collapsed'}}"
@@ -304,7 +304,7 @@
               </div>
             </div>
           </li>
-          
+
           <li class="nav-item {{Request::segment(1) == 'bank' ? 'active' : ''}}">
             <a
               class="nav-link {{Request::segment(1) == 'bank' ? '' : 'collapsed'}}"
@@ -334,7 +334,7 @@
               </div>
             </div>
           </li>
-          
+
           <li class="nav-item {{Request::segment(1) == 'memorial' ? 'active' : ''}}">
             <a
               class="nav-link {{Request::segment(1) == 'memorial' ? '' : 'collapsed'}}"
@@ -409,7 +409,7 @@
             >
           </li>
           @endif
-          
+
           <!-- Sidebar Toggler (Sidebar) -->
           <div class="text-center d-none d-md-inline">
             <button class="rounded-circle border-0" id="sidebarToggle"></button>
@@ -433,14 +433,14 @@
 
           <!-- Topbar Navbar -->
           <ul class="navbar-nav ml-auto">
-            
+
             <ul class="navbar-nav ml-auto">
               {{-- <li class="nav-item dropdown no-arrow mx-1">
                 <a class="nav-link dropdown-toggle" href="#" id="alertsDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                     <i class="fas fa-bell fa-notif-top fa-fw"></i>
                     <!-- Counter - Alerts -->
                     <span class="badge badge-danger badge-counter badge-notif">
-                    
+
                     </span>
                 </a>
                 <!-- Dropdown - Alerts -->
@@ -485,13 +485,13 @@
           <!-- Page Heading -->
           <div class="d-sm-flex align-items-center justify-content-between mb-4">
             <div class="h4 mb-0 solid-color font-weight-bold infopage">
-                  <?php 
+                  <?php
                     $pageSegment = !empty(Request::segment(2)) ? Request::segment(2) : 'Dashboard';
                   ?>
                   {{ ucwords( str_replace("-"," ",$pageSegment) ) }}
             </div>
             <div class="float-right info-text-page">
-              <a href="#"> 
+              <a href="#">
                 {{ucwords( str_replace("-"," ",$pageSegment) )}}
               </a>
               /
@@ -598,11 +598,11 @@
       tel.addEventListener('input', function() {
         let start = this.selectionStart;
         let end = this.selectionEnd;
-        
+
         const current = this.value
         const corrected = current.replace(/([^+0-9.]+)/gi, '');
         this.value = corrected;
-        
+
         if (corrected.length < current.length) --end;
         this.setSelectionRange(start, end);
       });
@@ -648,11 +648,11 @@
         tel.addEventListener('input', function() {
           let start = this.selectionStart;
           let end = this.selectionEnd;
-          
+
           const current = this.value
           const corrected = current.replace(/([^+0-9.]+)/gi, '');
           this.value = corrected;
-          
+
           if (corrected.length < current.length) --end;
           this.setSelectionRange(start, end);
         });
