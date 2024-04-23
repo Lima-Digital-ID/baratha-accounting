@@ -26,7 +26,7 @@ class BarangController extends Controller
         try {
             $keyword = $request->get('keyword');
             $kategori = $request->get('kategori');
-            $getBarang = Barang::with('kategoriBarang');
+            $getBarang = Barang::select('*')->selectRaw('coalesce((select harga_satuan from detail_pembelian_barang where detail_pembelian_barang.kode_barang = barang.kode_barang order by created_at desc limit 1),0) as harga_satuan')->with('kategoriBarang');
             // if ($kategori) {
             //     if ($keyword) {
             //         $barang = Barang::with('kategoriBarang')->where('id_kategori', $kategori)->where('kode_barang', 'LIKE', "%$keyword%")->orWhere('nama', 'LIKE', "%$keyword%")->paginate(10);

@@ -39,6 +39,7 @@
                         <td>Kode Barang</td>
                         <td>Nama</td>
                         <td>Satuan</td>
+                        <td>Harga Satuan</td>
                         <td>Stock Awal</td>
                         <td>Saldo Awal</td>
                         <td>Stock</td>
@@ -58,6 +59,7 @@
                             <td>{{$value->kode_barang}}</td>
                             <td>{{$value->nama}}</td>
                             <td>{{$value->satuan}}</td>
+                            <td>Rp {{number_format($value->harga_satuan, 2, ',', '.')}}</td>
                             <td>{{number_format($value->stock_awal, 2, ',', '.')}}</td>
                             <td>Rp {{number_format($value->saldo_awal, 2, ',', '.')}}</td>
                             <td>{{number_format($value->stock, 2, ',', '.')}}</td>
